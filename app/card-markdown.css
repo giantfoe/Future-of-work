@@ -1,0 +1,61 @@
+/* Card markdown content styling - optimized for small spaces */
+.card-markdown-content {
+  color: #4b5563; /* text-gray-600 */
+  line-height: 1.5;
+  font-size: 0.875rem;
+}
+
+.card-markdown-content p {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.card-markdown-content ul,
+.card-markdown-content ol {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-left: 1.25rem;
+}
+
+.card-markdown-content ul {
+  list-style-type: disc;
+}
+
+.card-markdown-content ol {
+  list-style-type: decimal;
+}
+
+.card-markdown-content li {
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
+}
+
+.card-markdown-content a {
+  color: #0070f3;
+  text-decoration: underline;
+}
+
+.card-markdown-content a:hover {
+  text-decoration: none;
+}
+
+.card-markdown-content code {
+  font-family: monospace;
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+
+/* Dark mode support */
+.dark .card-markdown-content {
+  color: #d1d5db;
+}
+
+.dark .card-markdown-content a {
+  color: #3b82f6;
+}
+
+.dark .card-markdown-content code {
+  background-color: #1f2937;
+}
