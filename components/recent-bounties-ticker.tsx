@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import CardMarkdownRenderer from "@/components/card-markdown-renderer"
 import type { Bounty } from "@/lib/types"
-import { getCategoryColorClasses } from "@/lib/utils"
+import { getCategoryColors } from "@/components/category-tag"
 
 interface RecentBountiesTickerProps {
   bounties: Bounty[]
@@ -34,9 +34,9 @@ export default function RecentBountiesTicker({ bounties }: RecentBountiesTickerP
                     ? // Multiple categories - show only the first one in the ticker for space reasons
                       (() => {
                         const firstCategory = bounty.category.split(",")[0].trim()
-                        const { background, text } = getCategoryColorClasses(firstCategory)
+                        const { bg, text } = getCategoryColors(firstCategory)
                         return (
-                          <Badge variant="outline" className={`${background} ${text} border-0`}>
+                          <Badge variant="outline" className={`${bg} ${text} border-0`}>
                             {firstCategory.charAt(0).toUpperCase() + firstCategory.slice(1)}
                           </Badge>
                         )
@@ -44,14 +44,14 @@ export default function RecentBountiesTicker({ bounties }: RecentBountiesTickerP
                     : // Single category
                       (() => {
                         const category = typeof bounty.category === "string" ? bounty.category : "Other"
-                        const { background, text } = getCategoryColorClasses(category)
+                        const { bg, text } = getCategoryColors(category)
                         return (
-                          <Badge variant="outline" className={`${background} ${text} border-0`}>
+                          <Badge variant="outline" className={`${bg} ${text} border-0`}>
                             {category.charAt(0).toUpperCase() + category.slice(1)}
                           </Badge>
                         )
                       })()}
-                  <span className="text-sm font-medium text-gray-500">${bounty.reward}</span>
+                  <span className="text-sm font-medium text-muted-foreground">${bounty.reward}</span>
                 </div>
                 {/* Use Markdown renderer for title with single line */}
                 <CardMarkdownRenderer content={bounty.title} className="font-medium text-sm" maxLines={1} />

@@ -36,7 +36,7 @@ export function LastSynced({ className }: LastSyncedProps) {
   }
 
   return (
-    <div className={`flex items-center text-xs text-gray-500 ${className}`}>
+    <div className={`flex items-center text-xs text-muted-foreground ${className}`}>
       <Clock className="h-3 w-3 mr-1" />
       <span>Last synced: {new Date(lastSynced).toLocaleString()}</span>
     </div>

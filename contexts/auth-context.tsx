@@ -35,7 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   typeof privyUser?.email === "object" && typeof privyUser.email.address === "string"
     ? privyUser.email.address
     : ""
-  console.log("privyUser", privyUser)
+  // Debug: Check Privy authentication state
+  // console.log("AuthContext - privyUser:", privyUser)
+  // console.log("AuthContext - ready:", ready)
+  // console.log("AuthContext - authenticated:", authenticated)
+  
   const transformedUser: User | null =
     privyUser && typeof privyUser.id === "string"
       ? {
@@ -51,6 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           ...privyUser.customMetadata,
         }
       : null
+
+  // console.log("AuthContext - transformedUser:", transformedUser)
 
   return (
     <AuthContext.Provider 

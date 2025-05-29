@@ -14,7 +14,7 @@ export default function BountyList({ bounties, featured = false }: BountyListPro
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium">No bounties available at the moment.</h3>
-        <p className="text-gray-500 mt-2">Check back later for new opportunities.</p>
+        <p className="text-muted-foreground mt-2">Check back later for new opportunities.</p>
       </div>
     )
   }

@@ -90,7 +90,7 @@ export function PaginationNav({ currentPage, totalPages, basePath, className }: 
       <div className="flex items-center space-x-1">
         {pageNumbers.map((page, index) =>
           page === "..." ? (
-            <span key={`ellipsis-${index}`} className="px-2 text-gray-500">
+            <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">
               ...
             </span>
           ) : (
@@ -100,7 +100,7 @@ export function PaginationNav({ currentPage, totalPages, basePath, className }: 
               size="icon"
               className={cn(
                 "h-8 w-8 text-sm",
-                currentPage === page ? "bg-primary text-primary-foreground" : "text-gray-600",
+                currentPage === page ? "bg-primary text-primary-foreground" : "text-foreground hover:text-primary",
               )}
               asChild={currentPage !== page}
             >

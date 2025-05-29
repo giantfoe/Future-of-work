@@ -17,195 +17,145 @@ import { parseCategories } from "@/components/category-tag"
 export default function BountyDetailPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
   const params = use(paramsPromise);
   const { id } = params;
-  const [bounty, setBounty] = useState<Bounty | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [deadlinePassed, setDeadlinePassed] = useState(false)
-  const [prevBountyId, setPrevBountyId] = useState<string | null>(null)
-  const [nextBountyId, setNextBountyId] = useState<string | null>(null)
-  const [currentBountyIndex, setCurrentBountyIndex] = useState<number>(0)
-  const [totalBounties, setTotalBounties] = useState<number>(0)
-  const [allBounties, setAllBounties] = useState<Bounty[]>([])
-  const [similarBounties, setSimilarBounties] = useState<Bounty[]>([])
+        console.log("BountyDetailPage: Initial ID from params", id);
+        const [bounty, setBounty] = useState<Bounty | null>(null)
+        const [loading, setLoading] = useState(true)
+        const [error, setError] = useState<string | null>(null)
+        const [deadlinePassed, setDeadlinePassed] = useState(false)
+        const [prevBountyId, setPrevBountyId] = useState<string | null>(null)
+        const [nextBountyId, setNextBountyId] = useState<string | null>(null)
+        const [currentBountyIndex, setCurrentBountyIndex] = useState<number>(0)
+        const [totalBounties, setTotalBounties] = useState<number>(0)
+        const [allBounties, setAllBounties] = useState<Bounty[]>([])
+        const [similarBounties, setSimilarBounties] = useState<Bounty[]>([])
 
-  useEffect(() => {
-    // First, fetch all bounties to get the navigation context
-    async function fetchAllBounties() {
-      try {
-        const response = await fetch("/api/bounties")
-        if (!response.ok) {
-          throw new Error("Failed to fetch bounties list")
-        }
-
-        const bounties = await response.json()
-        setAllBounties(bounties)
-        setTotalBounties(bounties.length)
-
-        // Now that we have all bounties, load the current one
-        loadCurrentBounty(bounties)
-      } catch (error) {
-        console.error("Error fetching bounties:", error)
-        setError("Failed to load bounties. Please try again.")
-        setLoading(false)
-      }
-    }
-
-    async function loadCurrentBounty(bounties: Bounty[]) {
-      try {
-        // Find the current bounty in the list
-        const currentBounty = bounties.find((b) => b.id === id)
-
-        if (!currentBounty) {
-          // If we can't find the bounty by ID in our list, try to fetch it directly
-          // This handles the case where the user navigates directly to a bounty URL
-          const response = await fetch(`/api/bounties/${id}`)
-
-          if (!response.ok) {
-            throw new Error(`Could not find bounty with ID ${id}`)
+        useEffect(() => {
+          const fetchData = async () => {
+            try {
+              setLoading(true)
+              setError(null)
+              
+              // First, fetch all bounties to get navigation data
+              const allBountiesResponse = await fetch('/api/bounties')
+              if (!allBountiesResponse.ok) {
+                throw new Error('Failed to fetch bounties')
+              }
+              const allBountiesData = await allBountiesResponse.json()
+              setAllBounties(allBountiesData)
+              
+              // Find the current bounty in the list
+              const currentBounty = allBountiesData.find((b: any) => b.id === id)
+              
+              if (currentBounty) {
+                setBounty(currentBounty)
+              } else {
+                // If not found in the list, try to fetch individually
+                const bountyResponse = await fetch(`/api/bounties/${id}`)
+                if (!bountyResponse.ok) {
+                  throw new Error('Bounty not found')
+                }
+                const bountyData = await bountyResponse.json()
+                setBounty(bountyData)
+              }
+              
+            } catch (err) {
+              console.error('Error fetching bounty:', err)
+              setError(err instanceof Error ? err.message : 'An error occurred')
+            } finally {
+              setLoading(false)
+            }
           }
-
-          const data = await response.json()
-          setBounty(data)
-
-          // Since this bounty wasn't in our initial list, we need to add it
-          // and recalculate the navigation
-          const updatedBounties = [...bounties, data]
-          setAllBounties(updatedBounties)
-          setTotalBounties(updatedBounties.length)
-
-          // Find the index now that we've added it
-          const currentIndex = updatedBounties.findIndex((b) => b.id === id)
-          setCurrentBountyIndex(currentIndex)
-
-          // Set previous and next bounty IDs
-          if (currentIndex > 0) {
-            setPrevBountyId(updatedBounties[currentIndex - 1].id)
+          
+          if (id) {
+            fetchData()
           }
+        }, [id])
 
-          if (currentIndex < updatedBounties.length - 1) {
-            setNextBountyId(updatedBounties[currentIndex + 1].id)
+        useEffect(() => {
+          if (!bounty || !allBounties.length) {
+            return;
           }
-        } else {
-          // We found the bounty in our list
-          setBounty(currentBounty)
+          
+          // Find similar bounties based on category
+          const similar = allBounties.filter(b => {
+            if (b.id === bounty.id) return false // Exclude current bounty
+            
+            // Check if any category matches
+            const bountyCategories = Array.isArray(bounty.category) ? bounty.category : [bounty.category]
+            const bCategories = Array.isArray(b.category) ? b.category : [b.category]
+            
+            return bountyCategories.some(cat => bCategories.includes(cat))
+          })
+          
+          // Limit to 3 similar bounties
+          const limitedSimilarBounties = similar.slice(0, 3)
+          setSimilarBounties(limitedSimilarBounties)
 
-          // Find the index of the current bounty
-          const currentIndex = bounties.findIndex((b) => b.id === id)
-          setCurrentBountyIndex(currentIndex)
+        }, [bounty, allBounties]) // Rerun when bounty or allBounties changes
 
-          // Set previous and next bounty IDs
-          if (currentIndex > 0) {
-            setPrevBountyId(bounties[currentIndex - 1].id)
-          }
+        // Render loading skeleton
+        if (loading) {
+          return (
+            <div className="bg-[#0A0A0A] min-h-screen py-12 relative z-20">
+              <div className="container px-4 md:px-6 max-w-[1200px] mx-auto relative z-20">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-30">
+                  {/* Bounty Details Skeleton */}
+                  <div className="glass-card rounded-lg p-8 lg:col-span-2 relative z-30">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <Skeleton className="h-6 w-16 mb-3 rounded-full" />
+                        <Skeleton className="h-10 w-3/4" />
+                      </div>
+                      <Skeleton className="h-8 w-24" />
+                    </div>
 
-          if (currentIndex < bounties.length - 1) {
-            setNextBountyId(bounties[currentIndex + 1].id)
-          }
-        }
+                    {/* Category skeleton */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      <Skeleton className="h-8 w-24 rounded-full" />
+                      <Skeleton className="h-8 w-32 rounded-full" />
+                    </div>
 
-        // Check if deadline has passed
-        // Ensure currentBounty is defined before accessing its properties
-        const deadlineSource = currentBounty ? currentBounty.deadline : (bounty ? bounty.deadline : Date.now());
-        const deadline = new Date(deadlineSource);
-        const now = new Date()
-        setDeadlinePassed(now > deadline)
-      } catch (err) {
-        console.error(`Error loading bounty ${id}:`, err)
-        setError(err instanceof Error ? err.message : "Failed to load bounty")
-      } finally {
-        setLoading(false)
-      }
-    }
+                    <Skeleton className="h-4 w-full mb-1" />
+                    <Skeleton className="h-4 w-full mb-1" />
+                    <Skeleton className="h-4 w-3/4 mb-6" />
 
-    fetchAllBounties()
-  }, [id])
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <Skeleton className="h-5 w-40" />
+                      <Skeleton className="h-5 w-32" />
+                    </div>
 
-  useEffect(() => {
-    if (!bounty || !allBounties.length) return
+                    <Skeleton className="h-6 w-32 mb-4" />
+                    <Skeleton className="h-4 w-full mb-1" />
+                    <Skeleton className="h-4 w-full mb-1" />
+                    <Skeleton className="h-4 w-full mb-1" />
+                    <Skeleton className="h-4 w-3/4 mb-8" />
+                  </div>
 
-    // Extract categories from the current bounty
-    const currentBountyCategories = parseCategories(bounty.category).map(cat => cat.toLowerCase().replace(/\s+/g, '-'))
-
-    // Filter for similar bounties
-    const filteredSimilarBounties = allBounties.filter(item => {
-      // Exclude the current bounty
-      if (item.id === bounty.id) return false
-
-      // Check if any category overlaps
-      const itemCategories = parseCategories(item.category).map(cat => cat.toLowerCase().replace(/\s+/g, '-'))
-      return currentBountyCategories.some(cat => itemCategories.includes(cat))
-    })
-
-    // Limit to a maximum of 3 and shuffle for variety
-    const limitedSimilarBounties = filteredSimilarBounties.sort(() => 0.5 - Math.random()).slice(0, 3)
-
-    setSimilarBounties(limitedSimilarBounties)
-
-  }, [bounty, allBounties]) // Rerun when bounty or allBounties changes
-
-  // Render loading skeleton
-  if (loading) {
-    return (
-      <div className="bg-[#0A0A0A] min-h-screen py-12">
-        <div className="container px-4 md:px-6 max-w-[1200px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Bounty Details Skeleton */}
-            <div className="glass-card rounded-lg p-8 lg:col-span-2">
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <Skeleton className="h-6 w-16 mb-3 rounded-full" />
-                  <Skeleton className="h-10 w-3/4" />
+                  {/* Submission Form Skeleton */}
+                  <div className="glass-card rounded-lg p-8 relative z-30">
+                    <Skeleton className="h-8 w-48 mb-6" />
+                    <Skeleton className="h-5 w-24 mb-2" />
+                    <Skeleton className="h-10 w-full mb-4" />
+                    <Skeleton className="h-5 w-32 mb-2" />
+                    <Skeleton className="h-10 w-full mb-4" />
+                    <Skeleton className="h-5 w-28 mb-2" />
+                    <Skeleton className="h-10 w-full mb-4" />
+                    <Skeleton className="h-5 w-36 mb-2" />
+                    <Skeleton className="h-10 w-full mb-6" />
+                    <Skeleton className="h-12 w-full" />
+                  </div>
                 </div>
-                <Skeleton className="h-8 w-24" />
               </div>
-
-              {/* Category skeleton */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                <Skeleton className="h-8 w-24 rounded-full" />
-                <Skeleton className="h-8 w-32 rounded-full" />
-              </div>
-
-              <Skeleton className="h-4 w-full mb-1" />
-              <Skeleton className="h-4 w-full mb-1" />
-              <Skeleton className="h-4 w-3/4 mb-6" />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <Skeleton className="h-5 w-40" />
-                <Skeleton className="h-5 w-32" />
-              </div>
-
-              <Skeleton className="h-6 w-32 mb-4" />
-              <Skeleton className="h-4 w-full mb-1" />
-              <Skeleton className="h-4 w-full mb-1" />
-              <Skeleton className="h-4 w-full mb-1" />
-              <Skeleton className="h-4 w-3/4 mb-8" />
             </div>
-
-            {/* Submission Form Skeleton */}
-            <div className="glass-card rounded-lg p-8">
-              <Skeleton className="h-8 w-48 mb-6" />
-              <Skeleton className="h-5 w-24 mb-2" />
-              <Skeleton className="h-10 w-full mb-4" />
-              <Skeleton className="h-5 w-32 mb-2" />
-              <Skeleton className="h-10 w-full mb-4" />
-              <Skeleton className="h-5 w-28 mb-2" />
-              <Skeleton className="h-10 w-full mb-4" />
-              <Skeleton className="h-5 w-36 mb-2" />
-              <Skeleton className="h-10 w-full mb-6" />
-              <Skeleton className="h-12 w-full" />
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+          )
+        }
 
   // Render error state
   if (error) {
     return (
-      <div className="bg-[#0A0A0A] min-h-screen py-12">
-        <div className="container px-4 md:px-6 max-w-[1200px] mx-auto">
-          <div className="text-center py-12 glass-card rounded-lg">
+      <div className="bg-[#0A0A0A] min-h-screen py-12 relative z-20">
+        <div className="container px-4 md:px-6 max-w-[1200px] mx-auto relative z-20">
+          <div className="text-center py-12 glass-card rounded-lg relative z-30">
             <h3 className="text-lg font-medium mb-2 text-[#FBF6E8]">Error Loading Bounty</h3>
             <p className="text-[#C4C9D2] mb-4">{error}</p>
             <Button onClick={() => window.location.reload()}>Try Again</Button>
@@ -218,9 +168,9 @@ export default function BountyDetailPage({ params: paramsPromise }: { params: Pr
   // Render not found state
   if (!bounty) {
     return (
-      <div className="bg-[#0A0A0A] min-h-screen py-12">
-        <div className="container px-4 md:px-6 max-w-[1200px] mx-auto">
-          <div className="text-center py-12 glass-card rounded-lg">
+      <div className="bg-[#0A0A0A] min-h-screen py-12 relative z-20">
+        <div className="container px-4 md:px-6 max-w-[1200px] mx-auto relative z-20">
+          <div className="text-center py-12 glass-card rounded-lg relative z-30">
             <h3 className="text-lg font-medium mb-2 text-[#FBF6E8]">Bounty not found</h3>
             <p className="text-[#C4C9D2]/40 mb-4">The bounty you're looking for doesn't exist or has been removed.</p>
             <Button asChild>
@@ -251,11 +201,11 @@ const isInReview = bounty.status === "in-progress"
   }
 
   return (
-    <div className="bg-[#0A0A0A] min-h-screen py-12">
-      <div className="container px-4 md:px-6 max-w-[1200px] mx-auto">
+    <div className="bg-[#0A0A0A] min-h-screen py-12 relative z-20">
+      <div className="container px-4 md:px-6 max-w-[1200px] mx-auto relative z-20">
         {/* Status Banner for In Review */}
         {isInReview && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8 relative z-30">
             <div className="flex items-center gap-3">
               <div className="bg-amber-500 text-white p-2 rounded-full">
                 <Clock className="h-5 w-5" />
@@ -272,7 +222,7 @@ const isInReview = bounty.status === "in-progress"
 
         {/* Status Banner for Closed */}
         {isClosed && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 relative z-30">
             <div className="flex items-center gap-3">
               <div className="bg-gray-500 text-white p-2 rounded-full">
                 <CheckCircle className="h-5 w-5" />
@@ -291,7 +241,7 @@ const isInReview = bounty.status === "in-progress"
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-8">
             {/* Bounty Details Card */}
-            <div className="glass-card rounded-lg p-8">
+            <div className="glass-card rounded-lg p-8 relative z-30">
               <div className="flex items-start justify-between mb-3">
                 <div>
                   {/* Use the StatusTag component for consistent status display */}
@@ -359,7 +309,7 @@ const isInReview = bounty.status === "in-progress"
           {/* Right Column */}
           <div className="lg:col-span-1 space-y-8">
             {/* Submission Form Card */}
-            <div className="glass-card rounded-lg p-8">
+            <div className="glass-card rounded-lg p-8 relative z-30">
               {isInReview ? (
                 /* In Review Bounty Information */
                 <div className="space-y-6">
@@ -449,9 +399,9 @@ const isInReview = bounty.status === "in-progress"
 
         {/* Similar Bounties Section */}
         {similarBounties.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-[#FBF6E8] mb-6 text-center">Similar Bounties</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="mt-12 relative z-30">
+            <h2 className="text-2xl font-bold text-[#FBF6E8] mb-6 text-center relative z-30">Similar Bounties</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-30">
               {similarBounties.map(simBounty => (
                 <BountyCard key={simBounty.id} bounty={simBounty} />
               ))}
@@ -460,8 +410,8 @@ const isInReview = bounty.status === "in-progress"
         )}
 
         {/* View All Bounties button - kept from original pagination section */}
-        <div className="mt-12 text-center">
-          <Button variant="outline" asChild className="px-6 bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-md transition-colors duration-200 hover:bg-[#FBF6E8] hover:text-[#091C2E]">
+        <div className="mt-12 text-center relative z-30">
+          <Button variant="outline" asChild className="px-6 bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-md transition-colors duration-200 hover:bg-[#FBF6E8] hover:text-[#091C2E] relative z-30">
             <Link href="/bounties">View All Bounties</Link>
           </Button>
         </div>

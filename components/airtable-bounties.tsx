@@ -71,7 +71,7 @@ export default function AirtableBounties() {
     return (
       <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
         <h3 className="text-lg font-medium mb-2 text-red-600">Error Loading Bounties</h3>
-        <p className="text-gray-500 mb-4">{error}</p>
+        <p className="text-muted-foreground mb-4">{error}</p>
         <button
           onClick={() => window.location.reload()}
           className="px-4 py-2 bg-black text-white rounded-md hover:bg-black/90"
@@ -87,7 +87,7 @@ export default function AirtableBounties() {
     return (
       <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
         <h3 className="text-lg font-medium mb-2">No Bounties Available</h3>
-        <p className="text-gray-500">Check back later for new opportunities.</p>
+        <p className="text-muted-foreground">Check back later for new opportunities.</p>
       </div>
     )
   }

@@ -32,7 +32,7 @@ export default async function Home() {
 
         <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-[130px] pb-24 sm:pt-[146px] sm:pb-32 z-20"> {/* TEXT&CARDS - Top Layer */}
           <div className="max-w-3xl text-left">
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+            <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl">
               <span className="block">Discover and</span>
               <span className="block">Complete</span>
               <span className="block text-foreground mt-3">Web3 Bounties</span>
@@ -43,7 +43,7 @@ export default async function Home() {
             </p>
             <div className="mt-10 flex">
               <Link href="/bounties">
-                <Button variant="cta" size="lg" className="h-14 px-8 text-base flex items-center gap-2">
+                <Button variant="cta" size="lg" className="h-14 px-8 text-base flex items-center gap-2" background-color="white">
                   Explore Bounties
                   <ArrowRight className="h-5 w-5" />
                 </Button>
@@ -91,8 +91,8 @@ export default async function Home() {
       <section className="py-16 sm:py-24 relative z-20">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">Featured Bounties</h2>
-            <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-white">Featured Bounties</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
               Check out these high-impact opportunities with attractive rewards
             </p>
           </div>
@@ -101,7 +101,7 @@ export default async function Home() {
 
           <div className="mt-12 text-center">
             <Link href="/bounties">
-              <Button variant="outline" size="lg" className="h-12 px-8">
+              <Button size="lg" className="h-12 px-8 bg-white text-black border border-gray-300 hover:bg-gray-50">
                 View All Bounties
               </Button>
             </Link>
@@ -116,8 +116,8 @@ export default async function Home() {
             {/* Recent Winners */}
             <div className="flex flex-col h-full">
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900">Recent Winners</h2>
-                <p className="mt-2 text-gray-500">Congratulations to our latest bounty winners</p>
+                <h2 className="text-2xl font-bold text-white">Recent Winners</h2>
+                <p className="mt-2 text-muted-foreground">Congratulations to our latest bounty winners</p>
               </div>
               <div className="flex-1 flex">
                 <RecentWinners winners={winners.slice(0, 4)} />
@@ -127,8 +127,8 @@ export default async function Home() {
             {/* Recent Activities */}
             <div className="flex flex-col h-full">
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900">Recent Activities</h2>
-                <p className="mt-2 text-gray-500">Stay updated with the latest platform activities</p>
+                <h2 className="text-2xl font-bold text-white">Recent Activities</h2>
+                <p className="mt-2 text-muted-foreground">Stay updated with the latest platform activities</p>
               </div>
               <div className="flex-1 flex">
                 <RecentActivities activities={activities.slice(0, 6)} />
@@ -142,8 +142,8 @@ export default async function Home() {
       <section className="py-16 sm:py-24 relative z-20">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900">How It Works</h2>
-            <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">Complete bounties in three simple steps</p>
+            <h2 className="text-3xl font-bold text-white-900">How It Works</h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">Complete bounties in three simple steps</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">

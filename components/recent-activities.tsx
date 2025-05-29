@@ -12,7 +12,7 @@ export default function RecentActivities({ activities }: RecentActivitiesProps) 
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium">No recent activities yet.</h3>
-        <p className="text-muted-foreground mt-2">Activities will appear here as users interact with the platform.</p>
+        <p className="text-muted-foreground mt-2">No recent activities to display.</p>
       </div>
     )
   }

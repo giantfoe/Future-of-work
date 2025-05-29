@@ -423,6 +423,7 @@ export default function BountiesPage() {
           statusInProgress={statusInProgress}
           setStatusInProgress={setStatusInProgress}
           statusCompleted={statusCompleted}
+          setStatusCompleted={setStatusCompleted}
           setSortBy={setSortBy}
           sortBy={sortBy}
           resetFilters={resetFilters}

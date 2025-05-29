@@ -409,7 +409,7 @@ export default function SubmissionForm({
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               If your college is not on the list, please message us to add it to the list, and you'll get $1.
             </p>
           </div>
@@ -435,7 +435,7 @@ export default function SubmissionForm({
               required
               className="h-10"
             />
-            <p className="text-sm text-gray-500">Link to your work (GitHub, Figma, Google Drive, etc.)</p>
+            <p className="text-sm text-muted-foreground">Link to your work (GitHub, Figma, Google Drive, etc.)</p>
           </div>
 
           {/* File Upload Section */}
@@ -470,10 +470,10 @@ export default function SubmissionForm({
             >
               <div className="flex flex-col items-center justify-center py-6">
                 <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                  <Upload className="h-8 w-8 text-gray-500" />
+                  <Upload className="h-8 w-8 text-muted-foreground" />
                 </div>
-                <p className="text-base font-medium text-gray-700 mb-2">Drag and drop your files here</p>
-                <p className="text-sm text-gray-500 text-center mb-4">or click to browse from your computer</p>
+                <p className="text-base font-medium text-foreground mb-2">Drag and drop your files here</p>
+                <p className="text-sm text-muted-foreground text-center mb-4">or click to browse from your computer</p>
                 <input
                   ref={fileInputRef}
                   id="files"
@@ -501,7 +501,7 @@ export default function SubmissionForm({
 
                 <div className="w-full mt-6 flex flex-col gap-2">
                   <div className="flex items-center justify-between w-full px-2">
-                    <p className="text-xs font-medium text-gray-500">
+                    <p className="text-xs font-medium text-muted-foreground">
                       {files.length} of {MAX_FILES} files used
                     </p>
                     <div className="flex items-center gap-2">
@@ -510,21 +510,21 @@ export default function SubmissionForm({
                         className="h-1.5 w-16 rounded-full"
                         aria-label="File count usage"
                       />
-                      <span className="text-xs font-medium text-gray-500">
+                      <span className="text-xs font-medium text-muted-foreground">
                         {Math.round((files.length / MAX_FILES) * 100)}%
                       </span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between w-full px-2">
-                    <p className="text-xs font-medium text-gray-500">Storage used</p>
+                    <p className="text-xs font-medium text-muted-foreground">Storage used</p>
                     <div className="flex items-center gap-2">
                       <Progress
                         value={(totalFileSize / MAX_TOTAL_SIZE) * 100}
                         className="h-1.5 w-16 rounded-full"
                         aria-label="Total file size usage"
                       />
-                      <span className="text-xs font-medium text-gray-500">
+                      <span className="text-xs font-medium text-muted-foreground">
                         {Math.round((totalFileSize / MAX_TOTAL_SIZE) * 100)}%
                       </span>
                     </div>
@@ -554,7 +554,7 @@ export default function SubmissionForm({
             {/* Selected Files List */}
             {files.length > 0 && (
               <div className="mt-2">
-                <p className="text-sm font-medium text-gray-700 mb-2">Selected Files:</p>
+                <p className="text-sm font-medium text-foreground mb-2">Selected Files:</p>
                 <ul className="space-y-2 bg-gray-50 rounded-lg border border-gray-200 p-2">
                   {files.map((file, index) => (
                     <li
@@ -563,11 +563,11 @@ export default function SubmissionForm({
                     >
                       <div className="flex items-center overflow-hidden">
                         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3 flex-shrink-0">
-                          <FileText className="h-4 w-4 text-gray-500" />
+                          <FileText className="h-4 w-4 text-muted-foreground" />
                         </div>
                         <div className="overflow-hidden">
-                          <p className="text-sm font-medium text-gray-800 truncate">{file.name}</p>
-                          <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+                          <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
+                          <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
                         </div>
                       </div>
                       <Button
@@ -615,7 +615,7 @@ export default function SubmissionForm({
               placeholder="Solana wallet address"
               className="h-10"
             />
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               This is NOT your home address. This is your Solana wallet address for bounty payouts.
             </p>
           </div>
@@ -630,11 +630,11 @@ export default function SubmissionForm({
                   ) : (
                     <span className="animate-pulse mr-2">⬤</span>
                   )}
-                  <p className="text-sm font-medium text-gray-700">
+                  <p className="text-sm font-medium text-foreground">
                     {uploadSuccess ? "Files uploaded successfully!" : "Uploading files..."}
                   </p>
                 </div>
-                <p className="text-sm text-gray-500">{Math.round(uploadProgress)}%</p>
+                <p className="text-sm text-muted-foreground">{Math.round(uploadProgress)}%</p>
               </div>
               <Progress
                 value={uploadProgress}
@@ -663,7 +663,7 @@ export default function SubmissionForm({
           </Button>
 
           {/* File size warning */}
-          <p className="text-xs text-gray-500 text-center mt-2">
+          <p className="text-xs text-muted-foreground text-center mt-2">
             Note: Large files may take longer to upload. If you experience timeout issues, try submitting with fewer or
             smaller files.
           </p>

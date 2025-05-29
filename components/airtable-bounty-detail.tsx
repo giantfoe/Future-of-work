@@ -106,7 +106,7 @@ export default function AirtableBountyDetail({ bountyId }: AirtableBountyDetailP
 
           <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
             <h3 className="text-lg font-medium mb-2 text-red-600">Error Loading Bounty</h3>
-            <p className="text-gray-500 mb-4">{error}</p>
+            <p className="text-muted-foreground mb-4">{error}</p>
             <Button onClick={() => window.location.reload()}>Try Again</Button>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function AirtableBountyDetail({ bountyId }: AirtableBountyDetailP
 
           <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
             <h3 className="text-lg font-medium mb-2">Bounty Not Found</h3>
-            <p className="text-gray-500 mb-4">The bounty you're looking for doesn't exist or has been removed.</p>
+            <p className="text-muted-foreground mb-4">The bounty you're looking for doesn't exist or has been removed.</p>
             <Link href="/airtable-bounties">
               <Button>View All Bounties</Button>
             </Link>
@@ -181,14 +181,14 @@ export default function AirtableBountyDetail({ bountyId }: AirtableBountyDetailP
               <div className="text-2xl font-bold text-primary">${bounty.reward}</div>
             </div>
 
-            <p className="text-gray-600 mb-6">{bounty.description}</p>
+            <p className="text-muted-foreground mb-6">{bounty.description}</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="flex items-center text-sm text-gray-500">
+              <div className="flex items-center text-sm text-muted-foreground">
                 <CalendarDays className="h-4 w-4 mr-2.5" />
                 <span>Deadline: {new Date(bounty.deadline).toLocaleDateString()}</span>
               </div>
-              <div className="flex items-center text-sm text-gray-500">
+              <div className="flex items-center text-sm text-muted-foreground">
                 <Clock className="h-4 w-4 mr-2.5" />
                 <span>{daysLeft} days left</span>
               </div>
@@ -213,7 +213,12 @@ export default function AirtableBountyDetail({ bountyId }: AirtableBountyDetailP
           {/* Submission Form */}
           <div id="submission-form" className="bg-white rounded-xl shadow-sm border p-6 md:p-8">
             <h2 className="text-2xl font-bold mb-6">Submit Your Application</h2>
-            <SubmissionForm bountyId={bountyId} bountyName={bounty.title} />
+            <SubmissionForm 
+              bountyId={bountyId} 
+              bountyName={bounty.title}
+              status={bounty.status}
+              deadline={bounty.deadline}
+            />
           </div>
         </div>
       </div>

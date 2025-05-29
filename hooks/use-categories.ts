@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 
 export function useCategories() {
-  const [categories, setCategories] = useState<string[]>([])
+  const [categories, setCategories] = useState<{ original: string; normalized: string }[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 

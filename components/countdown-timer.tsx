@@ -115,19 +115,19 @@ export function CountdownTimer({ deadline, onExpire, className = "", compact = f
       <div className="grid grid-cols-4 gap-1 text-center">
         <div className="flex flex-col">
           <span className="text-lg font-bold">{timeRemaining.days}</span>
-          <span className="text-xs text-gray-500">days</span>
+          <span className="text-xs text-muted-foreground">days</span>
         </div>
         <div className="flex flex-col">
           <span className="text-lg font-bold">{formatTimeUnit(timeRemaining.hours)}</span>
-          <span className="text-xs text-gray-500">hours</span>
+          <span className="text-xs text-muted-foreground">hours</span>
         </div>
         <div className="flex flex-col">
           <span className="text-lg font-bold">{formatTimeUnit(timeRemaining.minutes)}</span>
-          <span className="text-xs text-gray-500">mins</span>
+          <span className="text-xs text-muted-foreground">mins</span>
         </div>
         <div className="flex flex-col">
           <span className="text-lg font-bold">{formatTimeUnit(timeRemaining.seconds)}</span>
-          <span className="text-xs text-gray-500">secs</span>
+          <span className="text-xs text-muted-foreground">secs</span>
         </div>
       </div>
     </div>

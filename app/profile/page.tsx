@@ -1,30 +1,80 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { AuthModal } from "@/components/auth-modal"
 import Image from "next/image"
 
 export default function ProfilePage() {
   const { user, isLoading } = useAuth()
   const router = useRouter()
+  const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [authModalMode, setAuthModalMode] = useState<"login" | "signup">("login")
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/")
-    }
-  }, [user, isLoading, router])
+  // Don't redirect immediately, let user see the login prompt
+  // useEffect(() => {
+  //   if (!isLoading && !user) {
+  //     console.log('Profile page - redirecting to home because user is not authenticated')
+  //     router.push("/")
+  //   }
+  // }, [user, isLoading, router])
 
   if (isLoading) {
-    return <div className="container mx-auto p-6">Loading...</div>
+    return (
+      <div className="container mx-auto p-6">
+        <div className="text-center">
+          <div className="text-[#FBF6E8]">Loading profile...</div>
+        </div>
+      </div>
+    )
   }
 
   if (!user) {
-    return null
+    return (
+      <>
+        <div className="container mx-auto p-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-6 text-[#FBF6E8]">Profile</h1>
+            <div className="max-w-md mx-auto">
+              <p className="text-[#C4C9D2] mb-6">You need to be logged in to view your profile.</p>
+              <div className="flex gap-4 justify-center">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setAuthModalMode("login")
+                    setAuthModalOpen(true)
+                  }}
+                >
+                  Login
+                </Button>
+                <Button
+                  className="bg-[#5865F2] hover:bg-[#4752C4]"
+                  onClick={() => {
+                    setAuthModalMode("signup")
+                    setAuthModalOpen(true)
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <AuthModal 
+          isOpen={authModalOpen} 
+          onClose={() => setAuthModalOpen(false)} 
+          initialMode={authModalMode} 
+        />
+      </>
+    )
   }
 
-  console.log(user)
+  // Debug: Check authentication state
+  // console.log('Profile page - user:', user)
+  // console.log('Profile page - isLoading:', isLoading)
 
   return (
     <div className="container mx-auto p-6">

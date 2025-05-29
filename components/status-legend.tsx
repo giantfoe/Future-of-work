@@ -10,7 +10,7 @@ export function StatusLegend() {
           <Tooltip>
             <TooltipTrigger asChild>
               <button className="ml-1">
-                <HelpCircle className="h-4 w-4 text-gray-400" />
+                <HelpCircle className="h-4 w-4 text-muted-foreground" />
               </button>
             </TooltipTrigger>
             <TooltipContent>
@@ -25,7 +25,7 @@ export function StatusLegend() {
           <div className="h-3 w-3 rounded-full bg-emerald-500 mr-2"></div>
           <div>
             <p className="text-sm font-medium">Open</p>
-            <p className="text-xs text-gray-500">Available for submissions</p>
+            <p className="text-xs text-muted-foreground">Available for submissions</p>
           </div>
         </div>
 
@@ -33,7 +33,7 @@ export function StatusLegend() {
           <div className="h-3 w-3 rounded-full bg-amber-500 mr-2"></div>
           <div>
             <p className="text-sm font-medium">In Review</p>
-            <p className="text-xs text-gray-500">Being worked on</p>
+            <p className="text-xs text-muted-foreground">Being worked on</p>
           </div>
         </div>
 
@@ -41,7 +41,7 @@ export function StatusLegend() {
           <div className="h-3 w-3 rounded-full bg-gray-500 mr-2"></div>
           <div>
             <p className="text-sm font-medium">Closed</p>
-            <p className="text-xs text-gray-500">Bounty has been awarded</p>
+            <p className="text-xs text-muted-foreground">Bounty has been awarded</p>
           </div>
         </div>
       </div>
