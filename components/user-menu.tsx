@@ -31,7 +31,7 @@ export function UserMenu() {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1 hover:bg-gray-200 transition-colors"
+        className="flex items-center gap-2 rounded-full bg-transparent border border-[#FBF6E8] text-[#FBF6E8] px-3 py-2 transition-colors duration-200 ease-in-out hover:bg-[#FBF6E8] hover:text-[#091C2E] group"
       >
         <div className="relative w-6 h-6 rounded-full overflow-hidden">
           <Image
@@ -43,17 +43,17 @@ export function UserMenu() {
           />
         </div>
         <span className="text-sm font-medium">{user.name}</span>
-        <ChevronDown className="h-4 w-4 text-gray-500" />
+        <ChevronDown className="h-4 w-4 transition-colors duration-200 ease-in-out group-hover:text-[#091C2E]" />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+        <div className="absolute right-0 mt-2 w-40 bg-[#0a0a0a] border border-[#1F3B54] rounded-md py-2 shadow-md text-[#FBF6E8] transition-all duration-200">
           <button
             onClick={() => {
               setIsOpen(false)
               router.push("/profile")
             }}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="block w-full px-4 py-2 text-sm text-center transition-colors duration-200 rounded-sm hover:bg-[#FBF6E8]/10 hover:text-foreground"
           >
             Profile
           </button>
@@ -62,7 +62,7 @@ export function UserMenu() {
               setIsOpen(false)
               router.push("/profile/edit")
             }}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="block w-full px-4 py-2 text-sm text-center transition-colors duration-200 rounded-sm hover:bg-[#FBF6E8]/10 hover:text-foreground"
           >
             Edit Profile
           </button>
@@ -71,7 +71,7 @@ export function UserMenu() {
               logout()
               setIsOpen(false)
             }}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="block w-full px-4 py-2 text-sm font-semibold text-red-500 text-center transition-colors duration-200 rounded-sm hover:bg-red-600/10 hover:text-red-400"
           >
             Logout
           </button>

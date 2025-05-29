@@ -35,7 +35,7 @@ export default function AirtableBountiesList() {
     return (
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="border rounded-lg overflow-hidden bg-white h-full flex flex-col">
+          <div key={i} className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
             <div className="p-6 flex-1">
               <div className="mb-4">
                 <Skeleton className="h-6 w-16 mb-3 rounded-full" />
@@ -70,9 +70,9 @@ export default function AirtableBountiesList() {
   // Render error state
   if (error) {
     return (
-      <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
+      <div className="text-center py-12 bg-background rounded-lg border border-border">
         <h3 className="text-lg font-medium mb-2 text-red-600">Error Loading Bounties</h3>
-        <p className="text-gray-500 mb-4">{error}</p>
+        <p className="text-muted-foreground mb-4">{error}</p>
         <Button onClick={() => window.location.reload()}>Try Again</Button>
       </div>
     )
@@ -81,9 +81,9 @@ export default function AirtableBountiesList() {
   // Render empty state
   if (bounties.length === 0) {
     return (
-      <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
+      <div className="text-center py-12 bg-background rounded-lg border border-border">
         <h3 className="text-lg font-medium mb-2">No Bounties Available</h3>
-        <p className="text-gray-500">No bounties were found in the Airtable database.</p>
+        <p className="text-muted-foreground">No bounties were found in the Airtable database.</p>
       </div>
     )
   }

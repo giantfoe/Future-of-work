@@ -21,7 +21,7 @@ import { useCategories } from "@/hooks/use-categories"
 // Skeleton component for a single bounty card
 function BountyCardSkeleton() {
   return (
-    <div className="border rounded-lg overflow-hidden bg-white h-[460px] flex flex-col">
+    <div className="glass-card rounded-lg overflow-hidden h-[460px] flex flex-col">
       <div className="p-6 flex-1">
         <div className="mb-4">
           <Skeleton className="h-6 w-16 mb-3 rounded-full" />
@@ -78,17 +78,19 @@ function CategoryFilterButton({
     <button
       onClick={onClick}
       className={cn(
-        "px-2.5 py-1 text-sm font-medium rounded-full transition-all duration-200 border flex items-center",
+        "px-3 py-1 text-sm font-medium rounded-full flex items-center gap-1 transition-all duration-200 border",
         isSelected
-          ? "bg-black text-white border-black shadow-md"
-          : "bg-gradient-to-b from-white to-gray-50 text-gray-700 border-gray-200 shadow-sm hover:shadow hover:border-gray-300",
+          ? "bg-[#FBF6E8] text-[#091C2E] border border-[#FBF6E8] shadow-sm ring-1 ring-[#FBF6E8]"
+          : "bg-transparent text-muted-foreground border border-border hover:bg-white/5",
       )}
     >
       <span>{category.original}</span>
       <span
         className={cn(
-          "ml-1.5 text-xs px-1.5 py-0.5 rounded-full",
-          isSelected ? "bg-white bg-opacity-20 text-white" : "bg-gray-100 text-gray-700 border border-gray-200",
+          "ml-2 text-xs w-6 h-6 flex items-center justify-center rounded-full",
+          isSelected
+            ? "bg-[#091C2E] text-[#FBF6E8] border-0"
+            : "bg-transparent text-muted-foreground border border-border"
         )}
       >
         {count}
@@ -385,8 +387,14 @@ export default function BountiesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-12">
-      <div className="container px-4 md:px-6 max-w-[1400px] mx-auto">
+    <div className="bg-background min-h-screen relative">
+      {/* Background Pattern from Homepage */}
+      <div
+        className="absolute left-0 right-0 top-0 h-[300px] bg-gradient-to-b from-background to-transparent z-0"
+        aria-hidden="true"
+      />
+
+      <div className="container px-4 md:px-6 max-w-[1400px] mx-auto relative z-10 py-12">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <h1 className="text-3xl font-bold">Explore Bounties</h1>
 
@@ -428,24 +436,27 @@ export default function BountiesPage() {
           {/* Filters Sidebar - Desktop */}
           <div
             ref={sidebarRef}
-            className="space-y-8 hidden lg:block w-full"
+            className="space-y-8 hidden lg:block w-full min-h-screen"
             style={{
               position: "sticky",
               top: `${headerHeight + 16}px`,
-              height: "fit-content",
+              height: "100%",
               maxHeight: `calc(100vh - ${headerHeight + 32}px)`,
               overflowY: "auto",
-              overflowX: "hidden", // Changed from "visible" to "hidden"
+              overflowX: "visible",
+              paddingBottom: "4rem"
             }}
           >
             <div className="space-y-4">
               <h2 className="font-medium">Search</h2>
-              <Input
-                placeholder="Search bounties..."
-                className="w-full hover:border-gray-400 transition-colors"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
+              <div className="space-y-4 p-2">
+                <Input
+                  placeholder="Search bounties..."
+                  className="w-full hover:border-gray-400 transition-colors relative z-10"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+              </div>
             </div>
 
             <div className="space-y-4">
@@ -490,7 +501,7 @@ export default function BountiesPage() {
                   onValueChange={setRewardRange}
                   min={0}
                   max={maxReward}
-                  step={10} // Changed from 100 to 10 for smoother increments
+                  step={10}
                   className="relative z-0 transition-all duration-200 ease-in-out"
                 />
                 <div className="flex justify-between mt-2">
@@ -514,42 +525,45 @@ export default function BountiesPage() {
               <div className="space-y-2">
                 <label
                   htmlFor="open"
-                  className="flex items-center space-x-2 w-full hover:bg-gray-100 p-2 rounded-md transition-colors cursor-pointer"
+                  className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-[#FBF6E8]/10 group"
                 >
                   <Checkbox
                     id="open"
                     checked={statusOpen}
                     onCheckedChange={(checked) => setStatusOpen(checked as boolean)}
+                    className="focus:ring-1 focus:ring-[#FBF6E8]"
                   />
-                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow">
+                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-foreground group-hover:font-medium">
                     Open
                   </span>
                 </label>
 
                 <label
                   htmlFor="in-progress"
-                  className="flex items-center space-x-2 w-full hover:bg-gray-100 p-2 rounded-md transition-colors cursor-pointer"
+                  className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-[#FBF6E8]/10 group"
                 >
                   <Checkbox
                     id="in-progress"
                     checked={statusInProgress}
                     onCheckedChange={(checked) => setStatusInProgress(checked as boolean)}
+                    className="focus:ring-1 focus:ring-[#FBF6E8]"
                   />
-                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow">
+                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-foreground group-hover:font-medium">
                     In Review
                   </span>
                 </label>
 
                 <label
                   htmlFor="completed"
-                  className="flex items-center space-x-2 w-full hover:bg-gray-100 p-2 rounded-md transition-colors cursor-pointer"
+                  className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-[#FBF6E8]/10 group"
                 >
                   <Checkbox
                     id="completed"
                     checked={statusCompleted}
                     onCheckedChange={(checked) => setStatusCompleted(checked as boolean)}
+                    className="focus:ring-1 focus:ring-[#FBF6E8]"
                   />
-                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow">
+                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-foreground group-hover:font-medium">
                     Closed
                   </span>
                 </label>
@@ -558,23 +572,34 @@ export default function BountiesPage() {
 
             <div className="space-y-4 relative">
               <h2 className="font-medium">Sort By</h2>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-full hover:bg-gray-100 transition-colors">
-                  <SelectValue placeholder="Sort By" />
-                </SelectTrigger>
-                <SelectContent className="z-50 w-[var(--radix-select-trigger-width)] max-w-full">
-                  <SelectItem value="newest">Newest First</SelectItem>
-                  <SelectItem value="oldest">Oldest First</SelectItem>
-                  <SelectItem value="highest">Highest Reward</SelectItem>
-                  <SelectItem value="lowest">Lowest Reward</SelectItem>
-                  <SelectItem value="deadline">Deadline (Soonest)</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="p-1">
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-full border border-white/20 bg-transparent transition-colors duration-200 hover:bg-[#FBF6E8]/10 focus:outline-none focus:ring-2 focus:ring-[#FBF6E8] focus:ring-offset-2 focus:ring-offset-background">
+                    <SelectValue placeholder="Sort By" />
+                  </SelectTrigger>
+                  <SelectContent className="z-50 w-[var(--radix-select-trigger-width)] max-w-full bg-background border border-white/20">
+                    <SelectItem value="newest">Newest First</SelectItem>
+                    <SelectItem value="oldest">Oldest First</SelectItem>
+                    <SelectItem value="highest">Highest Reward</SelectItem>
+                    <SelectItem value="lowest">Lowest Reward</SelectItem>
+                    <SelectItem value="deadline">Deadline (Soonest)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
-            <Button className="w-full hover:bg-gray-800 transition-colors" onClick={resetFilters}>
-              Reset Filters
-            </Button>
+            <div className="space-y-4">
+              <h2 className="font-medium">Reset Filters</h2>
+              <div className="space-y-4 p-2">
+                <Button 
+                  variant="outline"
+                  className="relative z-10 w-full bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-md h-[40px] px-4 py-2 transition-colors duration-200 ease-in-out hover:bg-[#FBF6E8] hover:text-[#091C2E] hover:border-[#FBF6E8]" 
+                  onClick={resetFilters}
+                >
+                  Reset Filters
+                </Button>
+              </div>
+            </div>
           </div>
 
           {/* Bounties Grid */}
@@ -586,10 +611,15 @@ export default function BountiesPage() {
                 ))}
               </div>
             ) : filteredBounties.length === 0 ? (
-              <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-100">
+              <div className="bg-transparent border border-[#FBF6E8] rounded-md px-6 py-8 text-center">
                 <h3 className="text-lg font-medium mb-2">No bounties found</h3>
-                <p className="text-gray-500 mb-4">Try adjusting your filter criteria</p>
-                <Button onClick={resetFilters}>Reset Filters</Button>
+                <p className="text-[#C4C9D2] mb-4">Try adjusting your filter criteria</p>
+                <Button 
+                  onClick={resetFilters} 
+                  className="bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-md px-4 py-2 transition-colors duration-200 hover:bg-[#FBF6E8] hover:text-[#091C2E]"
+                >
+                  Reset Filters
+                </Button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

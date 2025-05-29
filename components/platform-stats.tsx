@@ -11,11 +11,11 @@ export default function PlatformStats({ stats }: PlatformStatsProps) {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       <Card>
         <CardContent className="p-6 flex items-center">
-          <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mr-4">
-            <DollarSign className="h-6 w-6 text-gray-500" />
+          <div className="h-12 w-12 rounded-full glass-card flex items-center justify-center mr-4">
+            <DollarSign className="h-6 w-6 text-muted-foreground" />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Total Earned</p>
+            <p className="text-sm text-muted-foreground">Total Earned</p>
             <h3 className="text-2xl font-bold">${stats.totalEarned}</h3>
           </div>
         </CardContent>
@@ -23,11 +23,11 @@ export default function PlatformStats({ stats }: PlatformStatsProps) {
 
       <Card>
         <CardContent className="p-6 flex items-center">
-          <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mr-4">
-            <Target className="h-6 w-6 text-gray-500" />
+          <div className="h-12 w-12 rounded-full glass-card flex items-center justify-center mr-4">
+            <Target className="h-6 w-6 text-muted-foreground" />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Available Opportunities</p>
+            <p className="text-sm text-muted-foreground">Available Opportunities</p>
             <h3 className="text-2xl font-bold">{stats.availableOpportunities}</h3>
           </div>
         </CardContent>
@@ -35,11 +35,11 @@ export default function PlatformStats({ stats }: PlatformStatsProps) {
 
       <Card>
         <CardContent className="p-6 flex items-center">
-          <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mr-4">
-            <DollarSign className="h-6 w-6 text-gray-500" />
+          <div className="h-12 w-12 rounded-full glass-card flex items-center justify-center mr-4">
+            <DollarSign className="h-6 w-6 text-muted-foreground" />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Total Available</p>
+            <p className="text-sm text-muted-foreground">Total Available</p>
             <h3 className="text-2xl font-bold">${stats.totalAvailable}</h3>
           </div>
         </CardContent>
@@ -47,11 +47,11 @@ export default function PlatformStats({ stats }: PlatformStatsProps) {
 
       <Card>
         <CardContent className="p-6 flex items-center">
-          <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mr-4">
-            <Users className="h-6 w-6 text-gray-500" />
+          <div className="h-12 w-12 rounded-full glass-card flex items-center justify-center mr-4">
+            <Users className="h-6 w-6 text-muted-foreground" />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Active Users</p>
+            <p className="text-sm text-muted-foreground">Active Users</p>
             <h3 className="text-2xl font-bold">{stats.activeUsers}</h3>
           </div>
         </CardContent>
@@ -59,11 +59,11 @@ export default function PlatformStats({ stats }: PlatformStatsProps) {
 
       <Card>
         <CardContent className="p-6 flex items-center">
-          <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mr-4">
-            <TrendingUp className="h-6 w-6 text-gray-500" />
+          <div className="h-12 w-12 rounded-full glass-card flex items-center justify-center mr-4">
+            <TrendingUp className="h-6 w-6 text-muted-foreground" />
           </div>
           <div>
-            <p className="text-sm text-gray-500">Completion Rate</p>
+            <p className="text-sm text-muted-foreground">Completion Rate</p>
             <h3 className="text-2xl font-bold">{stats.completionRate}%</h3>
           </div>
         </CardContent>

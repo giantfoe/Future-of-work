@@ -42,7 +42,7 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
 
   return (
     <div
-      className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden h-auto flex flex-col cursor-pointer transition-all duration-300 ease-out hover:shadow-lg hover:border-gray-300 font-sans"
+      className="group relative glass-card rounded-lg overflow-hidden h-auto flex flex-col cursor-pointer font-sans"
       onClick={handleCardClick}
       role="button"
       tabIndex={0}
@@ -62,19 +62,19 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold mb-3 line-clamp-2 text-gray-900 leading-tight font-sans">{bounty.title}</h3>
+        <h3 className="text-xl font-bold mb-3 line-clamp-2 text-foreground leading-tight font-sans">{bounty.title}</h3>
 
         {/* Description */}
         <CardMarkdownRenderer
           content={bounty.description}
-          className="text-gray-600 mb-6 leading-relaxed font-sans text-sm"
+          className="text-muted-foreground mb-6 leading-relaxed font-sans text-sm"
           maxLines={3}
         />
 
         {/* Reward Section */}
         <div className="mb-4">
           <div className="inline-flex items-center">
-            <span className="text-lg font-bold text-black border-2 border-black rounded-full px-4 py-1 font-sans">
+            <span className="text-lg font-bold text-foreground border-2 border-border rounded-full px-4 py-1 font-sans">
               ${bounty.reward} USD
             </span>
           </div>
@@ -84,23 +84,23 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
         <div className="space-y-2 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <CalendarDays className="h-4 w-4 text-gray-600" />
-              <span className="text-sm font-medium text-gray-700 font-sans">Deadline</span>
+              <CalendarDays className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium text-muted-foreground font-sans">Deadline</span>
             </div>
-            <span className="text-sm font-medium text-gray-900 font-sans">
+            <span className="text-sm font-medium text-foreground font-sans">
               {new Date(bounty.deadline).toLocaleDateString()}
             </span>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Clock className="h-4 w-4 text-gray-600" />
-              <span className="text-sm font-medium text-gray-700 font-sans">Time Remaining</span>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium text-muted-foreground font-sans">Time Remaining</span>
             </div>
             <span
               className={`text-sm font-medium font-sans ${
                 isClosed || isInReview
-                  ? "text-gray-600"
+                  ? "text-muted-foreground"
                   : daysLeft <= 0
                     ? "text-red-600"
                     : daysLeft <= 7
@@ -126,8 +126,7 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
       <div className="relative z-10 p-6 pt-0">
         <Link href={`/bounties/${bounty.id}`} onClick={handleButtonClick}>
           <Button
-            variant="default"
-            className="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 rounded-lg transition-all duration-300 border-0 font-sans"
+            variant="cta" className="w-full py-3"
           >
             {isClosed ? "View Details" : isInReview ? "View Status" : "Submit Now"}
           </Button>

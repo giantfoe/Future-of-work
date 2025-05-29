@@ -108,7 +108,7 @@ const config: Config = {
         marquee: "marquee 25s linear infinite",
       },
       fontFamily: {
-        sans: ["Open Sans", "system-ui", "sans-serif"],
+        sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
         opensans: ["Open Sans", "system-ui", "sans-serif"],
       },
       fontWeight: {

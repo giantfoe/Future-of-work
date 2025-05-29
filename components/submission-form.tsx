@@ -416,7 +416,13 @@ export default function SubmissionForm({
 
           <div className="space-y-2">
             <Label htmlFor="bountyName">Bounty Name</Label>
-            <Input id="bountyName" name="bountyName" value={bountyName} readOnly className="h-10 bg-gray-50" />
+            <Input
+              id="bountyName"
+              name="bountyName"
+              value={bountyName}
+              disabled
+              className="bg-transparent border border-[#FBF6E8] text-[#FBF6E8] placeholder:text-[#C4C9D2] rounded-md focus:ring-2 focus:ring-[#FBF6E8] transition-colors duration-200"
+            />
           </div>
 
           <div className="space-y-2">
@@ -438,14 +444,16 @@ export default function SubmissionForm({
               <Label htmlFor="files" className="text-base font-medium">
                 Supporting Documents (Optional)
               </Label>
-              <span className="text-xs font-medium px-2 py-1 bg-gray-100 rounded-full">Max file size: 30MB</span>
+              <span className="bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-full px-3 py-1 text-sm transition-colors duration-200 hover:bg-[#FBF6E8]/10">
+                Max size: 30MB
+              </span>
             </div>
 
             <div
               className={`border-2 border-dashed rounded-xl p-6 transition-all ${
                 files.length > 0
                   ? "border-gray-400 bg-gray-50"
-                  : "border-gray-300 hover:border-gray-400 hover:bg-gray-50/50"
+                  : "border-gray-300"
               } focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-gray-400`}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
@@ -583,12 +591,12 @@ export default function SubmissionForm({
             )}
 
             {/* File upload guidelines */}
-            <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg p-4">
+            <div className="mt-2 bg-transparent border border-[#1F3B54] rounded-md px-4 py-3">
               <div className="flex items-start">
-                <Info className="h-5 w-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" />
+                <Info className="h-5 w-5 text-[#FBF6E8] mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <h4 className="text-sm font-semibold text-blue-800 mb-2">File Upload Guidelines</h4>
-                  <ul className="text-xs text-blue-700 space-y-1.5 pl-4 list-disc">
+                  <h4 className="text-sm font-semibold text-[#FBF6E8] mb-2">File Upload Guidelines</h4>
+                  <ul className="text-xs text-[#C4C9D2] space-y-1.5 pl-4 list-disc">
                     <li>Supported formats: PDF, Word, Excel, PowerPoint, images, text, and ZIP files</li>
                     <li>Maximum 3 files can be uploaded</li>
                     <li>Each file must be under 30MB</li>
@@ -641,7 +649,7 @@ export default function SubmissionForm({
 
           <Button
             type="submit"
-            className="w-full h-12"
+            className="w-full h-12 bg-[#FBF6E8] text-[#091C2E] rounded-md transition-colors duration-200 hover:bg-[#f8eed7]"
             disabled={isSubmitting || isInReview || isClosed || isDeadlinePassed || fileErrors.length > 0}
           >
             {isSubmitting ? (

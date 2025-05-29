@@ -85,10 +85,8 @@ export function CategoryTag({ category, size = "md", showIcon = false, className
   return (
     <span
       className={cn(
-        "inline-flex items-center font-medium rounded-full",
-        "bg-gradient-to-b from-white to-gray-50",
-        "text-gray-700 border border-gray-200",
-        "shadow-sm hover:shadow hover:border-gray-300 transition-all duration-200",
+        "inline-flex items-center font-medium rounded-full transition-colors duration-200",
+        "bg-transparent border border-[#FBF6E8] text-[#FBF6E8] hover:bg-[#FBF6E8]/10",
         sizeClasses[size],
         className,
       )}

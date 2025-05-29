@@ -12,7 +12,7 @@ export default function RecentActivities({ activities }: RecentActivitiesProps) 
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium">No recent activities yet.</h3>
-        <p className="text-gray-500 mt-2">Activities will appear here as users interact with the platform.</p>
+        <p className="text-muted-foreground mt-2">Activities will appear here as users interact with the platform.</p>
       </div>
     )
   }
@@ -67,38 +67,40 @@ export default function RecentActivities({ activities }: RecentActivitiesProps) 
   }
 
   return (
-    <Card className="w-full">
-      <CardContent className="p-6">
-        <div className="space-y-6">
-          {activities.map((activity) => (
-            <div key={activity.id} className="flex items-start">
-              <div className="flex-shrink-0 mr-4">
-                {activity.userName ? (
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-gray-100 text-gray-800">
-                      {activity.userName
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                ) : (
-                  <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
-                    {getActivityIcon(activity.type)}
+    <div className="bg-background">
+      <Card className="w-full shadow-none">
+        <CardContent className="p-6">
+          <div className="space-y-6">
+            {activities.map((activity) => (
+              <div key={activity.id} className="flex items-start">
+                <div className="flex-shrink-0 mr-4">
+                  {activity.userName ? (
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="glass-card text-muted-foreground">
+                        {activity.userName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <div className="h-10 w-10 rounded-full glass-card flex items-center justify-center">
+                      {getActivityIcon(activity.type)}
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-muted-foreground">{getActivityMessage(activity)}</p>
+                  <div className="flex items-center mt-1">
+                    <Clock className="h-3 w-3 text-muted-foreground mr-1" />
+                    <span className="text-xs text-muted-foreground">{activity.timeAgo}</span>
                   </div>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800">{getActivityMessage(activity)}</p>
-                <div className="flex items-center mt-1">
-                  <Clock className="h-3 w-3 text-gray-400 mr-1" />
-                  <span className="text-xs text-gray-500">{activity.timeAgo}</span>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
