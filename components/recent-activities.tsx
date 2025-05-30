@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Clock, FileText, DollarSign, Send, CheckCircle } from "lucide-react"
 import type { Activity } from "@/lib/types"
@@ -68,8 +67,8 @@ export default function RecentActivities({ activities }: RecentActivitiesProps) 
 
   return (
     <div className="bg-background">
-      <Card className="w-full shadow-none">
-        <CardContent className="p-6">
+      <div className="w-full glass-card rounded-lg">
+        <div className="p-6">
           <div className="space-y-6">
             {activities.map((activity) => (
               <div key={activity.id} className="flex items-start">
@@ -99,8 +98,8 @@ export default function RecentActivities({ activities }: RecentActivitiesProps) 
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

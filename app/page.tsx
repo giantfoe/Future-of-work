@@ -43,7 +43,7 @@ export default async function Home() {
             </p>
             <div className="mt-10 flex">
               <Link href="/bounties">
-                <Button variant="default" size="lg" className="h-14 px-8 text-base flex items-center gap-2 opacity-70 backdrop-blur-md bg-background/60 border-radius=10">
+                <Button variant="default" size="lg" className="h-14 px-8 text-base flex items-center gap-2 glass-card">
                   Explore Bounties
                   <ArrowRight className="h-5 w-5" />
                 </Button>

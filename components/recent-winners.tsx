@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Trophy, Clock } from "lucide-react"
 import type { Winner } from "@/lib/types"
@@ -19,8 +18,8 @@ export default function RecentWinners({ winners }: RecentWinnersProps) {
 
   return (
     <div className="bg-background">
-      <Card className="w-full shadow-none">
-        <CardContent className="p-6">
+      <div className="w-full glass-card rounded-lg">
+        <div className="p-6">
           <div className="space-y-6">
             {winners.map((winner) => (
               <div key={winner.id} className="flex items-start">
@@ -51,8 +50,8 @@ export default function RecentWinners({ winners }: RecentWinnersProps) {
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }
