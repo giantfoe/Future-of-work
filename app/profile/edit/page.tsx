@@ -220,18 +220,21 @@ export default function EditProfilePage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Add a container for the two columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
         {/* PERSONAL INFO SECTION */}
         <Card className="glass-card border-[#1F3B54] relative z-20">
           <CardHeader>
             <CardTitle className="text-lg font-medium text-[#FBF6E8] relative z-20">Personal Information</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-8">
 
             {/* Profile Picture */}
-            <div>
+            <div className="mb-6 mt-8">
               <label className="block text-[#FBF6E8] mb-2 relative z-20">Profile Picture</label>
               <div
-                className={`border border-dashed ${isDragging ? "border-[#5865F2] bg-[#5865F2]/10 relative z-20" : "border-[#1F3B54] relative z-20"} rounded-md p-6 flex flex-col items-center justify-center cursor-pointer relative z-20 hover:border-[#5865F2]/50 transition-colors`}
+                className={`border border-dashed ${isDragging ? "border-[#5865F2] bg-[#5865F2]/10 relative z-20" : "border-[#1F3B54] relative z-20"} rounded-md p-10 flex flex-col items-center justify-center cursor-pointer relative z-20 hover:border-[#5865F2]/50 transition-colors`}
                 onClick={triggerFileInput}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -250,7 +253,7 @@ export default function EditProfilePage() {
                   </div>
                 ) : (
                   <div className="bg-[#1F3B54]/30 p-4 rounded-md mb-2 relative z-20">
-                    <Upload className="h-6 w-6 text-[#C4C9D2] relative z-20" />
+                    <Upload className="h-6 w-6 text-muted-foreground relative z-20" />
                   </div>
                 )}
 
@@ -325,18 +328,18 @@ export default function EditProfilePage() {
         </Card>
 
         {/* SOCIALS SECTION */}
-        <Card className="glass-card border-[#1F3B54] mb-8">
+        <Card className="glass-card border-[#1F3B54] mb-8 self-start">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-[#FBF6E8] relative z-20">Social Media</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-8">
             {/* Discord */}
-            <div className="relative z-20">
+            <div className="relative z-20 mt-8">
               <label htmlFor="discord" className="block text-[#FBF6E8] mb-2 relative z-20">
                 Discord
               </label>
               <div className="flex items-center relative z-20">
-                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
+                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 pr-6 py-2 text-muted-foreground rounded-l-md relative z-20">
                   @
                 </span>
                 <Input
@@ -356,7 +359,7 @@ export default function EditProfilePage() {
                 Twitter/X
               </label>
               <div className="flex items-center relative z-20">
-                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
+                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 pr-6 py-2 text-muted-foreground rounded-l-md relative z-20">
                   @
                 </span>
                 <Input
@@ -376,7 +379,7 @@ export default function EditProfilePage() {
                 GitHub
               </label>
               <div className="flex items-center relative z-20">
-                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
+                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 pr-6 py-2 text-muted-foreground rounded-l-md relative z-20">
                   @
                 </span>
                 <Input
@@ -392,8 +395,11 @@ export default function EditProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Submit Button */}
-        <div className="mt-8 relative z-20">
+        {/* Close the two-column container */}
+        </div>
+
+        {/* Submit Button - Centered */}
+        <div className="mt-8 flex justify-center relative z-20">
           <Button
             type="submit"
             disabled={isUploadingImage}
