@@ -57,29 +57,29 @@ export default async function Home() {
               <div className="flex flex-col items-center justify-center gap-3">
                 <DollarSign className="h-8 w-8 text-green-500 flex-shrink-0" />
                 <div className="flex flex-col items-center">
-                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Total Rewards</span>
-                  <span className="text-2xl font-bold text-foreground">$1.3M+</span>
+                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Community Earnings</span>
+                  <span className="text-2xl font-bold text-foreground">$34k</span>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center gap-3">
                 <Target className="h-8 w-8 text-blue-500 flex-shrink-0" />
                 <div className="flex flex-col items-center">
-                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Active Bounties</span>
-                  <span className="text-2xl font-bold text-foreground">349+</span>
+                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Total Bounties</span>
+                  <span className="text-2xl font-bold text-foreground">250+</span>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center gap-3">
                 <Wallet className="h-8 w-8 text-purple-500 flex-shrink-0" />
                 <div className="flex flex-col items-center">
-                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Total Value</span>
-                  <span className="text-2xl font-bold text-foreground">$424K+</span>
+                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Total Submissions</span>
+                  <span className="text-2xl font-bold text-foreground">1.5k</span>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center gap-3">
                 <Users className="h-8 w-8 text-orange-500 flex-shrink-0" />
                 <div className="flex flex-col items-center">
-                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Contributors</span>
-                  <span className="text-2xl font-bold text-foreground">12.5K+</span>
+                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Total Participants</span>
+                  <span className="text-2xl font-bold text-foreground">400+</span>
                 </div>
               </div>
             </div>
