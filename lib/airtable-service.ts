@@ -278,6 +278,11 @@ export async function getBountyById(id: string): Promise<Bounty | null> {
   try {
     console.log(`Starting getBountyById for ID: ${id}`)
 
+    // Check if this looks like a mock ID (1, 2, 3)
+    if (["1", "2", "3"].includes(id)) {
+      console.warn(`ID "${id}" looks like mock data ID. This suggests the bounty list is using mock data.`)
+    }
+
     const base = getBase()
     const tableId = process.env.AIRTABLE_BOUNTIES_TABLE_ID || "tblakfzUZvuvWKbdI"
 
@@ -299,7 +304,17 @@ export async function getBountyById(id: string): Promise<Bounty | null> {
     return bounty
   } catch (error) {
     console.error(`Error getting bounty with ID ${id}:`, error)
-    // Fallback to mock data in case of error
+    
+    // Log detailed error information
+    if (error instanceof Error) {
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+      });
+    }
+    
+    // Fallback to mock data but log that we're doing so
+    console.log(`Falling back to mock data for ID: ${id}`)
     const bounty = getMockBounties().find((b) => b.id === id)
     return bounty || null
   }

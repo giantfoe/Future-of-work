@@ -205,7 +205,7 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation - Only visible on desktop (>=1024px) */}
-          {!isBountiesPage && !isAirtableBountiesPage && (
+          {!isAirtableBountiesPage && (
             <div className="hidden lg:flex items-center space-x-6 mx-8">
               <Link href="/bounties" className="text-sm font-medium hover:text-primary">
                 All Bounties
