@@ -110,7 +110,7 @@ export default async function Home() {
       </section>
 
       {/* Recent Winners and Activities Section */}
-      <section className="bg-background py-16 sm:py-24 relative z-20">
+      <section className="bg-background py-16 sm:py-24 relative z-20 opacity-70 backdrop-blur-md ">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Recent Winners */}

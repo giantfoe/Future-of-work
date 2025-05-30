@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import FuturisticBackground from "@/components/FuturisticBackground"
 import { useState, useEffect, useMemo, useRef } from "react"
 import BountyCard from "@/components/bounty-card"
 import MobileFilters from "./mobile"
@@ -387,6 +387,8 @@ export default function BountiesPage() {
   }
 
   return (
+    <section className="relative">
+<FuturisticBackground/>
     <div className="bg-background min-h-screen relative">
       {/* Background Pattern from Homepage */}
       <div
@@ -633,5 +635,6 @@ export default function BountiesPage() {
         </div>
       </div>
     </div>
+    </section>
   )
 }

@@ -165,19 +165,19 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
-      <h1 className="text-4xl font-bold mb-8">Edit Profile</h1>
+    <div className="container mx-auto px-4 py-8 max-w-3xl relative z-20">
+      <h1 className="text-4xl font-bold mb-8 relative z-20">Edit Profile</h1>
 
       <form onSubmit={handleSubmit}>
         {/* PERSONAL INFO SECTION */}
         <div className="mb-8">
-          <h2 className="text-lg font-medium text-gray-600 mb-6">PERSONAL INFO</h2>
+          <h2 className="text-lg font-medium text-gray-600 mb-6 relative z-20">PERSONAL INFO</h2>
 
           {/* Profile Picture */}
           <div className="mb-6">
-            <label className="block text-gray-700 mb-2">Profile Picture</label>
+            <label className="block text-gray-700 mb-2 relative z-20">Profile Picture</label>
             <div
-              className={`border border-dashed ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"} rounded-md p-6 flex flex-col items-center justify-center cursor-pointer`}
+              className={`border border-dashed ${isDragging ? "border-blue-500 bg-blue-50 relative z-20" : "border-gray-300 relative z-20"} rounded-md p-6 flex flex-col items-center justify-center cursor-pointer relative z-20`}
               onClick={triggerFileInput}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -186,73 +186,73 @@ export default function EditProfilePage() {
               <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
 
               {profileImage ? (
-                <div className="relative w-24 h-24 mb-2">
+                <div className="relative w-24 h-24 mb-2 relative z-20">
                   <Image
                     src={profileImage || "/placeholder.svg"}
                     alt="Profile preview"
                     fill
-                    className="rounded-md object-cover"
+                    className="rounded-md object-cover relative z-20"
                   />
                 </div>
               ) : (
-                <div className="bg-gray-100 p-4 rounded-md mb-2">
-                  <Upload className="h-6 w-6 text-gray-500" />
+                <div className="bg-gray-100 p-4 rounded-md mb-2 relative z-20">
+                  <Upload className="h-6 w-6 text-gray-500 relative z-20" />
                 </div>
               )}
 
-              <p className="text-gray-700 mb-1">Choose or drag and drop media</p>
-              <p className="text-gray-500 text-sm">Maximum size 5 MB</p>
+              <p className="text-gray-700 mb-1 relative z-20">Choose or drag and drop media</p>
+              <p className="text-gray-500 text-sm relative z-20">Maximum size 5 MB</p>
             </div>
           </div>
 
           {/* Username */}
-          <div className="mb-6">
-            <label htmlFor="username" className="block text-gray-700 mb-2">
-              Username<span className="text-red-500">*</span>
+          <div className="mb-6 relative z-20">
+            <label htmlFor="username" className="block text-gray-700 mb-2 relative z-20">
+              Username<span className="text-red-500 relative z-20">*</span>
             </label>
             <Input
               id="username"
               name="username"
               value={formData.username}
               onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded-md"
+              className="w-full border border-gray-300 rounded-md relative z-20"
               required
             />
           </div>
 
           {/* First Name */}
-          <div className="mb-6">
-            <label htmlFor="firstName" className="block text-gray-700 mb-2">
-              First Name<span className="text-red-500">*</span>
+          <div className="mb-6 relative z-20">
+            <label htmlFor="firstName" className="block text-gray-700 mb-2 relative z-20">
+              First Name<span className="text-red-500 relative z-20">*</span>
             </label>
             <Input
               id="firstName"
               name="firstName"
               value={formData.firstName}
               onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded-md"
+              className="w-full border border-gray-300 rounded-md relative z-20"
               required
             />
           </div>
 
           {/* Last Name */}
           <div className="mb-6">
-            <label htmlFor="lastName" className="block text-gray-700 mb-2">
-              Last Name<span className="text-red-500">*</span>
+            <label htmlFor="lastName" className="block text-gray-700 mb-2 relative z-20">
+              Last Name<span className="text-red-500 relative z-20">*</span>
             </label>
             <Input
               id="lastName"
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded-md"
+              className="w-full border border-gray-300 rounded-md relative z-20"
               required
             />
           </div>
 
           {/* Bio */}
-          <div className="mb-6">
-            <label htmlFor="bio" className="block text-gray-700 mb-2">
+          <div className="mb-6 relative z-20">
+            <label htmlFor="bio" className="block text-gray-700 mb-2 relative z-20">
               Your One-Line Bio
             </label>
             <Textarea
@@ -260,21 +260,21 @@ export default function EditProfilePage() {
               name="bio"
               value={formData.bio}
               onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded-md"
+              className="w-full border border-gray-300 rounded-md relative z-20"
               rows={3}
               maxLength={200}
             />
-            <div className="text-right text-sm text-gray-500 mt-1">{bioCharactersLeft} characters left</div>
+            <div className="text-right text-sm text-gray-500 mt-1 relative z-20">{bioCharactersLeft} characters left</div>
           </div>
         </div>
 
         {/* SOCIALS SECTION */}
         <div className="mb-8">
-          <h2 className="text-lg font-medium text-gray-600 mb-6">SOCIALS</h2>
+          <h2 className="text-lg font-medium text-gray-600 mb-6 relative z-20">SOCIALS</h2>
 
           {/* Discord */}
-          <div className="mb-6 flex items-center">
-            <div className="w-8 h-8 flex items-center justify-center mr-2">
+          <div className="mb-6 flex items-center relative z-20">
+            <div className="w-8 h-8 flex items-center justify-center mr-2 relative z-20">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4C14.89 4.21 14.76 4.48 14.67 4.7C13.06 4.47 11.46 4.47 9.85 4.7C9.76 4.48 9.63 4.21 9.52 4C8.02 4.26 6.58 4.71 5.25 5.33C2.05 10.11 1.28 14.78 1.67 19.38C3.47 20.76 5.2 21.63 6.91 22.21C7.29 21.69 7.63 21.14 7.91 20.56C7.25 20.33 6.62 20.04 6.02 19.69C6.14 19.6 6.25 19.51 6.36 19.41C9.96 21.07 13.98 21.07 17.54 19.41C17.65 19.51 17.76 19.6 17.88 19.69C17.28 20.04 16.65 20.33 15.99 20.56C16.27 21.14 16.61 21.69 16.99 22.21C18.7 21.63 20.43 20.76 22.23 19.38C22.68 14.06 21.47 9.44 19.27 5.33ZM8.12 16.59C7.11 16.59 6.27 15.65 6.27 14.5C6.27 13.35 7.09 12.41 8.12 12.41C9.15 12.41 9.99 13.35 9.97 14.5C9.97 15.65 9.15 16.59 8.12 16.59ZM15.88 16.59C14.87 16.59 14.03 15.65 14.03 14.5C14.03 13.35 14.85 12.41 15.88 12.41C16.91 12.41 17.75 13.35 17.73 14.5C17.73 15.65 16.91 16.59 15.88 16.59Z"
@@ -287,18 +287,18 @@ export default function EditProfilePage() {
               name="discord"
               value={formData.discord}
               onChange={handleInputChange}
-              className="w-full border border-gray-300 rounded-md"
+              className="w-full border border-gray-300 rounded-md relative z-20"
               placeholder="Discord username"
             />
           </div>
 
           {/* Twitter/X */}
-          <div className="mb-6 flex items-center">
-            <div className="w-8 h-8 flex items-center justify-center mr-2">
-              <X className="h-5 w-5" />
+          <div className="mb-6 flex items-center relative z-20">
+            <div className="w-8 h-8 flex items-center justify-center mr-2 relative z-20">
+              <X className="h-5 w-5 relative z-20" />
             </div>
-            <div className="flex items-center w-full">
-              <div className="bg-gray-100 px-3 py-2 border border-gray-300 border-r-0 rounded-l-md text-gray-600">
+            <div className="flex items-center w-full relative z-20">
+              <div className="bg-white-100 px-3 py-2 border border-gray-300 border-r-0 rounded-l-md text-white-600 relative z-20">
                 x.com/
               </div>
               <Input
@@ -306,19 +306,19 @@ export default function EditProfilePage() {
                 name="twitter"
                 value={formData.twitter}
                 onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-none rounded-r-md"
+                className="w-full border border-gray-300 rounded-none rounded-r-md relative z-20"
                 placeholder="Twitter username"
               />
             </div>
           </div>
 
           {/* GitHub */}
-          <div className="mb-6 flex items-center">
-            <div className="w-8 h-8 flex items-center justify-center mr-2">
-              <Github className="h-5 w-5" />
+          <div className="mb-6 flex items-center relative z-20">
+            <div className="w-8 h-8 flex items-center justify-center mr-2 relative z-20">
+              <Github className="h-5 w-5 relative z-20" />
             </div>
-            <div className="flex items-center w-full">
-              <div className="bg-gray-100 px-3 py-2 border border-gray-300 border-r-0 rounded-l-md text-gray-600">
+            <div className="flex items-center w-full relative z-20">
+              <div className="bg-white-100 px-3 py-2 border border-gray-300 border-r-0 rounded-l-md text-gray-600 relative z-20">
                 github.com/
               </div>
               <Input
@@ -326,7 +326,7 @@ export default function EditProfilePage() {
                 name="github"
                 value={formData.github}
                 onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-none rounded-r-md"
+                className="w-full border border-gray-300 rounded-none rounded-r-md relative z-20"
                 placeholder="GitHub username"
               />
             </div>
@@ -334,10 +334,10 @@ export default function EditProfilePage() {
         </div>
 
         {/* Submit Button */}
-        <div className="mt-8">
+        <div className="mt-8 relative z-20">
           <button
             type="submit"
-            className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+            className="px-6 py-2 bg-white text-white rounded-md hover:bg-gray-800 transition-colors relative z-20"
           >
             Save Changes
           </button>
