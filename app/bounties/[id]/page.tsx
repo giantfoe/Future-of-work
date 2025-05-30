@@ -12,6 +12,7 @@ import { CategoryTags } from "@/components/category-tag"
 import { StatusTag } from "@/components/status-tag"
 import { CountdownTimer } from "@/components/countdown-timer"
 import BountyCard from "@/components/bounty-card"
+import SimilarBountyCard from "@/components/similar-bounty-card"
 import { parseCategories } from "@/components/category-tag"
 import FuturisticBackground from "@/components/FuturisticBackground"
 
@@ -80,6 +81,7 @@ export default function BountyDetailPage({ params: paramsPromise }: { params: Pr
     // Find similar bounties based on category
     const similar = allBounties.filter(b => {
       if (b.id === bounty.id) return false // Exclude current bounty
+      if (b.status !== "open") return false // Only show open bounties
       
       // Check if any category matches
       const bountyCategories = Array.isArray(bounty.category) ? bounty.category : [bounty.category]
@@ -406,25 +408,20 @@ export default function BountyDetailPage({ params: paramsPromise }: { params: Pr
                   </>
                 )}
               </div>
+
+              {/* Similar Bounties Section - Moved here */}
+              {similarBounties.length > 0 && (
+                <div className="glass-card rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-4">Similar Bounties</h3>
+                  <div className="space-y-2">
+                    {similarBounties.map(simBounty => (
+                      <SimilarBountyCard key={simBounty.id} bounty={simBounty} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-
-          {/* Similar Bounties Section */}
-          {similarBounties.length > 0 && (
-            <section className="py-16 sm:py-24">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-white">Similar Bounties</h2>
-                <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Check out these related opportunities that might interest you
-                </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {similarBounties.map(simBounty => (
-                  <BountyCard key={simBounty.id} bounty={simBounty} />
-                ))}
-              </div>
-            </section>
-          )}
 
           {/* View All Bounties button */}
           <div className="mt-12 text-center">
