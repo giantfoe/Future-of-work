@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Helper function to search bounties with enhanced fuzzy matching
+// Helper function to search bounties
 async function searchBounties(
   query: string,
   categories: string[],
@@ -128,18 +128,37 @@ async function searchBounties(
     
     return bounties
       .filter((bounty: any) => {
-        // Enhanced fuzzy search query matching
-        const matchesQuery = fuzzySearchMatch(query, [
-          bounty.title || '',
-          bounty.description || '',
-          bounty.category || '',
-          bounty.skills?.join(' ') || '',
-          bounty.tags?.join(' ') || ''
-        ])
+        // Enhanced flexible search query matching with broader scope
+        const queryLower = query.toLowerCase()
+        const titleLower = (bounty.title || '').toLowerCase()
+        const descriptionLower = (bounty.description || '').toLowerCase()
+        const categoryLower = Array.isArray(bounty.category) ? bounty.category.join(' ').toLowerCase() : (bounty.category || '').toLowerCase()
+        const tagsLower = (bounty.tags || []).join(' ').toLowerCase()
+        const skillsLower = (bounty.skills || []).join(' ').toLowerCase()
+        
+        // Create comprehensive searchable text combining all fields
+        const searchableText = `${titleLower} ${descriptionLower} ${categoryLower} ${tagsLower} ${skillsLower}`
+        
+        // Split query into individual words and phrases for flexible matching
+        const queryWords = queryLower.split(/\s+/).filter(word => word.length > 0)
+        const originalQuery = queryLower.trim()
+        
+        const matchesQuery = (() => {
+          // If empty query, show all
+          if (queryLower.length === 0) return true
+          
+          // Simple substring match - check if searchable text contains the query in order
+          return searchableText.includes(queryLower)
+        })()
         
         // Filter by categories if specified
         const matchesCategory = categories.length === 0 || 
-          categories.some(cat => bounty.category?.toLowerCase().includes(cat.toLowerCase()))
+          categories.some(cat => {
+            if (Array.isArray(bounty.category)) {
+              return bounty.category.some(bc => bc.toLowerCase().includes(cat.toLowerCase()))
+            }
+            return bounty.category?.toLowerCase().includes(cat.toLowerCase())
+          })
         
         // Filter by status if specified
         const matchesStatus = status.length === 0 || 
@@ -187,53 +206,24 @@ async function getCategories(): Promise<string[]> {
   }
 }
 
-// Enhanced fuzzy search matching function
-function fuzzySearchMatch(query: string, searchFields: string[]): boolean {
-  if (!query || query.trim().length === 0) return true
-  
-  const normalizedQuery = query.toLowerCase().trim()
-  const queryWords = normalizedQuery.split(/\s+/)
-  
-  // Join all search fields into one searchable text
-  const searchText = searchFields.join(' ').toLowerCase()
-  
-  // Check if any query word matches (partial matching)
-  return queryWords.some(queryWord => {
-    if (queryWord.length === 0) return false
-    
-    // Direct substring match (most flexible)
-    if (searchText.includes(queryWord)) return true
-    
-    // Word boundary matching for better relevance
-    const wordBoundaryRegex = new RegExp(`\\b${escapeRegExp(queryWord)}`, 'i')
-    if (wordBoundaryRegex.test(searchText)) return true
-    
-    // Partial word matching (for cases like "expl" matching "explore", "explain", etc.)
-    const words = searchText.split(/\s+/)
-    return words.some(word => {
-      // Check if any word starts with the query word
-      if (word.startsWith(queryWord)) return true
-      
-      // Check if query word is contained within any word (for compound words)
-      if (word.includes(queryWord) && queryWord.length >= 3) return true
-      
-      return false
-    })
-  })
-}
-
-// Helper function to escape special regex characters
-function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-}
-
-// Helper function to search categories
+// Helper function to search categories with enhanced scope
 async function searchCategories(query: string, limit: number): Promise<SearchResult[]> {
   try {
     const categories = await getCategories()
     
+    const queryLower = query.toLowerCase()
+    const queryWords = queryLower.split(/\s+/).filter(word => word.length > 0)
+    const originalQuery = queryLower.trim()
+    
     return categories
-      .filter((category) => fuzzySearchMatch(query, [category]))
+      .filter((category) => {
+        const categoryLower = category.toLowerCase()
+        
+        // Simple substring match - check if category contains the query in order
+        if (queryLower.length === 0) return true
+        
+        return categoryLower.includes(queryLower)
+      })
       .slice(0, limit)
       .map((category) => ({
         id: `category-${category.toLowerCase().replace(/\s+/g, "-")}`,
@@ -249,71 +239,135 @@ async function searchCategories(query: string, limit: number): Promise<SearchRes
 }
 
 /**
- * Sort results by relevance with enhanced scoring
+ * Sort results by relevance with enhanced scoring for broader search
  */
 function sortResultsByRelevance(results: SearchResult[], query: string): SearchResult[] {
   const queryLower = query.toLowerCase().trim()
-  const queryWords = queryLower.split(/\s+/)
+  const queryWords = queryLower.split(/\s+/).filter(word => word.length > 0)
   
-  return results.sort((a, b) => {
-    const aScore = calculateRelevanceScore(a, queryLower, queryWords)
-    const bScore = calculateRelevanceScore(b, queryLower, queryWords)
+  // Calculate relevance score for each result
+  const scoredResults = results.map(result => {
+    const titleLower = result.title.toLowerCase()
+    const descLower = result.description.toLowerCase()
+    const combinedText = `${titleLower} ${descLower}`
+    let score = 0
     
-    // Higher score comes first
-    if (aScore !== bScore) return bScore - aScore
+    // 1. Exact matches (highest priority)
+    if (titleLower === queryLower) score += 2000
+    if (titleLower.includes(queryLower) && queryLower.length > 1) score += 1000
+    if (descLower.includes(queryLower) && queryLower.length > 1) score += 500
     
-    // Bounties before categories if scores are equal
-    if (a.type === "bounty" && b.type !== "bounty") return -1
-    if (b.type === "bounty" && a.type !== "bounty") return 1
+    // 2. Phrase and word position scoring
+    if (titleLower.startsWith(queryLower)) score += 800
+    if (descLower.startsWith(queryLower)) score += 400
     
-    // Alphabetical as final sort
-    return a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+    // 3. Individual word scoring with enhanced partial matching
+    queryWords.forEach(word => {
+      // Title word matches (high weight)
+      if (titleLower.includes(word)) score += 200
+      
+      // Description word matches (medium weight)
+      if (descLower.includes(word)) score += 100
+      
+      // Enhanced partial word matching in title
+      if (word.length >= 2) {
+        const titleWords = titleLower.match(/\b\w+\b/g) || []
+        titleWords.forEach(titleWord => {
+          if (titleWord.includes(word)) score += 150
+          if (word.includes(titleWord)) score += 120
+          // Fuzzy matching bonus
+          if (word.length >= 3 && titleWord.length >= 3) {
+            const similarity = calculateSimilarity(word, titleWord)
+            if (similarity > 0.7) score += Math.floor(similarity * 100)
+          }
+        })
+      }
+      
+      // Enhanced partial word matching in description
+      if (word.length >= 2) {
+        const descWords = descLower.match(/\b\w+\b/g) || []
+        descWords.forEach(descWord => {
+          if (descWord.includes(word)) score += 75
+          if (word.includes(descWord)) score += 60
+          // Fuzzy matching bonus
+          if (word.length >= 3 && descWord.length >= 3) {
+            const similarity = calculateSimilarity(word, descWord)
+            if (similarity > 0.7) score += Math.floor(similarity * 50)
+          }
+        })
+      }
+    })
+    
+    // 4. Multi-word query bonus (when all words are found)
+    if (queryWords.length > 1) {
+      const allWordsInTitle = queryWords.every(word => 
+        titleLower.includes(word) || 
+        titleLower.split(/\s+/).some(titleWord => 
+          titleWord.includes(word) || word.includes(titleWord)
+        )
+      )
+      const allWordsInDesc = queryWords.every(word => 
+        descLower.includes(word) || 
+        descLower.split(/\s+/).some(descWord => 
+          descWord.includes(word) || word.includes(descWord)
+        )
+      )
+      
+      if (allWordsInTitle) score += 300
+      if (allWordsInDesc) score += 150
+    }
+    
+    // 5. Type-based bonuses
+    if (result.type === "bounty") score += 10
+    if (result.type === "category") score += 5
+    
+    // 6. Length penalty for very long queries (avoid over-matching)
+    if (queryLower.length > 20) score *= 0.9
+    
+    return { ...result, score }
   })
+  
+  // Sort by score (descending) then alphabetically
+  return scoredResults
+    .sort((a, b) => {
+      if (a.score !== b.score) return b.score - a.score
+      return a.title.localeCompare(b.title)
+    })
+    .map(({ score, ...result }) => result) // Remove score from final results
 }
 
 /**
- * Calculate relevance score for search results
+ * Calculate similarity between two strings using Levenshtein distance
+ * Returns a value between 0 and 1, where 1 is identical
  */
-function calculateRelevanceScore(result: SearchResult, query: string, queryWords: string[]): number {
-  const title = result.title.toLowerCase()
-  const description = result.description.toLowerCase()
-  let score = 0
+function calculateSimilarity(str1: string, str2: string): number {
+  const len1 = str1.length
+  const len2 = str2.length
   
-  // Exact title match (highest score)
-  if (title === query) score += 100
+  if (len1 === 0) return len2 === 0 ? 1 : 0
+  if (len2 === 0) return 0
   
-  // Title starts with query
-  if (title.startsWith(query)) score += 80
+  // Create matrix
+  const matrix = Array(len2 + 1).fill(null).map(() => Array(len1 + 1).fill(null))
   
-  // Title contains full query
-  if (title.includes(query)) score += 60
+  // Initialize first row and column
+  for (let i = 0; i <= len1; i++) matrix[0][i] = i
+  for (let j = 0; j <= len2; j++) matrix[j][0] = j
   
-  // Check individual query words
-  queryWords.forEach(word => {
-    if (word.length === 0) return
-    
-    // Word appears in title
-    if (title.includes(word)) {
-      if (title.startsWith(word)) score += 40
-      else score += 20
+  // Fill matrix
+  for (let j = 1; j <= len2; j++) {
+    for (let i = 1; i <= len1; i++) {
+      const cost = str1[i - 1] === str2[j - 1] ? 0 : 1
+      matrix[j][i] = Math.min(
+        matrix[j - 1][i] + 1,     // deletion
+        matrix[j][i - 1] + 1,     // insertion
+        matrix[j - 1][i - 1] + cost // substitution
+      )
     }
-    
-    // Word appears in description
-    if (description.includes(word)) score += 10
-    
-    // Partial word matching in title (for "expl" matching "explore")
-    const titleWords = title.split(/\s+/)
-    titleWords.forEach(titleWord => {
-      if (titleWord.startsWith(word) && word.length >= 3) {
-        score += 15
-      }
-    })
-  })
+  }
   
-  // Bonus for bounties (more relevant than categories)
-  if (result.type === "bounty") score += 5
-  
-  return score
+  const maxLen = Math.max(len1, len2)
+  return (maxLen - matrix[len2][len1]) / maxLen
 }
 
 /**
