@@ -40,12 +40,13 @@ export default function EditProfilePage() {
         twitter: user.twitter || '',
         github: user.github || '',
       })
-      setProfileImage(user.profileImage || null)
+      setProfileImage(user.profileImageUrl || null)
     }
   }, [user])
   const [bioCharactersLeft, setBioCharactersLeft] = useState(161)
   const [profileImage, setProfileImage] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -74,6 +75,42 @@ export default function EditProfilePage() {
     e.preventDefault()
     if (!user) return
 
+    let profileImageUrl = profileImage // Keep existing URL if no new image
+
+    // If profileImage contains base64 data (new upload), upload to Cloudinary first
+    if (profileImage && profileImage.startsWith('data:')) {
+      setIsUploadingImage(true)
+      try {
+        const uploadResponse = await fetch('/api/upload-profile-image', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            base64Data: profileImage,
+            userId: user.id,
+          }),
+        })
+
+        const uploadResult = await uploadResponse.json()
+
+        if (uploadResult.success) {
+          profileImageUrl = uploadResult.imageUrl
+        } else {
+          console.error('Image upload failed:', uploadResult.message)
+          alert('Failed to upload image. Please try again.')
+          setIsUploadingImage(false)
+          return
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error)
+        alert('Failed to upload image. Please try again.')
+        setIsUploadingImage(false)
+        return
+      }
+      setIsUploadingImage(false)
+    }
+
     const metadataPayload: Record<string, any> = {
       username: formData.username,
       firstName: formData.firstName,
@@ -82,7 +119,7 @@ export default function EditProfilePage() {
       discord: formData.discord,
       twitter: formData.twitter,
       github: formData.github,
-      ...(profileImage ? { profileImage } : {}) // <-- only include if profileImage is truthy
+      ...(profileImageUrl ? { profileImageUrl } : {}) // Store URL, not base64
     }
   
     try {
@@ -359,9 +396,10 @@ export default function EditProfilePage() {
         <div className="mt-8 relative z-20">
           <Button
             type="submit"
-            className="w-full glass-card border-[#5865F2] bg-[#5865F2]/20 hover:bg-[#5865F2]/30 text-[#FBF6E8] py-3 rounded-md relative z-20 transition-all duration-200"
+            disabled={isUploadingImage}
+            className="w-full glass-card border-[#5865F2] bg-[#5865F2]/20 hover:bg-[#5865F2]/30 text-[#FBF6E8] py-3 rounded-md relative z-20 transition-all duration-200 disabled:opacity-50"
           >
-            Save Changes
+            {isUploadingImage ? 'Uploading Image...' : 'Save Changes'}
           </Button>
         </div>
         </form>
