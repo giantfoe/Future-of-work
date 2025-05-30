@@ -80,7 +80,16 @@ export default function ProfilePage() {
     <section className="relative">
 <FuturisticBackground />
     <div className="container mx-auto p-6 relative z-20" >
-      <h1 className="text-3xl font-bold mb-6 text-[#FBF6E8] relative z-20">Profile</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-[#FBF6E8] relative z-20">Profile</h1>
+        <Button 
+          onClick={() => router.push('/profile/edit')}
+          className="glass-card border-[#1F3B54] text-[#FBF6E8] hover:bg-[#1F3B54]/20 relative z-20"
+          variant="outline"
+        >
+          Edit Profile
+        </Button>
+      </div>
 
       {/* Profile Summary Card */}
       <div className="border border-[#1F3B54] rounded-xl px-6 py-6 flex flex-col md:flex-row gap-8 mb-6 items-start relative z-20">
@@ -100,39 +109,68 @@ export default function ProfilePage() {
 
         {/* Right Section: Details and Bio */}
         <div className="flex-1 flex flex-col relative z-20">
-          {/* Details Grid (Email, University, Socials) */}
-          <div className="grid grid-cols-3 gap-6 w-full relative z-20">
-            <div>
-              <p className="text-xs text-muted-foreground relative z-20">Email:</p>
-              <p className="text-sm text-[#FBF6E8]">{user.email}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground relative z-20">University:</p>
-              <p className="text-sm text-[#FBF6E8]">{user.university || '-'}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground relative z-20">Socials:</p>
-              <p className="text-sm text-[#FBF6E8] relative z-20">{user.socials || '-'}</p>
-            </div>
+          {/* Details Grid - Only show fields that have data */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full relative z-20">
+            {user.email && (
+              <div>
+                <p className="text-xs text-muted-foreground relative z-20">Email:</p>
+                <p className="text-sm text-[#FBF6E8]">{user.email}</p>
+              </div>
+            )}
+            {user.university && (
+              <div>
+                <p className="text-xs text-muted-foreground relative z-20">University:</p>
+                <p className="text-sm text-[#FBF6E8]">{user.university}</p>
+              </div>
+            )}
+            {(user.discord || user.twitter || user.github) && (
+              <div>
+                <p className="text-xs text-muted-foreground relative z-20">Socials:</p>
+                <div className="flex flex-col gap-1">
+                  {user.discord && (
+                    <p className="text-sm text-[#FBF6E8] relative z-20">Discord: {user.discord}</p>
+                  )}
+                  {user.twitter && (
+                    <p className="text-sm text-[#FBF6E8] relative z-20">Twitter: @{user.twitter}</p>
+                  )}
+                  {user.github && (
+                    <p className="text-sm text-[#FBF6E8] relative z-20">GitHub: {user.github}</p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Bio */}
-          <p className="mt-4 text-sm text-[#FBF6E8] leading-relaxed relative z-20">
-            {user.bio || '-'}
-          </p>
+          {/* Bio - Only show if exists */}
+          {user.bio && (
+            <div className="mt-4 relative z-20">
+              <p className="text-xs text-muted-foreground mb-1">Bio:</p>
+              <p className="text-sm text-[#FBF6E8] leading-relaxed">
+                {user.bio}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Activity Card */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 relative z-20">
-        {/* Removed User Information Card */}
-
-        <Card className="">
-          <CardHeader>
-            <CardTitle className="text-[#FBF6E8] relative z-20">Activity</CardTitle>
+      <div className="mt-8 relative z-20">
+        <Card className="glass-card border-[#1F3B54]">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-[#FBF6E8] text-xl relative z-20">Recent Activity</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-[#C4C9D2] relative z-20">No activity yet.</p>
+          <CardContent className="pt-0">
+            <div className="min-h-[200px] flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#1F3B54]/30 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-[#C4C9D2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <p className="text-[#C4C9D2] text-lg font-medium mb-2 relative z-20">No activity yet</p>
+                <p className="text-[#C4C9D2]/70 text-sm relative z-20">Your bounty submissions and achievements will appear here</p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
