@@ -30,7 +30,7 @@ export default async function Home() {
         {/* Background Pattern */}
 
 
-        <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-[130px] pb-24 sm:pt-[146px] sm:pb-32 z-20"> {/* TEXT&CARDS - Top Layer */}
+        <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-[190px] pb-24 sm:pt-[186px] sm:pb-32 z-20"> {/* TEXT&CARDS - Top Layer */}
           <div className="max-w-3xl text-left">
             <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl">
               <span className="block">Discover and</span>
@@ -43,7 +43,7 @@ export default async function Home() {
             </p>
             <div className="mt-10 flex">
               <Link href="/bounties">
-                <Button variant="cta" size="lg" className="h-14 px-8 text-base flex items-center gap-2" background-color="white">
+                <Button variant="default" size="lg" className="h-14 px-8 text-base flex items-center gap-2 opacity-70 backdrop-blur-md bg-background/60 border-radius=10">
                   Explore Bounties
                   <ArrowRight className="h-5 w-5" />
                 </Button>
