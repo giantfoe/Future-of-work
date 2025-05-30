@@ -17,6 +17,7 @@ type User = {
   twitter?: string
   github?: string
   profileImage?: string | null
+  profileImageUrl?: string | null
   university?: string
   socials?: string
 }
@@ -50,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: emailAddress,
           walletAddress: privyUser.wallet?.address,
           avatar:
+            (privyUser.customMetadata?.profileImageUrl as string) ||
             (privyUser.customMetadata?.profileImage as string) ||
             `https://api.dicebear.com/7.x/initials/svg?seed=${emailAddress || privyUser.id}`,
           ...privyUser.customMetadata,

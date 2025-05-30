@@ -8,6 +8,20 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.dicebear.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 }
 
