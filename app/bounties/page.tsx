@@ -626,8 +626,8 @@ export default function BountiesPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredBounties.map((bounty) => (
-                  <BountyCard key={bounty.id} bounty={bounty} />
+                {filteredBounties.map((bounty, index) => (
+                  <BountyCard key={bounty.id} bounty={bounty} index={index} />
                 ))}
               </div>
             )}

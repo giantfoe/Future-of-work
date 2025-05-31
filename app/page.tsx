@@ -27,7 +27,34 @@ export default async function Home() {
       <FuturisticBackground />
       
       {/* Bold Hero Section */}
-      <section className="relative hero-background py-20 lg:py-32">
+      <section className="relative section-dark py-20 lg:py-32">
+        {/* Architectural background grid - same as original hero */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden architectural-grid opacity-15"></div>
+        
+        {/* Subtle flowing lines */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <svg className="absolute inset-0 w-full h-full opacity-8" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="heroLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#60a5fa" stopOpacity="0"/>
+                <stop offset="50%" stopColor="#60a5fa" stopOpacity="0.3"/>
+                <stop offset="100%" stopColor="#60a5fa" stopOpacity="0"/>
+              </linearGradient>
+            </defs>
+            
+            <path d="M0,400 Q600,350 1200,400" stroke="url(#heroLineGradient)" strokeWidth="1" fill="none">
+              <animate attributeName="d" 
+                values="M0,400 Q600,350 1200,400;M0,420 Q600,370 1200,420;M0,400 Q600,350 1200,400" 
+                dur="20s" repeatCount="indefinite"/>
+            </path>
+            <path d="M0,300 Q600,250 1200,300" stroke="url(#heroLineGradient)" strokeWidth="0.5" fill="none" opacity="0.5">
+              <animate attributeName="d" 
+                values="M0,300 Q600,250 1200,300;M0,320 Q600,270 1200,320;M0,300 Q600,250 1200,300" 
+                dur="25s" repeatCount="indefinite"/>
+            </path>
+          </svg>
+        </div>
+
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-20 items-center min-h-[600px]">
             

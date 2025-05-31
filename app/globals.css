@@ -1399,3 +1399,170 @@
 .participants-card .card-icon {
   color: #a7f3d0;
 }
+
+/* ===============================================
+   AWARD STYLE BOUNTY CARDS
+   =============================================== */
+
+.award-style-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: awardCardSlideIn 0.6s ease-out forwards;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes awardCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.award-style-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Enhanced hover effects for the inner card */
+.award-style-card:hover > div {
+  border-color: rgba(96, 165, 250, 0.4) !important;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 12px 24px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(96, 165, 250, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Icon hover effects */
+.award-style-card:hover .w-12.h-12 {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+/* Button hover glow */
+.award-style-card:hover .bg-white {
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  transition: all 0.3s ease;
+}
+
+/* Staggered entrance animation */
+.award-style-card:nth-child(1) { animation-delay: 0s; }
+.award-style-card:nth-child(2) { animation-delay: 0.1s; }
+.award-style-card:nth-child(3) { animation-delay: 0.2s; }
+.award-style-card:nth-child(4) { animation-delay: 0.3s; }
+.award-style-card:nth-child(5) { animation-delay: 0.4s; }
+.award-style-card:nth-child(6) { animation-delay: 0.5s; }
+
+/* ===============================================
+   GEOMETRIC PATTERNS
+   =============================================== */
+
+/* Pattern 1: Flowing Lines */
+.bounty-pattern-lines {
+  background-image: 
+    linear-gradient(45deg, transparent 25%, rgba(59, 130, 246, 0.6) 25%, rgba(59, 130, 246, 0.6) 50%, transparent 50%),
+    linear-gradient(-45deg, transparent 25%, rgba(139, 92, 246, 0.4) 25%, rgba(139, 92, 246, 0.4) 50%, transparent 50%);
+  background-size: 8px 8px;
+  border-radius: 50% 20% 80% 40%;
+}
+
+/* Pattern 2: Dotted Wave */
+.bounty-pattern-dots {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(34, 197, 94, 0.6) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.4) 1px, transparent 1px);
+  background-size: 16px 16px, 8px 8px;
+  border-radius: 60% 40% 30% 70%;
+}
+
+/* Pattern 3: Triangle Mountain */
+.bounty-pattern-triangles {
+  background-image: 
+    linear-gradient(45deg, transparent 40%, rgba(245, 158, 11, 0.6) 40%, rgba(245, 158, 11, 0.6) 60%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, rgba(249, 115, 22, 0.4) 40%, rgba(249, 115, 22, 0.4) 60%, transparent 60%);
+  background-size: 12px 12px;
+  border-radius: 40% 60% 70% 30%;
+}
+
+/* Pattern 4: Flowing Waves */
+.bounty-pattern-waves {
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 4px,
+      rgba(168, 85, 247, 0.5) 4px,
+      rgba(168, 85, 247, 0.5) 8px
+    );
+  border-radius: 70% 30% 60% 40%;
+}
+
+/* Pattern 5: Grid Mesh */
+.bounty-pattern-grid {
+  background-image: 
+    linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px);
+  background-size: 10px 10px;
+  border-radius: 50% 50% 70% 30%;
+}
+
+/* Pattern 6: Scattered Circles */
+.bounty-pattern-circles {
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(239, 68, 68, 0.5) 15%, transparent 15%),
+    radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.3) 10%, transparent 10%),
+    radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.4) 8%, transparent 8%);
+  background-size: 40px 40px, 30px 30px, 20px 20px;
+  border-radius: 30% 70% 40% 60%;
+}
+
+/* Pattern Animation on Hover */
+.award-style-card:hover .bounty-pattern-lines,
+.award-style-card:hover .bounty-pattern-dots,
+.award-style-card:hover .bounty-pattern-triangles,
+.award-style-card:hover .bounty-pattern-waves,
+.award-style-card:hover .bounty-pattern-grid,
+.award-style-card:hover .bounty-pattern-circles {
+  opacity: 0.6 !important;
+  transform: scale(1.1) rotate(2deg);
+  transition: all 0.4s ease;
+}
+
+/* Focus styles for accessibility */
+.award-style-card:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 4px;
+  border-radius: 1rem;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .award-style-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .award-style-card:hover > div {
+    box-shadow: 
+      0 12px 24px rgba(0, 0, 0, 0.2),
+      0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .award-style-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .award-style-card:hover {
+    transform: none;
+  }
+}
