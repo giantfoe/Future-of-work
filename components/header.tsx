@@ -188,8 +188,8 @@ export default function Header() {
       <header
         ref={headerRef}
         className={cn(
-          "bg-background/80 sticky top-0 z-30 transition-all duration-300",
-          scrolled ? "border-b border-border shadow-sm backdrop-blur-md bg-background/60" : "border-b border-border",
+          "header-glass sticky top-0 z-30",
+          scrolled ? "scrolled" : "",
         )}
       >
         <div className="max-w-[1440px] mx-auto flex h-16 items-center justify-between px-4 md:px-6 w-full">
@@ -200,21 +200,21 @@ export default function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-bold">Bounty Platform</span>
+              <span className="text-xl font-bold header-logo">Bounty Platform</span>
             </Link>
           </div>
 
           {/* Desktop Navigation - Only visible on desktop (>=1024px) */}
           {!isAirtableBountiesPage && (
-            <div className="hidden lg:flex items-center space-x-6 mx-8">
-              <Link href="/bounties" className="text-sm font-medium hover:text-primary">
+            <div className="hidden lg:flex items-center space-x-2 mx-8">
+              <Link href="/bounties" className="nav-link">
                 All Bounties
               </Link>
               {categories.map((category) => (
                 <Link
                   key={category.slug}
                   href={`/bounties?category=${category.slug}`}
-                  className="text-sm font-medium hover:text-primary px-2 py-1 rounded-full hover:bg-[hsl(var(--primary-hover))]"
+                  className="nav-link"
                 >
                   {category.name}
                 </Link>
@@ -232,7 +232,7 @@ export default function Header() {
               )}>
                 {headerSearchExpanded ? (
                   <div className="relative w-full">
-                    <div className="glass-card rounded-lg border border-border/20 bg-background/80 backdrop-blur-md">
+                    <div className="header-search expanded">
                       <div className="flex items-center gap-2 px-3 py-2">
                         <Search className="h-4 w-4 text-muted-foreground" />
                         <input
@@ -267,12 +267,12 @@ export default function Header() {
                     
                     {/* Search Results Dropdown */}
                     {headerSearchResults.length > 0 && (
-                      <div className="absolute top-full left-0 right-0 mt-2 glass-card rounded-lg border border-border/20 bg-background/95 backdrop-blur-md shadow-lg z-50 max-h-80 overflow-y-auto">
+                      <div className="absolute top-full left-0 right-0 mt-2 search-dropdown z-50 max-h-80 overflow-y-auto">
                         {headerSearchResults.map((result, index) => (
                           <button
                             key={result.id}
                             onClick={() => handleHeaderSearchSelect(result)}
-                            className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors border-b border-border/10 last:border-b-0 focus:outline-none focus:bg-muted/50"
+                            className="w-full text-left px-4 py-3 search-result-item border-b border-border/10 last:border-b-0 focus:outline-none"
                           >
                             <div className="flex items-start gap-3">
                               <div className={cn(
@@ -309,7 +309,7 @@ export default function Header() {
                       })
                       document.dispatchEvent(event)
                     }}
-                    className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                    className="header-search flex items-center gap-2 text-muted-foreground hover:text-foreground border-none"
                   >
                     <Search className="h-4 w-4" />
                     <span className="text-sm">Search</span>
@@ -322,7 +322,7 @@ export default function Header() {
             <div ref={headerSearchRef} className="md:hidden relative">
               {headerSearchExpanded ? (
                 <div className="absolute right-0 top-0 w-64 z-50">
-                  <div className="glass-card rounded-lg border border-border/20 bg-background/80 backdrop-blur-md">
+                  <div className="header-search">
                     <div className="flex items-center gap-2 px-3 py-2">
                       <Search className="h-4 w-4 text-muted-foreground" />
                       <input
@@ -357,12 +357,12 @@ export default function Header() {
                   
                   {/* Mobile Search Results Dropdown */}
                   {headerSearchResults.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-2 glass-card rounded-lg border border-border/20 bg-background/95 backdrop-blur-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-2 search-dropdown z-50 max-h-60 overflow-y-auto">
                       {headerSearchResults.map((result) => (
                         <button
                           key={result.id}
                           onClick={() => handleHeaderSearchSelect(result)}
-                          className="w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors border-b border-border/10 last:border-b-0 focus:outline-none focus:bg-muted/50"
+                          className="w-full text-left px-3 py-2 search-result-item border-b border-border/10 last:border-b-0 focus:outline-none"
                         >
                           <div className="flex items-start gap-2">
                             <div className={cn(
@@ -396,7 +396,7 @@ export default function Header() {
                     })
                     document.dispatchEvent(event)
                   }}
-                  className="p-2"
+                  className="header-search p-2 border-none"
                 >
                   <Search className="h-4 w-4" />
                 </Button>
@@ -415,12 +415,13 @@ export default function Header() {
                         setAuthModalMode("login")
                         setAuthModalOpen(true)
                       }}
+                      className="auth-button-login border-none"
                     >
                       Login
                     </Button>
                     <Button
                       size="sm"
-                      className="bg-[#5865F2] hover:bg-[#4752C4] neon-border"
+                      className="auth-button-signup border-none"
                       onClick={() => {
                         setAuthModalMode("signup")
                         setAuthModalOpen(true)
@@ -434,13 +435,6 @@ export default function Header() {
             )}
           </div>
         </div>
-
-        {/* Debug info - Only visible in development */}
-        {process.env.NODE_ENV === "development" && (
-          <div className="fixed bottom-0 right-0 bg-foreground text-background p-2 text-xs z-50">
-            Width: {windowWidth}px | {isDesktop ? "Desktop" : "Mobile"} View | Path: {pathname}
-          </div>
-        )}
       </header>
 
       {/* Scroll to top button */}
