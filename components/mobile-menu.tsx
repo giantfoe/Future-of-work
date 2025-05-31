@@ -44,7 +44,7 @@ export default function MobileMenu() {
       {/* Hamburger Button - Absolutely Positioned to Ensure Clickability */}
       <button
         onClick={toggleMenu}
-        className="relative z-50 p-2 text-gray-700 hover:text-gray-900 focus:outline-none"
+        className="mobile-menu-button relative z-50 p-2 text-white hover:text-white focus:outline-none"
         style={{ touchAction: "manipulation" }}
         aria-label="Toggle menu"
       >
@@ -52,35 +52,43 @@ export default function MobileMenu() {
       </button>
 
       {/* Backdrop - Only visible when menu is open */}
-      {isOpen && <div className="fixed inset-0 bg-black/50 z-40" onClick={closeMenu} aria-hidden="true" />}
+      {isOpen && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={closeMenu} aria-hidden="true" />}
 
       {/* Drawer - Slides in from left */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 transform transition-transform duration-300 ease-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        style={{
+          background: 'rgba(10, 10, 10, 0.95)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          border: '1px solid rgba(96, 165, 250, 0.15)',
+          borderLeft: 'none',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 32px rgba(96, 165, 250, 0.1)'
+        }}
       >
-        <div className="p-5">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold">Navigation</h2>
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-xl font-bold text-white header-logo">Navigation</h2>
             <button
               onClick={closeMenu}
-              className="p-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              className="mobile-menu-button p-2 text-white hover:text-white focus:outline-none"
               aria-label="Close menu"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <nav className="space-y-6">
-            <div className="space-y-2">
-              <h3 className="text-sm font-medium text-gray-500">Main Navigation</h3>
-              <ul className="space-y-1">
+          <nav className="space-y-8">
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Main Navigation</h3>
+              <ul className="space-y-2">
                 {navItems.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="block px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+                      className="nav-link block w-full text-left"
                       onClick={closeMenu}
                     >
                       {item.name}
@@ -90,14 +98,14 @@ export default function MobileMenu() {
               </ul>
             </div>
 
-            <div className="space-y-2 pt-4 border-t">
-              <h3 className="text-sm font-medium text-gray-500">Categories</h3>
-              <ul className="space-y-1">
+            <div className="space-y-3 pt-6 border-t border-gray-700/50">
+              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Categories</h3>
+              <ul className="space-y-2">
                 {categories.map((category) => (
                   <li key={category.slug}>
                     <Link
                       href={`/bounties?category=${category.slug}`}
-                      className="block px-2 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+                      className="nav-link block w-full text-left"
                       onClick={closeMenu}
                     >
                       {category.name}

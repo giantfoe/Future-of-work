@@ -1,120 +1,37 @@
 'use client'
 
-import React, { useCallback, useMemo } from 'react'
-import Particles from 'react-tsparticles'
-import { loadSlim } from 'tsparticles-slim' // or loadFull, loadBasic, etc.
-import type { Engine } from 'tsparticles-engine'
+import React from 'react'
 
 const FuturisticBackground: React.FC = () => {
-  const particlesInit = useCallback(async (engine: Engine) => {
-    // console.log(engine)
-    // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's good to keep it here to shape the bundle
-    await loadSlim(engine) // or loadFull(engine), loadBasic(engine) if you need more features
-  }, [])
-
-  const particlesLoaded = useCallback(async (container: any) => {
-    // await console.log(container)
-  }, [])
-
-  const particleOptions = useMemo(() => ({
-    background: {
-      color: {
-        value: 'transparent', // Make background transparent so page background shows
-      },
-    },
-    fpsLimit: 60,
-    interactivity: {
-      events: {
-        onClick: {
-          enable: true,
-          mode: 'push',
-        },
-        onHover: {
-          enable: true,
-          mode: 'repulse', // Or 'grab', 'bubble'
-        },
-        resize: true,
-      },
-      modes: {
-        push: {
-          quantity: 4,
-        },
-        repulse: {
-          distance: 100,
-          duration: 0.4,
-        },
-      },
-    },
-    particles: {
-      color: {
-        value: '#ffffff',
-      },
-      links: {
-        color: '#ffffff',
-        distance: 150,
-        enable: false, // No links for a starry sky
-        opacity: 0.5,
-        width: 1,
-      },
-      collisions: {
-        enable: true,
-      },
-      move: {
-        direction: 'none',
-        enable: true,
-        outModes: {
-          default: 'bounce',
-        },
-        random: false,
-        speed: 0.5, // Slow movement for stars
-        straight: false,
-      },
-      number: {
-        density: {
-          enable: true,
-          area: 800, // Adjust for more/less stars
-        },
-        value: 150, // Number of particles
-      },
-      opacity: {
-        value: {
-          min: 0.1,
-          max: 0.7
-        },
-        animation: {
-          enable: true,
-          speed: 1,
-          minimumValue: 0.1,
-          sync: false
-        }
-      },
-      shape: {
-        type: 'circle',
-      },
-      size: {
-        value: { min: 1, max: 3 },
-        animation: {
-          enable: true,
-          speed: 2,
-          minimumValue: 0.5,
-          sync: false
-        }
-      },
-    },
-    detectRetina: true,
-  }), [])
-
   return (
     <>
-      {/* Particles - Middle Layer (z-10 to be above gradient but below text/cards) */}
-      <div className="fixed inset-0 z-10 pointer-events-none">
-        <Particles
-          id="tsparticles"
-          init={particlesInit}
-          loaded={particlesLoaded}
-          options={particleOptions as any} // Type assertion to avoid deep type checking issues
-        />
+      {/* Architectural background grid */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden architectural-grid opacity-20"></div>
+      
+      {/* Subtle geometric elements */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Large geometric background elements */}
+        <div className="absolute top-20 right-1/4 w-2 h-2 bg-blue-400/20 rotate-45"></div>
+        <div className="absolute bottom-32 left-1/3 w-1 h-20 bg-blue-400/10"></div>
+        <div className="absolute top-1/2 left-20 w-20 h-1 bg-blue-400/10"></div>
+        <div className="absolute bottom-20 right-20 w-1.5 h-1.5 bg-blue-400/30 rotate-45"></div>
+        
+        {/* Subtle flowing lines for sections only */}
+        <svg className="absolute inset-0 w-full h-full opacity-5" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="subtleLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#60a5fa" stopOpacity="0"/>
+              <stop offset="50%" stopColor="#60a5fa" stopOpacity="1"/>
+              <stop offset="100%" stopColor="#60a5fa" stopOpacity="0"/>
+            </linearGradient>
+          </defs>
+          
+          <path d="M0,400 Q600,350 1200,400" stroke="url(#subtleLineGradient)" strokeWidth="1" fill="none">
+            <animate attributeName="d" 
+              values="M0,400 Q600,350 1200,400;M0,420 Q600,370 1200,420;M0,400 Q600,350 1200,400" 
+              dur="20s" repeatCount="indefinite"/>
+          </path>
+        </svg>
       </div>
     </>
   )
