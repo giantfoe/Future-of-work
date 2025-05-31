@@ -1566,3 +1566,22 @@
     transform: none;
   }
 }
+
+/* Slow Scrolling Animation for Banner */
+@keyframes scroll-slow {
+  0% {
+    transform: translateX(0%) translateY(0px);
+  }
+  100% {
+    transform: translateX(-200%) translateY(-20px);
+  }
+}
+
+.animate-scroll-slow {
+  animation: scroll-slow 1000s linear infinite;
+}
+
+/* Pause scrolling on banner hover */
+section:hover .animate-scroll-slow {
+  animation-play-state: paused;
+}

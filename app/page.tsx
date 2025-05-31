@@ -182,6 +182,70 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Angled Earnings Banner */}
+      <section className="relative overflow-hidden bg-gray-900/95 transform -skew-y-1 py-20 my-12">
+        {/* Grid lines passing through */}
+        <div className="absolute inset-0 architectural-grid opacity-30"></div>
+        
+        <div className="transform skew-y-1">
+          {/* Scrolling Text Container */}
+          <div className="relative overflow-hidden whitespace-nowrap">
+            <div className="animate-scroll-slow inline-block">
+              <div className="flex items-center gap-16 text-white font-black text-3xl md:text-4xl lg:text-5xl">
+                <span className="flex items-center gap-4">
+                  <DollarSign className="h-10 w-10 md:h-12 md:w-12" />
+                  Start Earning in Dollars
+                </span>
+                <span>•</span>
+                <span>$4k+ Up to be Earned Now</span>
+                <span>•</span>
+                <span>250+ Active Opportunities</span>
+                <span>•</span>
+                <span className="flex items-center gap-4">
+                  <Target className="h-10 w-10 md:h-12 md:w-12" />
+                  Real Payments for Real Contributions
+                </span>
+                <span>•</span>
+                <span>Join 400+ Web3 Builders</span>
+                <span>•</span>
+                <span className="flex items-center gap-4">
+                  <TrendingUp className="h-10 w-10 md:h-12 md:w-12" />
+                  $34k+ Community Earnings
+                </span>
+                <span>•</span>
+                <span>Start Earning in Dollars</span>
+                <span>•</span>
+                <span>$4k+ Up to be Earned Now</span>
+                <span>•</span>
+                <span>250+ Active Opportunities</span>
+                <span>•</span>
+                <span>Real Payments for Real Contributions</span>
+                <span>•</span>
+                <span>Join 400+ Web3 Builders</span>
+                <span>•</span>
+                <span>$34k+ Community Earnings</span>
+                <span>•</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Animated background elements */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-white/10 rounded-full blur-xl animate-pulse"></div>
+          <div className="absolute top-1/4 right-1/3 w-32 h-32 bg-white/10 rounded-full blur-lg animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-1/3 right-1/4 w-28 h-28 bg-white/10 rounded-full blur-lg animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-3/4 left-1/3 w-24 h-24 bg-cyan-300/20 rounded-full blur-lg animate-pulse" style={{ animationDelay: '3s' }}></div>
+          <div className="absolute bottom-1/4 left-3/4 w-36 h-36 bg-blue-300/15 rounded-full blur-xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+        </div>
+
+        {/* Geometric accent lines */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-300/40 to-transparent"></div>
+        </div>
+      </section>
+
       {/* Featured Bounties Section */}
       <section className="section-dark py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
