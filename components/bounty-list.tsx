@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { CalendarDays, Clock, ArrowRight, DollarSign, Target, Code } from "lucide-react"
+import { CalendarDays, Clock, ArrowRight, DollarSign, Target, Code, Wrench, FileText, Palette, Video, Package, Users, Briefcase, Lightbulb, Shield } from "lucide-react"
 import type { Bounty } from "@/lib/types"
 import { CategoryTags } from "@/components/category-tag"
 import { StatusTag } from "@/components/status-tag"
@@ -26,14 +26,55 @@ export default function BountyList({ bounties, featured = false }: BountyListPro
     const categoryStr = category ? String(category) : ''
     const mainCategory = categoryStr.split(',')[0]?.trim().toLowerCase()
     switch (mainCategory) {
-      case 'defi':
-        return { icon: DollarSign, color: 'bg-green-500' }
-      case 'nft':
-        return { icon: Target, color: 'bg-purple-500' }
-      case 'dao':
+      case 'engineering':
+      case 'development':
+      case 'coding':
+      case 'programming':
         return { icon: Code, color: 'bg-blue-500' }
+      case 'content':
+      case 'content creation':
+      case 'writing':
+      case 'copywriting':
+      case 'documentation':
+        return { icon: FileText, color: 'bg-green-500' }
+      case 'design':
+      case 'ui':
+      case 'ux':
+      case 'graphic':
+        return { icon: Palette, color: 'bg-purple-500' }
+      case 'media':
+      case 'video':
+      case 'multimedia':
+      case 'animation':
+        return { icon: Video, color: 'bg-red-500' }
+      case 'product':
+      case 'management':
+      case 'strategy':
+        return { icon: Package, color: 'bg-orange-500' }
+      case 'community':
+      case 'social':
+      case 'marketing':
+        return { icon: Users, color: 'bg-pink-500' }
+      case 'business':
+      case 'finance':
+      case 'legal':
+        return { icon: Briefcase, color: 'bg-indigo-500' }
+      case 'research':
+      case 'innovation':
+      case 'ideation':
+        return { icon: Lightbulb, color: 'bg-yellow-500' }
+      case 'security':
+      case 'audit':
+      case 'testing':
+        return { icon: Shield, color: 'bg-gray-500' }
+      case 'defi':
+        return { icon: DollarSign, color: 'bg-emerald-500' }
+      case 'nft':
+        return { icon: Target, color: 'bg-violet-500' }
+      case 'dao':
+        return { icon: Users, color: 'bg-cyan-500' }
       default:
-        return { icon: Code, color: 'bg-gray-500' }
+        return { icon: Code, color: 'bg-slate-500' }
     }
   }
 
@@ -70,10 +111,9 @@ export default function BountyList({ bounties, featured = false }: BountyListPro
         const getUrgencyStatus = () => {
           if (isClosed) return { text: "Closed", color: "text-gray-400" }
           if (isInReview) return { text: "In Review", color: "text-yellow-400" }
-          if (daysLeft <= 0) return { text: "Expired", color: "text-red-400" }
+          if (daysLeft <= 0) return { text: "In Review", color: "text-yellow-400" }
           if (daysLeft <= 7) return { text: "Urgent", color: "text-orange-400" }
-          if (daysLeft <= 14) return { text: "Soon", color: "text-yellow-400" }
-          return { text: "Active", color: "text-green-400" }
+          return { text: "Open", color: "text-green-400" }
         }
 
         const urgencyStatus = getUrgencyStatus()
@@ -85,75 +125,60 @@ export default function BountyList({ bounties, featured = false }: BountyListPro
             className="group award-style-card cursor-pointer"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className="relative bg-gray-900/95 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden h-full transition-all duration-300 group-hover:border-gray-700/70 group-hover:shadow-xl">
+            <div className="relative bg-gray-900/95 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden h-full transition-all duration-300 group-hover:border-gray-700/70 group-hover:shadow-xl flex flex-col">
               
-              {/* Header with Icon and Date */}
+              {/* Header with Icon and Status */}
               <div className="flex items-start justify-between p-6 pb-4">
                 <div className={`w-12 h-12 rounded-xl ${categoryInfo.color} flex items-center justify-center shadow-lg`}>
                   <IconComponent className="h-6 w-6 text-white" />
                 </div>
                 <div className="text-right">
-                  <div className="text-xs text-gray-400 font-medium">
-                    {new Date(bounty.deadline).toLocaleDateString('en-US', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric'
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Status */}
-              <div className="px-6 pb-2">
-                <span className={`text-sm font-medium ${urgencyStatus.color}`}>
-                  {urgencyStatus.text}
-                </span>
-              </div>
-
-              {/* Title */}
-              <div className="px-6 pb-4">
-                <h3 className="text-xl font-bold text-white leading-tight line-clamp-2 mb-2">
-                  {bounty.title}
-                </h3>
-                <div className="text-gray-400 text-sm">
-                  {bounty.category ? String(bounty.category).split(',')[0]?.trim() : 'General'}
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="px-6 pb-6">
-                <CardMarkdownRenderer
-                  content={bounty.description}
-                  className="text-gray-300 text-sm leading-relaxed"
-                  maxLines={2}
-                />
-              </div>
-
-              {/* Reward and Time Info */}
-              <div className="px-6 pb-6 space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-400">Reward</span>
-                  <span className="text-white font-bold">${bounty.reward} USD</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-400">Time Left</span>
-                  <span className={`font-medium ${urgencyStatus.color}`}>
-                    {isClosed ? "Closed" : isInReview ? "In Review" : daysLeft <= 0 ? "Expired" : `${daysLeft} days`}
+                  <span className={`text-sm font-medium ${urgencyStatus.color}`}>
+                    {urgencyStatus.text}
                   </span>
                 </div>
               </div>
 
-              {/* Categories */}
-              <div className="px-6 pb-6">
-                <CategoryTags categories={bounty.category} size="sm" />
+              {/* Content Area - Flex grow to fill space */}
+              <div className="flex-1 flex flex-col">
+                {/* Title */}
+                <div className="px-6 pb-4">
+                  <h3 className="text-xl font-bold text-white leading-tight mb-2">
+                    {bounty.title}
+                  </h3>
+                  <CategoryTags categories={bounty.category} size="sm" />
+                </div>
+
+                {/* Description */}
+                <div className="px-6 pb-6">
+                  <CardMarkdownRenderer
+                    content={bounty.description}
+                    className="text-gray-300 text-sm leading-relaxed"
+                    maxLines={2}
+                  />
+                </div>
+
+                {/* Reward and Time Info */}
+                <div className="px-6 pb-6 space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">Reward</span>
+                    <span className="text-white font-bold">${bounty.reward} USD</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">Time Left</span>
+                    <span className={`font-medium ${urgencyStatus.color}`}>
+                      {daysLeft <= 0 ? "Expired" : `${daysLeft} days`}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              {/* Action Button */}
-              <div className="px-6 pb-6">
+              {/* Action Button - Always at bottom */}
+              <div className="px-6 pb-6 mt-auto">
                 <Link href={`/bounties/${bounty.id}`}>
                   <Button className="w-full h-10 bg-white text-gray-900 hover:bg-gray-100 font-medium rounded-lg transition-colors duration-200">
                     <span className="flex items-center justify-center gap-2">
-                      {bounty.status === "closed" ? "View Details" : "Submit Now"}
+                      View Details
                       <ArrowRight className="h-4 w-4" />
                     </span>
                   </Button>
@@ -161,7 +186,7 @@ export default function BountyList({ bounties, featured = false }: BountyListPro
               </div>
 
               {/* Decorative Pattern */}
-              <div className={`absolute bottom-0 right-0 w-32 h-32 ${patternClass} opacity-20`} />
+              <div className={`absolute bottom-8 right-0 w-32 h-32 ${patternClass} opacity-20 -z-10`} />
             </div>
           </div>
         )

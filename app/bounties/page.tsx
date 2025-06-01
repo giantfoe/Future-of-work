@@ -439,168 +439,173 @@ export default function BountiesPage() {
           {/* Filters Sidebar - Desktop */}
           <div
             ref={sidebarRef}
-            className="space-y-8 hidden lg:block w-full min-h-screen"
+            className="space-y-8 hidden lg:block w-full"
             style={{
               position: "sticky",
               top: `${headerHeight + 16}px`,
-              height: "100%",
+              height: "fit-content",
               maxHeight: `calc(100vh - ${headerHeight + 32}px)`,
               overflowY: "auto",
               overflowX: "visible",
-              paddingBottom: "4rem"
+              paddingBottom: "2rem",
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(255, 255, 255, 0.3) transparent"
             }}
           >
-            <div className="space-y-4">
-              <h2 className="font-medium">Search</h2>
-              <div className="space-y-4 p-2">
-                <Input
-                  placeholder="Search bounties..."
-                  className="w-full hover:border-gray-400 transition-colors relative z-10"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
+            {/* Add a subtle background container for better visual separation */}
+            <div className="bg-gray-900/30 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6 space-y-8">
+              <div className="space-y-4">
+                <h2 className="font-medium text-white">Search</h2>
+                <div className="space-y-4">
+                  <Input
+                    placeholder="Search bounties..."
+                    className="w-full hover:border-gray-400 transition-colors bg-gray-800/50 border-gray-700"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-4">
-              <h2 className="font-medium">Categories</h2>
-              {categoriesLoading ? (
-                <div className="py-2 text-sm text-gray-500">Loading categories...</div>
-              ) : (
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((cat) => (
-                    <CategoryFilterButton
-                      key={cat.normalized}
-                      category={cat}
-                      isSelected={selectedCategories.includes(cat.normalized)}
-                      onClick={() => toggleCategory(cat.normalized)}
-                      count={categoryCounts[cat.normalized] || 0}
+              <div className="space-y-4">
+                <h2 className="font-medium text-white">Categories</h2>
+                {categoriesLoading ? (
+                  <div className="py-2 text-sm text-gray-500">Loading categories...</div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map((cat) => (
+                      <CategoryFilterButton
+                        key={cat.normalized}
+                        category={cat}
+                        isSelected={selectedCategories.includes(cat.normalized)}
+                        onClick={() => toggleCategory(cat.normalized)}
+                        count={categoryCounts[cat.normalized] || 0}
+                      />
+                    ))}
+                    {selectedCategories.length > 0 && (
+                      <button
+                        onClick={() => setSelectedCategories([])}
+                        className={cn(
+                          "px-2.5 py-1 text-sm font-medium rounded-full",
+                          "bg-gradient-to-b from-white to-gray-50",
+                          "text-gray-700 border border-gray-200",
+                          "shadow-sm hover:shadow hover:border-gray-300 transition-all duration-200",
+                          "flex items-center",
+                        )}
+                      >
+                        <X className="h-3 w-3 mr-1" />
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                <h2 className="font-medium text-white">Reward Range</h2>
+                <div className="pt-6 pb-2">
+                  <Slider
+                    value={rewardRange}
+                    onValueChange={setRewardRange}
+                    min={0}
+                    max={maxReward}
+                    step={10}
+                    className="relative z-0 transition-all duration-200 ease-in-out"
+                  />
+                  <div className="flex justify-between mt-2">
+                    <span className="text-sm font-medium text-gray-300 transition-all duration-200">
+                      {formatCurrency(rewardRange[0])}
+                    </span>
+                    <span className="text-sm font-medium text-gray-300 transition-all duration-200">
+                      {formatCurrency(rewardRange[1])}
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1 text-center transition-all duration-200">
+                    {rewardRange[0] === 0 && rewardRange[1] === maxReward
+                      ? "Showing all rewards"
+                      : `Showing rewards between ${formatCurrency(rewardRange[0])} and ${formatCurrency(rewardRange[1])}`}
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h2 className="font-medium text-white">Status</h2>
+                <div className="space-y-2">
+                  <label
+                    htmlFor="open"
+                    className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-gray-800/50 group"
+                  >
+                    <Checkbox
+                      id="open"
+                      checked={statusOpen}
+                      onCheckedChange={(checked) => setStatusOpen(checked as boolean)}
+                      className="focus:ring-1 focus:ring-blue-500"
                     />
-                  ))}
-                  {selectedCategories.length > 0 && (
-                    <button
-                      onClick={() => setSelectedCategories([])}
-                      className={cn(
-                        "px-2.5 py-1 text-sm font-medium rounded-full",
-                        "bg-gradient-to-b from-white to-gray-50",
-                        "text-gray-700 border border-gray-200",
-                        "shadow-sm hover:shadow hover:border-gray-300 transition-all duration-200",
-                        "flex items-center",
-                      )}
-                    >
-                      <X className="h-3 w-3 mr-1" />
-                      Clear
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
+                    <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-white text-gray-300">
+                      Open
+                    </span>
+                  </label>
 
-            <div className="space-y-4">
-              <h2 className="font-medium">Reward Range</h2>
-              <div className="pt-6 pb-2">
-                <Slider
-                  value={rewardRange}
-                  onValueChange={setRewardRange}
-                  min={0}
-                  max={maxReward}
-                  step={10}
-                  className="relative z-0 transition-all duration-200 ease-in-out"
-                />
-                <div className="flex justify-between mt-2">
-                  <span className="text-sm font-medium text-gray-700 transition-all duration-200">
-                    {formatCurrency(rewardRange[0])}
-                  </span>
-                  <span className="text-sm font-medium text-gray-700 transition-all duration-200">
-                    {formatCurrency(rewardRange[1])}
-                  </span>
-                </div>
-                <div className="text-xs text-gray-500 mt-1 text-center transition-all duration-200">
-                  {rewardRange[0] === 0 && rewardRange[1] === maxReward
-                    ? "Showing all rewards"
-                    : `Showing rewards between ${formatCurrency(rewardRange[0])} and ${formatCurrency(rewardRange[1])}`}
+                  <label
+                    htmlFor="in-progress"
+                    className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-gray-800/50 group"
+                  >
+                    <Checkbox
+                      id="in-progress"
+                      checked={statusInProgress}
+                      onCheckedChange={(checked) => setStatusInProgress(checked as boolean)}
+                      className="focus:ring-1 focus:ring-blue-500"
+                    />
+                    <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-white text-gray-300">
+                      In Review
+                    </span>
+                  </label>
+
+                  <label
+                    htmlFor="completed"
+                    className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-gray-800/50 group"
+                  >
+                    <Checkbox
+                      id="completed"
+                      checked={statusCompleted}
+                      onCheckedChange={(checked) => setStatusCompleted(checked as boolean)}
+                      className="focus:ring-1 focus:ring-blue-500"
+                    />
+                    <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-white text-gray-300">
+                      Closed
+                    </span>
+                  </label>
                 </div>
               </div>
-            </div>
 
-            <div className="space-y-4">
-              <h2 className="font-medium">Status</h2>
-              <div className="space-y-2">
-                <label
-                  htmlFor="open"
-                  className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-[#FBF6E8]/10 group"
-                >
-                  <Checkbox
-                    id="open"
-                    checked={statusOpen}
-                    onCheckedChange={(checked) => setStatusOpen(checked as boolean)}
-                    className="focus:ring-1 focus:ring-[#FBF6E8]"
-                  />
-                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-foreground group-hover:font-medium">
-                    Open
-                  </span>
-                </label>
-
-                <label
-                  htmlFor="in-progress"
-                  className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-[#FBF6E8]/10 group"
-                >
-                  <Checkbox
-                    id="in-progress"
-                    checked={statusInProgress}
-                    onCheckedChange={(checked) => setStatusInProgress(checked as boolean)}
-                    className="focus:ring-1 focus:ring-[#FBF6E8]"
-                  />
-                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-foreground group-hover:font-medium">
-                    In Review
-                  </span>
-                </label>
-
-                <label
-                  htmlFor="completed"
-                  className="flex items-center space-x-2 w-full p-2 rounded-md transition-colors duration-200 ease-in-out cursor-pointer hover:bg-[#FBF6E8]/10 group"
-                >
-                  <Checkbox
-                    id="completed"
-                    checked={statusCompleted}
-                    onCheckedChange={(checked) => setStatusCompleted(checked as boolean)}
-                    className="focus:ring-1 focus:ring-[#FBF6E8]"
-                  />
-                  <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex-grow transition-colors duration-200 ease-in-out group-hover:text-foreground group-hover:font-medium">
-                    Closed
-                  </span>
-                </label>
+              <div className="space-y-4 relative">
+                <h2 className="font-medium text-white">Sort By</h2>
+                <div className="p-1">
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-full border border-gray-700 bg-gray-800/50 text-white transition-colors duration-200 hover:bg-gray-800/70 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <SelectValue placeholder="Sort By" />
+                    </SelectTrigger>
+                    <SelectContent className="z-50 w-[var(--radix-select-trigger-width)] max-w-full bg-gray-900 border border-gray-700">
+                      <SelectItem value="newest">Newest First</SelectItem>
+                      <SelectItem value="oldest">Oldest First</SelectItem>
+                      <SelectItem value="highest">Highest Reward</SelectItem>
+                      <SelectItem value="lowest">Lowest Reward</SelectItem>
+                      <SelectItem value="deadline">Deadline (Soonest)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-4 relative">
-              <h2 className="font-medium">Sort By</h2>
-              <div className="p-1">
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-full border border-white/20 bg-transparent transition-colors duration-200 hover:bg-[#FBF6E8]/10 focus:outline-none focus:ring-2 focus:ring-[#FBF6E8] focus:ring-offset-2 focus:ring-offset-background">
-                    <SelectValue placeholder="Sort By" />
-                  </SelectTrigger>
-                  <SelectContent className="z-50 w-[var(--radix-select-trigger-width)] max-w-full bg-background border border-white/20">
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="oldest">Oldest First</SelectItem>
-                    <SelectItem value="highest">Highest Reward</SelectItem>
-                    <SelectItem value="lowest">Lowest Reward</SelectItem>
-                    <SelectItem value="deadline">Deadline (Soonest)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="font-medium">Reset Filters</h2>
-              <div className="space-y-4 p-2">
-                <Button 
-                  variant="outline"
-                  className="relative z-10 w-full bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-md h-[40px] px-4 py-2 transition-colors duration-200 ease-in-out hover:bg-[#FBF6E8] hover:text-[#091C2E] hover:border-[#FBF6E8]" 
-                  onClick={resetFilters}
-                >
-                  Reset Filters
-                </Button>
+              <div className="space-y-4">
+                <h2 className="font-medium text-white">Reset Filters</h2>
+                <div className="space-y-4">
+                  <Button 
+                    variant="outline"
+                    className="w-full bg-transparent border border-blue-500 text-blue-400 rounded-md h-[40px] px-4 py-2 transition-colors duration-200 ease-in-out hover:bg-blue-500 hover:text-white hover:border-blue-500" 
+                    onClick={resetFilters}
+                  >
+                    Reset Filters
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
