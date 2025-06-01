@@ -1460,6 +1460,103 @@
 .award-style-card:nth-child(6) { animation-delay: 0.5s; }
 
 /* ===============================================
+   STICKY FILTER SIDEBAR ENHANCEMENTS
+   =============================================== */
+
+/* Enhanced sticky positioning with smooth transitions */
+.sticky-filter-sidebar {
+  position: sticky;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
+}
+
+/* Custom scrollbar for filter sidebar */
+.sticky-filter-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sticky-filter-sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.sticky-filter-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.sticky-filter-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Smooth scroll behavior for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Filter container glass effect enhancement */
+.filter-container {
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.filter-container:hover {
+  border-color: rgba(96, 165, 250, 0.2);
+  box-shadow: 
+    0 25px 30px -5px rgba(0, 0, 0, 0.4),
+    0 15px 15px -5px rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(96, 165, 250, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Enhanced filter section headings */
+.filter-heading {
+  position: relative;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 1rem;
+}
+
+.filter-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  width: 2rem;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(96, 165, 250, 0.6) 0%, transparent 100%);
+  border-radius: 1px;
+}
+
+/* Improved focus states for accessibility */
+.filter-input:focus-visible,
+.filter-checkbox:focus-visible,
+.filter-button:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.6);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Mobile sticky improvements */
+@media (max-width: 1024px) {
+  .sticky-filter-sidebar {
+    position: relative;
+    top: auto;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+/* ===============================================
    GEOMETRIC PATTERNS
    =============================================== */
 
@@ -1467,7 +1564,7 @@
 .bounty-pattern-lines {
   background-image: 
     linear-gradient(45deg, transparent 25%, rgba(59, 130, 246, 0.6) 25%, rgba(59, 130, 246, 0.6) 50%, transparent 50%),
-    linear-gradient(-45deg, transparent 25%, rgba(139, 92, 246, 0.4) 25%, rgba(139, 92, 246, 0.4) 50%, transparent 50%);
+    linear-gradient(-45deg, transparent 25%, rgba(139, 92, 246, 0.4) 25%, rgba(139, 92, 246, 0.4) 50%);
   background-size: 8px 8px;
   border-radius: 50% 20% 80% 40%;
 }

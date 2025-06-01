@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Clock, DollarSign, Target, Code } from "lucide-react"
+import { Clock, DollarSign, Target, Code, Wrench, FileText, Palette, Video, Package, Users, Briefcase, Lightbulb, Shield } from "lucide-react"
 import type { Bounty } from "@/lib/types"
 import { StatusTag } from "@/components/status-tag"
 
@@ -18,14 +18,55 @@ export default function SimilarBountyCard({ bounty }: SimilarBountyCardProps) {
     const categoryStr = category ? String(category) : ''
     const mainCategory = categoryStr.split(',')[0]?.trim().toLowerCase()
     switch (mainCategory) {
-      case 'defi':
-        return { icon: DollarSign, color: 'bg-green-500' }
-      case 'nft':
-        return { icon: Target, color: 'bg-purple-500' }
-      case 'dao':
+      case 'engineering':
+      case 'development':
+      case 'coding':
+      case 'programming':
         return { icon: Code, color: 'bg-blue-500' }
+      case 'content':
+      case 'content creation':
+      case 'writing':
+      case 'copywriting':
+      case 'documentation':
+        return { icon: FileText, color: 'bg-green-500' }
+      case 'design':
+      case 'ui':
+      case 'ux':
+      case 'graphic':
+        return { icon: Palette, color: 'bg-purple-500' }
+      case 'media':
+      case 'video':
+      case 'multimedia':
+      case 'animation':
+        return { icon: Video, color: 'bg-red-500' }
+      case 'product':
+      case 'management':
+      case 'strategy':
+        return { icon: Package, color: 'bg-orange-500' }
+      case 'community':
+      case 'social':
+      case 'marketing':
+        return { icon: Users, color: 'bg-pink-500' }
+      case 'business':
+      case 'finance':
+      case 'legal':
+        return { icon: Briefcase, color: 'bg-indigo-500' }
+      case 'research':
+      case 'innovation':
+      case 'ideation':
+        return { icon: Lightbulb, color: 'bg-yellow-500' }
+      case 'security':
+      case 'audit':
+      case 'testing':
+        return { icon: Shield, color: 'bg-gray-500' }
+      case 'defi':
+        return { icon: DollarSign, color: 'bg-emerald-500' }
+      case 'nft':
+        return { icon: Target, color: 'bg-violet-500' }
+      case 'dao':
+        return { icon: Users, color: 'bg-cyan-500' }
       default:
-        return { icon: Code, color: 'bg-gray-500' }
+        return { icon: Code, color: 'bg-slate-500' }
     }
   }
 
@@ -40,10 +81,9 @@ export default function SimilarBountyCard({ bounty }: SimilarBountyCardProps) {
   const getUrgencyStatus = () => {
     if (isClosed) return { text: "Closed", color: "text-gray-400" }
     if (isInReview) return { text: "In Review", color: "text-yellow-400" }
-    if (daysLeft <= 0) return { text: "Expired", color: "text-red-400" }
+    if (daysLeft <= 0) return { text: "In Review", color: "text-yellow-400" }
     if (daysLeft <= 7) return { text: "Urgent", color: "text-orange-400" }
-    if (daysLeft <= 14) return { text: "Soon", color: "text-yellow-400" }
-    return { text: "Active", color: "text-green-400" }
+    return { text: "Open", color: "text-green-400" }
   }
 
   const urgencyStatus = getUrgencyStatus()
@@ -67,7 +107,7 @@ export default function SimilarBountyCard({ bounty }: SimilarBountyCardProps) {
 
         {/* Title */}
         <div className="mb-3">
-          <h4 className="font-semibold text-sm text-white leading-tight line-clamp-2 mb-1">
+          <h4 className="font-semibold text-sm text-white leading-tight mb-1">
             {bounty.title}
           </h4>
           <div className="text-xs text-gray-400">
@@ -87,7 +127,7 @@ export default function SimilarBountyCard({ bounty }: SimilarBountyCardProps) {
               Time Left
             </span>
             <span className={`font-medium ${urgencyStatus.color}`}>
-              {isClosed ? "Closed" : isInReview ? "In Review" : daysLeft <= 0 ? "Expired" : `${daysLeft} days`}
+              {daysLeft <= 0 ? "Expired" : `${daysLeft} days`}
             </span>
           </div>
         </div>
