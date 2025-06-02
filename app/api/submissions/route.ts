@@ -26,20 +26,46 @@ const ALLOWED_FILE_TYPES = [
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("=== Submission API called ===")
+    
     // Parse the form data
     const formData = await request.formData()
 
     // Extract basic submission data
     const fullName = formData.get("fullName") as string
     const university = formData.get("university") as string
+    const userId = formData.get("userId") as string
     const bountyId = formData.get("bountyId") as string
     const bountyName = formData.get("bountyName") as string
     const submissionLink = formData.get("submissionLink") as string
     const walletAddress = formData.get("walletAddress") as string
 
+    console.log("Extracted form data:", {
+      fullName,
+      university,
+      userId: userId ? "present" : "missing",
+      bountyId,
+      bountyName,
+      submissionLink: submissionLink ? "present" : "missing",
+      walletAddress: walletAddress ? "present" : "missing"
+    })
+
     // Validate required fields
-    if (!fullName || !university || !bountyId || !bountyName || !submissionLink || !walletAddress) {
-      return NextResponse.json({ success: false, message: "All required fields must be provided" }, { status: 400 })
+    if (!fullName || !university || !userId || !bountyId || !bountyName || !submissionLink || !walletAddress) {
+      const missingFields = []
+      if (!fullName) missingFields.push("fullName")
+      if (!university) missingFields.push("university") 
+      if (!userId) missingFields.push("userId")
+      if (!bountyId) missingFields.push("bountyId")
+      if (!bountyName) missingFields.push("bountyName")
+      if (!submissionLink) missingFields.push("submissionLink")
+      if (!walletAddress) missingFields.push("walletAddress")
+      
+      console.error("Missing required fields:", missingFields)
+      return NextResponse.json({ 
+        success: false, 
+        message: `Missing required fields: ${missingFields.join(", ")}` 
+      }, { status: 400 })
     }
 
     // Handle file uploads to Cloudinary
@@ -137,16 +163,20 @@ export async function POST(request: NextRequest) {
     console.log(`Successfully processed ${fileAttachments.length} file attachments`)
     console.log(`Skipped ${skippedFiles.length} files`)
 
-    // Submit to Airtable with Cloudinary URLs
+    // Submit to Airtable with the complete submission data
+    console.log("Calling submitBountyApplication...")
     const result = await submitBountyApplication({
       fullName,
       university,
+      userId,
       bountyId,
       bountyName,
       submissionLink,
       walletAddress,
-      cloudinaryAttachments: fileAttachments, // Pass Cloudinary URLs instead of file content
+      cloudinaryAttachments: fileAttachments,
     })
+
+    console.log("submitBountyApplication result:", result)
 
     if (result.success) {
       // Create a detailed success message
@@ -178,10 +208,21 @@ export async function POST(request: NextRequest) {
         attachments: fileAttachments.map((att) => att.url),
       })
     } else {
+      console.error("Submission failed:", result.message)
       return NextResponse.json({ success: false, message: result.message }, { status: 400 })
     }
   } catch (error) {
     console.error("Error processing submission:", error)
+    
+    // Log detailed error information
+    if (error instanceof Error) {
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack
+      })
+    }
+    
     return NextResponse.json(
       {
         success: false,

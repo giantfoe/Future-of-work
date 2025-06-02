@@ -353,12 +353,36 @@ interface SubmissionData {
   bountyName: string
   submissionLink: string
   walletAddress: string
+  userId: string
   cloudinaryAttachments?: Array<{
     filename: string
     url: string
     cloudinaryPublicId: string
     fileType: string
   }>
+}
+
+/**
+ * Check if a user has already submitted for a specific bounty
+ */
+export async function hasUserSubmittedForBounty(userId: string, bountyId: string): Promise<boolean> {
+  try {
+    const base = getBase()
+    const submissionsTableId = process.env.AIRTABLE_SUBMISSIONS_TABLE_ID || "Submissions"
+
+    const records = await base(submissionsTableId)
+      .select({
+        filterByFormula: `AND({User ID} = "${userId}", {Bounty ID} = "${bountyId}")`,
+        fields: ["User ID", "Bounty ID"],
+        maxRecords: 1,
+      })
+      .all()
+
+    return records.length > 0
+  } catch (error) {
+    console.error(`Error checking existing submission for user ${userId} and bounty ${bountyId}:`, error)
+    return false // Return false on error to allow submission attempt
+  }
 }
 
 export async function submitBountyApplication(
@@ -368,19 +392,30 @@ export async function submitBountyApplication(
     console.log("Starting submitBountyApplication with:", {
       fullName: data.fullName,
       university: data.university,
+      userId: data.userId,
       bountyId: data.bountyId,
       bountyName: data.bountyName,
       hasCloudinaryAttachments: !!data.cloudinaryAttachments && data.cloudinaryAttachments.length > 0,
       attachmentCount: data.cloudinaryAttachments?.length || 0,
     })
 
+    // Check if user has already submitted for this bounty
+    const hasAlreadySubmitted = await hasUserSubmittedForBounty(data.userId, data.bountyId)
+    if (hasAlreadySubmitted) {
+      return {
+        success: false,
+        message: "You have already submitted for this bounty. Only one submission per user is allowed.",
+      }
+    }
+
     const base = getBase()
     const submissionsTableId = process.env.AIRTABLE_SUBMISSIONS_TABLE_ID || "Submissions"
 
-    // Prepare the record data without attachments first
+    // Prepare the record data including User ID
     const recordData: any = {
       "Full Name": data.fullName,
       University: data.university,
+      "User ID": data.userId,
       "Bounty ID": data.bountyId,
       "Bounty Name": data.bountyName,
       "Submission Link": data.submissionLink,
@@ -502,6 +537,7 @@ export async function getSubmissionsForBounty(bountyId: string): Promise<any[]> 
       id: record.id,
       userName: record.fields["Full Name"] || "",
       university: record.fields["University"] || "",
+      userId: record.fields["User ID"] || "",
       bountyId: record.fields["Bounty ID"] || "",
       bountyName: record.fields["Bounty Name"] || "",
       submissionLink: record.fields["Submission Link"] || "",
@@ -512,6 +548,40 @@ export async function getSubmissionsForBounty(bountyId: string): Promise<any[]> 
     }))
   } catch (error) {
     console.error(`Error getting submissions for bounty ${bountyId}:`, error)
+    return []
+  }
+}
+
+/**
+ * Get all submissions by a specific user
+ */
+export async function getSubmissionsByUser(userId: string): Promise<any[]> {
+  try {
+    const base = getBase()
+    const submissionsTableId = process.env.AIRTABLE_SUBMISSIONS_TABLE_ID || "Submissions"
+
+    const records = await base(submissionsTableId)
+      .select({
+        filterByFormula: `{User ID} = "${userId}"`,
+        sort: [{ field: "Created At", direction: "desc" }],
+      })
+      .all()
+
+    return records.map((record) => ({
+      id: record.id,
+      userName: record.fields["Full Name"] || "",
+      university: record.fields["University"] || "",
+      userId: record.fields["User ID"] || "",
+      bountyId: record.fields["Bounty ID"] || "",
+      bountyName: record.fields["Bounty Name"] || "",
+      submissionLink: record.fields["Submission Link"] || "",
+      attachments: record.fields["Attachments"] || [],
+      walletAddress: record.fields["Wallet Address"] || "",
+      status: record.fields["Status"] || "Submitted",
+      createdAt: record.fields["Created At"] || new Date().toISOString(),
+    }))
+  } catch (error) {
+    console.error(`Error getting submissions for user ${userId}:`, error)
     return []
   }
 }
