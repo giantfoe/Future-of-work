@@ -49,12 +49,12 @@ export default function SubmissionForm({
   isDetailsPage = false,
 }: SubmissionFormProps) {
   const router = useRouter()
-  const { user } = useAuth()
+  const { user, isLoading: authLoading } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [hasAlreadySubmitted, setHasAlreadySubmitted] = useState(false)
-  const [isCheckingSubmission, setIsCheckingSubmission] = useState(true)
+  const [submissionCheckComplete, setSubmissionCheckComplete] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const [fileErrors, setFileErrors] = useState<string[]>([])
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -70,8 +70,14 @@ export default function SubmissionForm({
   // Check if user has already submitted for this bounty
   useEffect(() => {
     const checkExistingSubmission = async () => {
+      // Wait for auth to finish loading first
+      if (authLoading) {
+        return
+      }
+
+      // If no user or bountyId, mark check as complete
       if (!user?.id || !bountyId) {
-        setIsCheckingSubmission(false)
+        setSubmissionCheckComplete(true)
         return
       }
 
@@ -81,15 +87,19 @@ export default function SubmissionForm({
         setHasAlreadySubmitted(result.hasSubmitted)
       } catch (error) {
         console.error('Error checking existing submission:', error)
-        // If there's an error, don't block the user from attempting to submit
         setHasAlreadySubmitted(false)
       } finally {
-        setIsCheckingSubmission(false)
+        setSubmissionCheckComplete(true)
       }
     }
 
     checkExistingSubmission()
-  }, [user?.id, bountyId])
+  }, [user?.id, bountyId, authLoading])
+
+  // Don't render anything until auth is loaded AND submission check is complete
+  if (authLoading || !submissionCheckComplete) {
+    return null
+  }
 
   // Check if the bounty is closed or in review, or if the deadline has passed
   const isDeadlinePassed = new Date() > new Date(deadline)
@@ -97,20 +107,9 @@ export default function SubmissionForm({
   const isClosed = status === "closed"
   const isDisabled = isClosed || isInReview || isDeadlinePassed || hasAlreadySubmitted
 
-  // Add debugging
-  console.log("SubmissionForm status checks:", {
-    status,
-    isInReview,
-    isClosed,
-    isDeadlinePassed,
-    isDisabled,
-    isDetailsPage,
-  })
-
   // If the bounty is closed or in review and we're on the details page,
   // we don't need to render the form at all as the parent component will handle it
   if ((isClosed || isInReview) && isDetailsPage) {
-    console.log("SubmissionForm early return - not rendering form")
     return null
   }
 
@@ -359,24 +358,9 @@ export default function SubmissionForm({
     router.push(`/bounties/${bountyId}`)
   }
 
-  // If the bounty is closed or in review and we're on the details page,
-  // we don't need to render the form at all as the parent component will handle it
-  if ((isClosed || isInReview) && isDetailsPage) {
-    return null
-  }
-
   return (
     <div>
-      {isCheckingSubmission && (
-        <Alert className="mb-6 notification-info">
-          <Info className="h-4 w-4 text-blue-400" />
-          <AlertDescription className="text-blue-100">
-            Checking your submission status...
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {!isCheckingSubmission && hasAlreadySubmitted && (
+      {hasAlreadySubmitted && (
         <Alert className="mb-6 notification-warning">
           <CheckCircle className="h-4 w-4 text-green-400" />
           <AlertTitle className="text-green-200">Already Submitted</AlertTitle>
