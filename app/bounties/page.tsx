@@ -137,7 +137,7 @@ export default function BountiesPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [rewardRange, setRewardRange] = useState<number[]>([0, 5000])
-  const [statusOpen, setStatusOpen] = useState(false)
+  const [statusOpen, setStatusOpen] = useState(true)
   const [statusInProgress, setStatusInProgress] = useState(false)
   const [statusCompleted, setStatusCompleted] = useState(false)
   const [sortBy, setSortBy] = useState("status")
@@ -293,9 +293,6 @@ export default function BountiesPage() {
         // Get the status and ensure it's a string
         const status = String(bounty.status || "open").toLowerCase()
 
-        // Log the status for debugging
-        console.log(`Filtering bounty: ${bounty.title}, Status: ${status}`)
-
         // Check if the status matches any of the selected filters
         if (statusOpen && status === "open") {
           return true
@@ -312,12 +309,13 @@ export default function BountiesPage() {
         return false
       })
     }
+    // If no status filters are selected, show all bounties (this is the default behavior)
 
     // Apply sorting
     switch (sortBy) {
       case "status":
         result = result.sort((a, b) => {
-          const statusOrder: Record<string, number> = { "open": 0, "in-review": 1, "in-progress": 1, "closed": 2 };
+          const statusOrder: Record<string, number> = { "open": 0, "in-progress": 1, "closed": 2 };
           const statusA = (a.status || "open").toLowerCase();
           const statusB = (b.status || "open").toLowerCase();
           return (statusOrder[statusA] || 999) - (statusOrder[statusB] || 999);
