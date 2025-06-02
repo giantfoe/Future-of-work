@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
-import { ChevronDown } from "lucide-react"
 import Image from "next/image"
 
 export function UserMenu() {
@@ -31,19 +30,15 @@ export function UserMenu() {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-full bg-transparent border border-[#FBF6E8] text-[#FBF6E8] px-3 py-2 transition-colors duration-200 ease-in-out hover:bg-[#FBF6E8] hover:text-[#091C2E] group"
+        className="flex items-center justify-center hover grey 800  text-white p-1 rounded-full transition-colors duration-200 w-10 h-10 ring-2 ring-gray-900 ring-offset-2 ring-offset-gray-800"
       >
-        <div className="relative w-6 h-6 rounded-full overflow-hidden">
-          <Image
-            src={user.avatar || "/placeholder.svg"}
-            alt={user.name}
-            width={24}
-            height={24}
-            className="rounded-full"
-          />
-        </div>
-        <span className="text-sm font-medium">{user.name}</span>
-        <ChevronDown className="h-4 w-4 transition-colors duration-200 ease-in-out group-hover:text-[#091C2E]" />
+        <Image
+          src={user?.avatar || user?.picture || '/placeholder-user.jpg'}
+          alt={user?.name || 'User'}
+          width={32}
+          height={32}
+          className="rounded-full object-cover w-full h-full"
+        />
       </button>
 
       {isOpen && (
