@@ -10,9 +10,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Image from "next/image"
 import { useUser } from "@privy-io/react-auth"
 import FuturisticBackground from "@/components/FuturisticBackground"
+import { universities } from "@/lib/universities"
 
 
 export default function EditProfilePage() {
@@ -27,6 +29,7 @@ export default function EditProfilePage() {
     discord: user?.discord || '',
     twitter: user?.twitter || '',
     github: user?.github || '',
+    university: user?.university || '',
   })
 
   useEffect(() => {
@@ -39,6 +42,7 @@ export default function EditProfilePage() {
         discord: user.discord || '',
         twitter: user.twitter || '',
         github: user.github || '',
+        university: user.university || '',
       })
       setProfileImage(user.profileImageUrl || null)
     }
@@ -69,6 +73,13 @@ export default function EditProfilePage() {
       // Assuming max length is 200 characters
       setBioCharactersLeft(200 - value.length)
     }
+  }
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -119,6 +130,7 @@ export default function EditProfilePage() {
       discord: formData.discord,
       twitter: formData.twitter,
       github: formData.github,
+      university: formData.university,
       ...(profileImageUrl ? { profileImageUrl } : {}) // Store URL, not base64
     }
   
@@ -388,6 +400,38 @@ export default function EditProfilePage() {
                   placeholder="username"
                 />
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* UNIVERSITY SECTION */}
+        <Card className="glass-card border-[#1F3B54] mb-8">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-[#FBF6E8] relative z-20">University</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="relative z-20">
+              <label htmlFor="university" className="block text-[#FBF6E8] mb-2 relative z-20">
+                University
+              </label>
+              <Select
+                value={formData.university}
+                onValueChange={(value) => handleSelectChange("university", value)}
+              >
+                <SelectTrigger className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] focus:border-[#5865F2] relative z-20">
+                  <SelectValue placeholder="Select your university" />
+                </SelectTrigger>
+                <SelectContent>
+                  {universities.map((uni) => (
+                    <SelectItem key={uni} value={uni}>
+                      {uni}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-sm text-[#C4C9D2] mt-1 relative z-20">
+                If your college is not on the list, please message us to add it to the list, and you'll get $1.
+              </p>
             </div>
           </CardContent>
         </Card>

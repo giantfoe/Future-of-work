@@ -2,16 +2,16 @@
 
 import type React from "react"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { universities } from "@/lib/universities"
 import { Eye, AlertCircle, Upload, X, FileText, AlertTriangle, CheckCircle, Info } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import { useAuth } from "@/contexts/auth-context"
+import Link from "next/link"
 
 interface SubmissionFormProps {
   bountyId: string
@@ -49,27 +49,53 @@ export default function SubmissionForm({
   isDetailsPage = false,
 }: SubmissionFormProps) {
   const router = useRouter()
+  const { user } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
-  const [university, setUniversity] = useState("")
+  const [hasAlreadySubmitted, setHasAlreadySubmitted] = useState(false)
+  const [isCheckingSubmission, setIsCheckingSubmission] = useState(true)
   const [files, setFiles] = useState<File[]>([])
   const [fileErrors, setFileErrors] = useState<string[]>([])
   const [uploadProgress, setUploadProgress] = useState(0)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadSuccess, setUploadSuccess] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string>(
-    "Your submission has been received! We'll review it and get back to you soon.",
+    "Your submission has been received! We'll review it and get back to you soon."
   )
   const [totalFileSize, setTotalFileSize] = useState(0)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const formRef = useRef<HTMLFormElement>(null) // Add a ref for the form
+  const formRef = useRef<HTMLFormElement>(null)
+
+  // Check if user has already submitted for this bounty
+  useEffect(() => {
+    const checkExistingSubmission = async () => {
+      if (!user?.id || !bountyId) {
+        setIsCheckingSubmission(false)
+        return
+      }
+
+      try {
+        const response = await fetch(`/api/submissions/check?userId=${user.id}&bountyId=${bountyId}`)
+        const result = await response.json()
+        setHasAlreadySubmitted(result.hasSubmitted)
+      } catch (error) {
+        console.error('Error checking existing submission:', error)
+        // If there's an error, don't block the user from attempting to submit
+        setHasAlreadySubmitted(false)
+      } finally {
+        setIsCheckingSubmission(false)
+      }
+    }
+
+    checkExistingSubmission()
+  }, [user?.id, bountyId])
 
   // Check if the bounty is closed or in review, or if the deadline has passed
   const isDeadlinePassed = new Date() > new Date(deadline)
   const isInReview = status === "in-progress" || status === "in review"
   const isClosed = status === "closed"
-  const isDisabled = isClosed || isInReview || isDeadlinePassed
+  const isDisabled = isClosed || isInReview || isDeadlinePassed || hasAlreadySubmitted
 
   // Add debugging
   console.log("SubmissionForm status checks:", {
@@ -225,9 +251,28 @@ export default function SubmissionForm({
     setUploadProgress(0)
 
     try {
+      if (!user) {
+        setError("You must be signed in to submit.")
+        setIsSubmitting(false)
+        setIsUploading(false)
+        return
+      }
+      // Debug: log user object
+      console.log('SubmissionForm user:', user)
+      if (!user.name) {
+        setError("Please finish setting up your profile to submit")
+        setIsSubmitting(false)
+        setIsUploading(false)
+        return
+      }
+      if (!user.university) {
+        setError("Please finish setting up your profile to submit")
+        setIsSubmitting(false)
+        setIsUploading(false)
+        return
+      }
       // Get form data
       const formData = new FormData(event.currentTarget)
-      const fullName = formData.get("fullName") as string
       const submissionLink = formData.get("submissionLink") as string
       const walletAddress = formData.get("walletAddress") as string
 
@@ -236,10 +281,13 @@ export default function SubmissionForm({
         formData.append(`file-${index}`, file)
       })
 
-      // Add other necessary fields
+      // Add other necessary fields from user context
       formData.append("bountyId", bountyId)
       formData.append("bountyName", bountyName)
-      formData.append("university", university)
+      formData.append("fullName", user.name || "")
+      formData.append("userId", user.id)
+      // University is now required from user profile
+      formData.append("university", user.university || "")
 
       // Start progress updates with more realistic progression
       const progressInterval = setInterval(() => {
@@ -280,7 +328,6 @@ export default function SubmissionForm({
 
         setFiles([])
         setFileErrors([])
-        setUniversity("")
         setTotalFileSize(0)
 
         // Display the specific success message from the server
@@ -320,17 +367,28 @@ export default function SubmissionForm({
 
   return (
     <div>
-      {isDisabled && (
-        <Alert
-          className={`mb-6 ${
-            isInReview
-              ? "bg-amber-50 border-amber-200 text-amber-800"
-              : isClosed
-                ? "bg-gray-50 border-gray-200 text-gray-800"
-                : "bg-amber-50 border-amber-200 text-amber-800"
-          }`}
-        >
-          <AlertDescription>
+      {isCheckingSubmission && (
+        <Alert className="mb-6 notification-info">
+          <Info className="h-4 w-4 text-blue-400" />
+          <AlertDescription className="text-blue-100">
+            Checking your submission status...
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {!isCheckingSubmission && hasAlreadySubmitted && (
+        <Alert className="mb-6 notification-warning">
+          <CheckCircle className="h-4 w-4 text-green-400" />
+          <AlertTitle className="text-green-200">Already Submitted</AlertTitle>
+          <AlertDescription className="text-green-100">
+            You have already submitted for this bounty. Only one submission per user is allowed.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {isDisabled && !hasAlreadySubmitted && (
+        <Alert className="mb-6 notification-warning">
+          <AlertDescription className="text-amber-100">
             {isInReview
               ? "This bounty is in review and is not accepting submissions at the moment."
               : isClosed
@@ -341,29 +399,38 @@ export default function SubmissionForm({
       )}
 
       {error && (
-        <Alert variant="destructive" className="mb-6">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+        <Alert className="mb-6 notification-error">
+          <AlertCircle className="h-4 w-4 text-red-400" />
+          <AlertTitle className="text-red-200">Error</AlertTitle>
+          <AlertDescription className="text-red-100">
+            {error}
+            {error.includes("profile") && (
+              <span className="block mt-2">
+                <Link href="/profile/edit" className="underline text-blue-400 hover:text-blue-300 transition-colors">Complete Profile</Link>
+              </span>
+            )}
+          </AlertDescription>
         </Alert>
       )}
 
       {success && (
-        <Alert className="mb-6 bg-green-50 border-green-200 text-green-800">
-          <CheckCircle className="h-4 w-4" />
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{successMessage}</AlertDescription>
+        <Alert className="mb-6 notification-success">
+          <CheckCircle className="h-4 w-4 text-green-400" />
+          <AlertTitle className="text-green-200">Success</AlertTitle>
+          <AlertDescription className="text-green-100">{successMessage}</AlertDescription>
         </Alert>
       )}
 
       {isDisabled ? (
         <div className="space-y-6">
           <p className="text-gray-500">
-            {isInReview
-              ? "This bounty is in review and is not accepting submissions at the moment."
-              : isClosed
-                ? "This bounty has been completed and is no longer accepting submissions."
-                : "The deadline for this bounty has passed and it is no longer accepting submissions."}
+            {hasAlreadySubmitted
+              ? "You have already submitted for this bounty. Only one submission per user is allowed."
+              : isInReview
+                ? "This bounty is in review and is not accepting submissions at the moment."
+                : isClosed
+                  ? "This bounty has been completed and is no longer accepting submissions."
+                  : "The deadline for this bounty has passed and it is no longer accepting submissions."}
           </p>
 
           {/* Only show the View Bounty button if we're NOT on the details page */}
@@ -380,51 +447,18 @@ export default function SubmissionForm({
 
           {/* Show a different message if we are on the details page */}
           {isDetailsPage && (
-            <div className="flex items-center justify-center gap-2 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <AlertCircle className="h-5 w-5 text-amber-500" />
-              <p className="text-sm font-medium text-gray-700">
-                Submissions are currently not being accepted for this bounty.
+            <div className="flex items-center justify-center gap-2 p-4 notification-warning rounded-lg">
+              <AlertCircle className="h-5 w-5 text-amber-400" />
+              <p className="text-sm font-medium text-amber-100">
+                {hasAlreadySubmitted
+                  ? "You have already submitted for this bounty."
+                  : "Submissions are currently not being accepted for this bounty."}
               </p>
             </div>
           )}
         </div>
       ) : (
         <form id="submission-form" ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
-            <Input id="fullName" name="fullName" required className="h-10" />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="university">University</Label>
-            <Select value={university} onValueChange={setUniversity} required>
-              <SelectTrigger className="h-10">
-                <SelectValue placeholder="Select your university" />
-              </SelectTrigger>
-              <SelectContent>
-                {universities.map((uni) => (
-                  <SelectItem key={uni} value={uni}>
-                    {uni}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-sm text-muted-foreground mt-1">
-              If your college is not on the list, please message us to add it to the list, and you'll get $1.
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="bountyName">Bounty Name</Label>
-            <Input
-              id="bountyName"
-              name="bountyName"
-              value={bountyName}
-              disabled
-              className="bg-transparent border border-[#FBF6E8] text-[#FBF6E8] placeholder:text-[#C4C9D2] rounded-md focus:ring-2 focus:ring-[#FBF6E8] transition-colors duration-200"
-            />
-          </div>
-
           <div className="space-y-2">
             <Label htmlFor="submissionLink">Submission Link</Label>
             <Input
@@ -452,9 +486,9 @@ export default function SubmissionForm({
             <div
               className={`border-2 border-dashed rounded-xl p-6 transition-all ${
                 files.length > 0
-                  ? "border-gray-400 bg-gray-50"
-                  : "border-gray-300"
-              } focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-gray-400`}
+                  ? "border-[#5865F2]/50 bg-[#1F3B54]/10"
+                  : "border-[#1F3B54]/30"
+              } focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-[#5865F2]/50 hover:border-[#5865F2]/40`}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               tabIndex={0}
@@ -469,11 +503,11 @@ export default function SubmissionForm({
               }}
             >
               <div className="flex flex-col items-center justify-center py-6">
-                <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                  <Upload className="h-8 w-8 text-muted-foreground" />
+                <div className="w-16 h-16 mb-4 rounded-full bg-[#1F3B54]/30 flex items-center justify-center">
+                  <Upload className="h-8 w-8 text-[#C4C9D2]" />
                 </div>
-                <p className="text-base font-medium text-foreground mb-2">Drag and drop your files here</p>
-                <p className="text-sm text-muted-foreground text-center mb-4">or click to browse from your computer</p>
+                <p className="text-base font-medium text-[#FBF6E8] mb-2">Drag and drop your files here</p>
+                <p className="text-sm text-[#C4C9D2] text-center mb-4">or click to browse from your computer</p>
                 <input
                   ref={fileInputRef}
                   id="files"
@@ -535,17 +569,17 @@ export default function SubmissionForm({
 
             {/* File Error Messages */}
             {fileErrors.length > 0 && (
-              <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-sm">
-                <h4 className="text-sm font-semibold text-red-800 mb-1 flex items-center">
-                  <AlertTriangle className="h-4 w-4 mr-2 flex-shrink-0" />
+              <div className="mt-2 p-4 notification-error">
+                <h4 className="text-sm font-semibold text-red-200 mb-1 flex items-center">
+                  <AlertTriangle className="h-4 w-4 mr-2 flex-shrink-0 text-red-400" />
                   File Upload Error
                 </h4>
                 {fileErrors.map((error, index) => (
-                  <p key={index} className="text-sm text-red-600 flex items-center mb-1 last:mb-0 pl-6">
+                  <p key={index} className="text-sm text-red-100 flex items-center mb-1 last:mb-0 pl-6">
                     • {error}
                   </p>
                 ))}
-                <p className="text-xs text-red-500 mt-2 pl-6">
+                <p className="text-xs text-red-200 mt-2 pl-6">
                   Please remove or replace the problematic file(s) before submitting.
                 </p>
               </div>
@@ -554,27 +588,27 @@ export default function SubmissionForm({
             {/* Selected Files List */}
             {files.length > 0 && (
               <div className="mt-2">
-                <p className="text-sm font-medium text-foreground mb-2">Selected Files:</p>
-                <ul className="space-y-2 bg-gray-50 rounded-lg border border-gray-200 p-2">
+                <p className="text-sm font-medium text-[#FBF6E8] mb-2">Selected Files:</p>
+                <ul className="space-y-2 bg-[#1F3B54]/10 rounded-lg border border-[#1F3B54]/30 p-2">
                   {files.map((file, index) => (
                     <li
                       key={index}
-                      className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-100 shadow-sm transition-all hover:shadow-md"
+                      className="flex items-center justify-between p-3 bg-[#1F3B54]/20 rounded-md border border-[#1F3B54]/40 shadow-sm transition-all hover:bg-[#1F3B54]/30 hover:border-[#5865F2]/40"
                     >
                       <div className="flex items-center overflow-hidden">
-                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3 flex-shrink-0">
-                          <FileText className="h-4 w-4 text-muted-foreground" />
+                        <div className="w-8 h-8 rounded-full bg-[#1F3B54]/40 flex items-center justify-center mr-3 flex-shrink-0">
+                          <FileText className="h-4 w-4 text-[#C4C9D2]" />
                         </div>
                         <div className="overflow-hidden">
-                          <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
-                          <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
+                          <p className="text-sm font-medium text-[#FBF6E8] truncate">{file.name}</p>
+                          <p className="text-xs text-[#C4C9D2]">{formatFileSize(file.size)}</p>
                         </div>
                       </div>
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 flex-shrink-0 rounded-full hover:bg-red-50 hover:text-red-500"
+                        className="h-8 w-8 p-0 flex-shrink-0 rounded-full hover:bg-red-500/20 hover:text-red-400 text-[#C4C9D2]"
                         onClick={(e) => {
                           e.stopPropagation()
                           removeFile(index)
