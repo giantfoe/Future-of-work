@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { AuthModal } from "@/components/auth-modal"
 import Image from "next/image"
 import FuturisticBackground from "@/components/FuturisticBackground"
+import UserActivitySection from "@/components/user-activity-section"
+
 export default function ProfilePage() {
   const { user, isLoading } = useAuth()
   const router = useRouter()
@@ -71,10 +73,6 @@ export default function ProfilePage() {
       </>
     )
   }
-
-  // Debug: Check authentication state
-  // console.log('Profile page - user:', user)
-  // console.log('Profile page - isLoading:', isLoading)
 
   return (
     <section className="relative">
@@ -153,26 +151,9 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Activity Card */}
+      {/* Activity Section - Now using the new UserActivitySection component */}
       <div className="mt-8 relative z-20">
-        <Card className="glass-card border-[#1F3B54]">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-[#FBF6E8] text-xl relative z-20">Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="min-h-[200px] flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#1F3B54]/30 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-[#C4C9D2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <p className="text-[#C4C9D2] text-lg font-medium mb-2 relative z-20">No activity yet</p>
-                <p className="text-[#C4C9D2]/70 text-sm relative z-20">Your bounty submissions and achievements will appear here</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <UserActivitySection userId={user.id} />
       </div>
       
     </div>

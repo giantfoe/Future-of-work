@@ -557,17 +557,47 @@ export async function getSubmissionsForBounty(bountyId: string): Promise<any[]> 
  */
 export async function getSubmissionsByUser(userId: string): Promise<any[]> {
   try {
+    console.log(`=== getSubmissionsByUser Debug ===`)
+    console.log(`Looking for submissions with User ID: "${userId}"`)
+    
     const base = getBase()
     const submissionsTableId = process.env.AIRTABLE_SUBMISSIONS_TABLE_ID || "Submissions"
+    
+    console.log(`Using submissions table: ${submissionsTableId}`)
+    console.log(`Filter formula: {User ID} = "${userId}"`)
 
+    // Remove the sort by "Created At" since that field doesn't exist
     const records = await base(submissionsTableId)
       .select({
         filterByFormula: `{User ID} = "${userId}"`,
-        sort: [{ field: "Created At", direction: "desc" }],
+        // No sorting to avoid field issues
       })
       .all()
 
-    return records.map((record) => ({
+    console.log(`Found ${records.length} raw records from Airtable`)
+    
+    // Log the first few records for debugging
+    if (records.length > 0) {
+      console.log("Sample record fields:", Object.keys(records[0].fields))
+      console.log("First record User ID:", records[0].fields["User ID"])
+      console.log("First record data:", JSON.stringify(records[0].fields, null, 2))
+    }
+    
+    // Also try to get all records to see what User IDs exist
+    console.log("=== Checking all User IDs in table ===")
+    const allRecords = await base(submissionsTableId)
+      .select({
+        fields: ["User ID", "Full Name", "Bounty Name"],
+        maxRecords: 10 // Just get first 10 to see what's there
+      })
+      .all()
+    
+    console.log("All User IDs found in table:")
+    allRecords.forEach((record, index) => {
+      console.log(`${index + 1}. User ID: "${record.fields["User ID"]}" | Name: "${record.fields["Full Name"]}" | Bounty: "${record.fields["Bounty Name"]}"`)
+    })
+
+    const mappedSubmissions = records.map((record) => ({
       id: record.id,
       userName: record.fields["Full Name"] || "",
       university: record.fields["University"] || "",
@@ -578,8 +608,11 @@ export async function getSubmissionsByUser(userId: string): Promise<any[]> {
       attachments: record.fields["Attachments"] || [],
       walletAddress: record.fields["Wallet Address"] || "",
       status: record.fields["Status"] || "Submitted",
-      createdAt: record.fields["Created At"] || new Date().toISOString(),
+      createdAt: new Date().toISOString(), // Use current date as fallback since "Created At" field doesn't exist
     }))
+    
+    console.log(`Returning ${mappedSubmissions.length} mapped submissions`)
+    return mappedSubmissions
   } catch (error) {
     console.error(`Error getting submissions for user ${userId}:`, error)
     return []
