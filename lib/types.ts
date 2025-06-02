@@ -13,6 +13,7 @@ export interface BountySubmission {
   id?: string
   fullName: string
   university: string
+  userId: string
   bountyId: string
   bountyName: string
   submissionLink: string
