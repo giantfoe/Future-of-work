@@ -28,9 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans text-foreground antialiased dark">
         <PrivyProvider>
           <AuthProvider>
-            <div className="relative z-50">
-              <Header />
-            </div>
+            <Header />
             <main className="min-h-screen relative z-10">{children}</main>
             <div className="relative z-50">
               <Footer />

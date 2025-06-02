@@ -24,7 +24,7 @@
 
   /* Enhanced Header Styling - Matching Hero Section */
   .header-glass {
-    background: rgba(10, 10, 10, 0.85);
+    background: #020817;
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-bottom: 1px solid rgba(96, 165, 250, 0.08);
@@ -33,7 +33,9 @@
       0 2px 8px -1px rgba(0, 0, 0, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.02);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 30;
   }
 
   .header-glass::before {
@@ -54,7 +56,7 @@
   }
 
   .header-glass.scrolled {
-    background: rgba(5, 5, 5, 0.95);
+    /* background: rgba(5, 5, 5, 0.95); */
     border-bottom-color: rgba(96, 165, 250, 0.15);
     box-shadow: 
       0 8px 32px -4px rgba(0, 0, 0, 0.6),
@@ -734,7 +736,7 @@
   }
   body {
     color: hsl(var(--foreground));
-    background: #0a0a0a;
+    background: #020817;
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
@@ -869,17 +871,17 @@
 
 /* Section backgrounds */
 .section-dark {
-  background: #0a0a0a;
+  /* background: #0a0a0a; */
 }
 
 .section-darker {
-  background: #050505;
+  /* background: #050505; */
 }
 
 .section-gradient {
-  background: 
+  /* background: 
     radial-gradient(ellipse at center, rgba(96, 165, 250, 0.05) 0%, transparent 70%),
-    #0f0f0f;
+    #0f0f0f; */
 }
 
 /* Button styles */

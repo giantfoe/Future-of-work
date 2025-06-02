@@ -47,7 +47,7 @@ export function UserMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-[#0a0a0a] border border-[#1F3B54] rounded-md py-2 shadow-md text-[#FBF6E8] transition-all duration-200">
+        <div className="absolute right-0 mt-2 w-40 bg-[#020817] border border-[#1F3B54] rounded-md py-2 shadow-md text-[#FBF6E8] transition-all duration-200">
           <button
             onClick={() => {
               setIsOpen(false)
