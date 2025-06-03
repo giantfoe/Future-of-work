@@ -397,11 +397,40 @@ export default function BountiesPage() {
       />
 
       <div className="container px-4 md:px-6 max-w-[1400px] mx-auto relative z-10 py-12">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-          <h1 className="text-3xl font-bold">Explore Bounties</h1>
+        <div className="mb-8">
+          {/* Header with title and filter button */}
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-3xl font-bold">Explore Bounties</h1>
+            
+            {/* Mobile Filters - positioned directly to the right of the title */}
+            <div className="lg:hidden mt-6">
+              <MobileFilters
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+                rewardRange={rewardRange}
+                setRewardRange={setRewardRange}
+                statusOpen={statusOpen}
+                setStatusOpen={setStatusOpen}
+                statusInProgress={statusInProgress}
+                setStatusInProgress={setStatusInProgress}
+                statusCompleted={statusCompleted}
+                setStatusCompleted={setStatusCompleted}
+                setSortBy={setSortBy}
+                sortBy={sortBy}
+                resetFilters={resetFilters}
+                minReward={minReward}
+                maxReward={maxReward}
+                activeFilters={activeFilters}
+                categoryCounts={categoryCounts}
+              />
+            </div>
+          </div>
 
+          {/* Active filters badge - below the header when present */}
           {activeFilters > 0 && (
-            <div className="flex items-center">
+            <div className="flex items-center lg:hidden">
               <Badge variant="secondary" className="mr-2">
                 {activeFilters} {activeFilters === 1 ? "filter" : "filters"} active
               </Badge>
@@ -411,29 +440,6 @@ export default function BountiesPage() {
             </div>
           )}
         </div>
-
-        {/* Mobile Filters */}
-        <MobileFilters
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories}
-          rewardRange={rewardRange}
-          setRewardRange={setRewardRange}
-          statusOpen={statusOpen}
-          setStatusOpen={setStatusOpen}
-          statusInProgress={statusInProgress}
-          setStatusInProgress={setStatusInProgress}
-          statusCompleted={statusCompleted}
-          setStatusCompleted={setStatusCompleted}
-          setSortBy={setSortBy}
-          sortBy={sortBy}
-          resetFilters={resetFilters}
-          minReward={minReward}
-          maxReward={maxReward}
-          activeFilters={activeFilters}
-          categoryCounts={categoryCounts}
-        />
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Filters Sidebar - Desktop */}
