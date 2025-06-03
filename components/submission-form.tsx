@@ -258,18 +258,6 @@ export default function SubmissionForm({
       }
       // Debug: log user object
       console.log('SubmissionForm user:', user)
-      if (!user.name) {
-        setError("Please finish setting up your profile to submit")
-        setIsSubmitting(false)
-        setIsUploading(false)
-        return
-      }
-      if (!user.university) {
-        setError("Please finish setting up your profile to submit")
-        setIsSubmitting(false)
-        setIsUploading(false)
-        return
-      }
       // Get form data
       const formData = new FormData(event.currentTarget)
       const submissionLink = formData.get("submissionLink") as string
@@ -356,6 +344,33 @@ export default function SubmissionForm({
   // Function to handle view bounty click
   const handleViewBounty = () => {
     router.push(`/bounties/${bountyId}`)
+  }
+
+  // Check if profile is complete
+  const isProfileComplete = user?.name && user?.bio && user?.university;
+
+  // If profile is incomplete, don't render the form at all
+  if (!isProfileComplete) {
+    return (
+      <div className="space-y-6">
+        <Alert className="notification-warning">
+          <AlertTitle className="text-amber-200">Profile Incomplete</AlertTitle>
+          <AlertDescription className="text-amber-100">
+            You need to complete your profile before you can submit to bounties. Please add your bio, skills, experience, and contact information.
+          </AlertDescription>
+          <div className="mt-4 text-center">
+            <Button variant="outline" asChild className="px-6 btn-outline-glass text-white">
+              <Link href="/profile/edit">
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Complete Your Profile
+              </Link>
+            </Button>
+          </div>
+        </Alert>
+      </div>
+    );
   }
 
   return (

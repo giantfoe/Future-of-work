@@ -21,10 +21,10 @@ export default function ProfileCompletionBanner({ className }: ProfileCompletion
   // Check if banner was dismissed
   if (isDismissed) return null;
 
-  // Check if profile is complete
-  const isProfileComplete = user.customMetadata?.firstName && 
-                           user.customMetadata?.lastName && 
-                           user.customMetadata?.bio;
+  // Check if profile is complete (same logic as submission form)
+  const isProfileComplete = user.name && 
+                           user.bio && 
+                           user.university;
 
   // Don't show if profile is already complete
   if (isProfileComplete) return null;
