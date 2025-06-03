@@ -201,11 +201,11 @@ export default function BountyDetailPage({ params: paramsPromise }: { params: Pr
   const today = new Date()
   const daysLeft = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
-  // Check if bounty is closed or in review - ensure we're correctly identifying the status
+  // Check status based on new requirements
   const isClosed = bounty.status === "closed"
-  // Check for both "in-progress" and "in review" to be safe
-  const isInReview = bounty.status === "in-progress"
-  const isOpen = !isClosed && !isInReview && !deadlinePassed
+  const isDeadlineExpired = daysLeft <= 0 && !isClosed
+  const isInReview = isDeadlineExpired || bounty.status === "in-progress"
+  const isOpen = !isClosed && !isDeadlineExpired
 
   // Handle deadline expiration
   const handleDeadlineExpire = () => {
@@ -358,7 +358,7 @@ export default function BountyDetailPage({ params: paramsPromise }: { params: Pr
                       </Button>
                     </div>
                   </div>
-                ) : isClosed || deadlinePassed ? (
+                ) : isClosed || isDeadlineExpired ? (
                   /* Closed Bounty Information */
                   <div className="space-y-6">
                     <h2 className="text-2xl font-bold text-foreground mb-4">Bounty {isClosed ? "Closed" : "Deadline Passed"}</h2>

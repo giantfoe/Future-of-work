@@ -26,9 +26,9 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
   const today = new Date()
   const daysLeft = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
-  // Check if bounty is closed or in review
+  // Check if bounty is closed or deadline has passed
   const isClosed = bounty.status === "closed"
-  const isInReview = bounty.status === "in-progress"
+  const deadlinePassed = daysLeft <= 0
 
   // Handle card click
   const handleCardClick = () => {
@@ -115,12 +115,15 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
   const categoryInfo = getCategoryIcon(bounty.category)
   const IconComponent = categoryInfo.icon
 
-  // Get urgency status
+  // Get status based on the new requirements
   const getUrgencyStatus = () => {
+    // If status is explicitly closed, show closed
     if (isClosed) return { text: "Closed", color: "text-gray-400" }
-    if (isInReview) return { text: "In Review", color: "text-yellow-400" }
-    if (daysLeft <= 0) return { text: "In Review", color: "text-yellow-400" }
-    if (daysLeft <= 7) return { text: "Urgent", color: "text-orange-400" }
+    
+    // If status is in-progress OR deadline has passed but not closed, show in review
+    if (bounty.status === "in-progress" || deadlinePassed) return { text: "In Review", color: "text-yellow-400" }
+    
+    // If deadline hasn't been reached and status is open, show open
     return { text: "Open", color: "text-green-400" }
   }
 

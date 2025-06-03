@@ -56,27 +56,26 @@ export default async function Home() {
         </div>
 
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-20 items-center min-h-[600px]">
-            
-            {/* Left side - Bold Typography */}
-            <div className="space-y-10 z-10 relative">
+          {/* Mobile Layout */}
+          <div className="lg:hidden">
+            <div className="text-center space-y-10 z-10 relative">
               <div className="space-y-8">
-                <h1 className="text-6xl lg:text-7xl font-black leading-[0.9] text-reveal">
+                <h1 className="text-5xl sm:text-6xl font-black leading-[0.9] text-reveal">
                   The Future of{" "}
                   <span className="accent-text block">Work is here</span>
                 </h1>
                 
-                <p className="text-xl text-gray-300 leading-relaxed max-w-2xl font-medium">
+                <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto font-medium">
                   Join the most innovative Web3 builders completing high-impact bounties. 
                   From DeFi protocols to NFT marketplaces - shape the decentralized future.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-6">
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <Link href="/bounties">
                   <Button 
                     size="lg" 
-                    className="h-14 px-10 text-lg font-bold btn-primary"
+                    className="h-14 px-10 text-lg font-bold btn-primary w-full sm:w-auto"
                   >
                     Start Building
                     <ArrowRight className="h-6 w-6 ml-3" />
@@ -85,96 +84,220 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Right side - Large Geometric Element + Metric Dashboard Cards */}
-            <div className="relative z-10 h-[600px]">
-              
-              {/* Large animated blobs - inspired by Pipeline */}
-              <div className="absolute top-16 right-0 hero-blob hero-blob opacity-80" style={{ background: 'rgba(96, 165, 250, 0.2)', width: '500px', height: '500px' }}></div>
-              <div className="absolute bottom-16 right-32 hero-blob-2 opacity-60" style={{ background: 'rgba(34, 211, 238, 0.15)', width: '300px', height: '300px' }}></div>
-              <div className="absolute top-1/2 left-1/4 hero-blob opacity-40" style={{ background: 'rgba(139, 92, 246, 0.12)', width: '200px', height: '200px', animationDelay: '10s' }}></div>
-              
-              {/* Community Earnings Card - Top Right */}
-              <div className="absolute top-20 right-8 dashboard-card metric-card-earnings w-64">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                    <DollarSign className="h-6 w-6 text-white" />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <TrendingUp className="h-4 w-4 text-green-400" />
-                  </div>
-                </div>
-                <div className="text-4xl font-black text-green-400 mb-1">$34k+</div>
-                <div className="text-sm text-gray-300 font-medium mb-3">Community Earnings</div>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-gray-700/50 rounded-full h-1">
-                    <div className="bg-green-400 h-1 rounded-full w-3/4 animate-pulse"></div>
+            {/* Mobile Metrics Cards - Stacked Layout */}
+            <div className="mt-16 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mobile-card-stack">
+                
+                {/* Active Bounties Card */}
+                <div className="dashboard-card metric-card-bounties mobile-stack-card mobile-stack-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                      <Target className="h-6 w-6 text-white" />
                     </div>
-                  <span className="text-xs text-green-400 font-medium">+23% this week</span>
-                </div>
-              </div>
-
-              {/* Active Bounties Card - Top Left */}
-              <div className="absolute top-8 left-8 dashboard-card metric-card-bounties w-60">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
-                    <Target className="h-6 w-6 text-white" />
+                    <div className="flex items-center gap-1">
+                      {[...Array(3)].map((_, i) => (
+                        <div key={i} className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.1}s` }}></div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    {[...Array(3)].map((_, i) => (
-                      <div key={i} className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.1}s` }}></div>
+                  <div className="text-3xl sm:text-4xl font-black text-blue-400 mb-1">250+</div>
+                  <div className="text-sm text-gray-300 font-medium mb-3">Active Bounties</div>
+                  <div className="grid grid-cols-3 gap-1">
+                    {[...Array(9)].map((_, i) => (
+                      <div key={i} className={`w-full h-1 rounded-full ${i < 6 ? 'bg-blue-400' : 'bg-gray-600'}`}></div>
                     ))}
                   </div>
                 </div>
-                <div className="text-4xl font-black text-blue-400 mb-1">250+</div>
-                <div className="text-sm text-gray-300 font-medium mb-3">Active Bounties</div>
-                <div className="grid grid-cols-3 gap-1">
-                  {[...Array(9)].map((_, i) => (
-                    <div key={i} className={`w-full h-1 rounded-full ${i < 6 ? 'bg-blue-400' : 'bg-gray-600'}`}></div>
-                  ))}
-                </div>
-              </div>
 
-              {/* Total Submissions Card - Bottom Right */}
-              <div className="absolute bottom-2 right-8 dashboard-card metric-card-submissions w-64">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-                    <Wallet className="h-6 w-6 text-white" />
+                {/* Community Earnings Card */}
+                <div className="dashboard-card metric-card-earnings mobile-stack-card mobile-stack-2">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                      <DollarSign className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <TrendingUp className="h-4 w-4 text-green-400" />
+                    </div>
                   </div>
-                  <div className="text-xs text-purple-400 font-medium">Live Count</div>
+                  <div className="text-3xl sm:text-4xl font-black text-green-400 mb-1">$34k+</div>
+                  <div className="text-sm text-gray-300 font-medium mb-3">Community Earnings</div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-gray-700/50 rounded-full h-1">
+                      <div className="bg-green-400 h-1 rounded-full w-3/4 animate-pulse"></div>
+                    </div>
+                    <span className="text-xs text-green-400 font-medium">+23%</span>
+                  </div>
                 </div>
-                <div className="text-4xl font-black text-purple-400 mb-1">1.5k+</div>
-                <div className="text-sm text-gray-300 font-medium mb-3">Total Submissions</div>
-                <div className="flex items-center gap-3">
-                  <div className="flex -space-x-2">
-                    {[...Array(4)].map((_, i) => (
-                      <div key={i} className="w-6 h-6 rounded-full bg-purple-500 border-2 border-gray-800 flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
+
+                {/* Unique Participants Card */}
+                <div className="dashboard-card metric-card-participants mobile-stack-card mobile-stack-3">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                      <Users className="h-6 w-6 text-white" />
+                    </div>
+                    <TrendingUp className="h-4 w-4 text-orange-400 animate-pulse" />
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-black text-orange-400 mb-1">400+</div>
+                  <div className="text-sm text-gray-300 font-medium mb-3">Unique Participants</div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center">
+                        <Users className="h-4 w-4 text-orange-400" />
                       </div>
-                    ))}
+                      <span className="text-xs text-orange-400">Growing daily</span>
+                    </div>
+                    <div className="text-xs text-gray-400">+5 this week</div>
                   </div>
-                  <span className="text-xs text-purple-400">+12 today</span>
+                </div>
+
+                {/* Total Submissions Card */}
+                <div className="dashboard-card metric-card-submissions mobile-stack-card mobile-stack-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                      <Wallet className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="text-xs text-purple-400 font-medium">Live Count</div>
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-black text-purple-400 mb-1">1.5k+</div>
+                  <div className="text-sm text-gray-300 font-medium mb-3">Total Submissions</div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex -space-x-2">
+                      {[...Array(4)].map((_, i) => (
+                        <div key={i} className="w-6 h-6 rounded-full bg-purple-500 border-2 border-gray-800 flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-xs text-purple-400">+12 today</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden lg:block">
+            <div className="grid lg:grid-cols-2 gap-20 items-center min-h-[600px]">
+              
+              {/* Left side - Bold Typography */}
+              <div className="space-y-10 z-10 relative">
+                <div className="space-y-8">
+                  <h1 className="text-6xl lg:text-7xl font-black leading-[0.9] text-reveal">
+                    The Future of{" "}
+                    <span className="accent-text block">Work is here</span>
+                  </h1>
+                  
+                  <p className="text-xl text-gray-300 leading-relaxed max-w-2xl font-medium">
+                    Join the most innovative Web3 builders completing high-impact bounties. 
+                    From DeFi protocols to NFT marketplaces - shape the decentralized future.
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-6">
+                  <Link href="/bounties">
+                    <Button 
+                      size="lg" 
+                      className="h-14 px-10 text-lg font-bold btn-primary"
+                    >
+                      Start Building
+                      <ArrowRight className="h-6 w-6 ml-3" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
 
-              {/* Total Participants Card - Bottom Left */}
-              <div className="absolute bottom-8 left-8 dashboard-card metric-card-participants w-60">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-                    <Users className="h-6 w-6 text-white" />
-                  </div>
-                  <TrendingUp className="h-4 w-4 text-orange-400 animate-pulse" />
-                </div>
-                <div className="text-4xl font-black text-orange-400 mb-1">400+</div>
-                <div className="text-sm text-gray-300 font-medium mb-3">Unique Participants</div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center">
-                      <Users className="h-4 w-4 text-orange-400" />
+              {/* Right side - Large Geometric Element + Metric Dashboard Cards */}
+              <div className="relative z-10 h-[600px]">
+                
+                {/* Large animated blobs - inspired by Pipeline */}
+                <div className="absolute top-16 right-0 hero-blob hero-blob opacity-80" style={{ background: 'rgba(96, 165, 250, 0.2)', width: '500px', height: '500px' }}></div>
+                <div className="absolute bottom-16 right-32 hero-blob-2 opacity-60" style={{ background: 'rgba(34, 211, 238, 0.15)', width: '300px', height: '300px' }}></div>
+                <div className="absolute top-1/2 left-1/4 hero-blob opacity-40" style={{ background: 'rgba(139, 92, 246, 0.12)', width: '200px', height: '200px', animationDelay: '10s' }}></div>
+                
+                {/* Community Earnings Card - Top Right */}
+                <div className="absolute top-20 right-8 dashboard-card metric-card-earnings w-64">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                      <DollarSign className="h-6 w-6 text-white" />
                     </div>
-                    <span className="text-xs text-orange-400">Growing daily</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <TrendingUp className="h-4 w-4 text-green-400" />
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-400">+5 this week</div>
+                  <div className="text-4xl font-black text-green-400 mb-1">$34k+</div>
+                  <div className="text-sm text-gray-300 font-medium mb-3">Community Earnings</div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-gray-700/50 rounded-full h-1">
+                      <div className="bg-green-400 h-1 rounded-full w-3/4 animate-pulse"></div>
+                      </div>
+                    <span className="text-xs text-green-400 font-medium">+23% this week</span>
+                  </div>
+                </div>
+
+                {/* Active Bounties Card - Top Left */}
+                <div className="absolute top-8 left-8 dashboard-card metric-card-bounties w-60">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                      <Target className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {[...Array(3)].map((_, i) => (
+                        <div key={i} className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.1}s` }}></div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-4xl font-black text-blue-400 mb-1">250+</div>
+                  <div className="text-sm text-gray-300 font-medium mb-3">Active Bounties</div>
+                  <div className="grid grid-cols-3 gap-1">
+                    {[...Array(9)].map((_, i) => (
+                      <div key={i} className={`w-full h-1 rounded-full ${i < 6 ? 'bg-blue-400' : 'bg-gray-600'}`}></div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Total Submissions Card - Bottom Right */}
+                <div className="absolute bottom-2 right-8 dashboard-card metric-card-submissions w-64">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                      <Wallet className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="text-xs text-purple-400 font-medium">Live Count</div>
+                  </div>
+                  <div className="text-4xl font-black text-purple-400 mb-1">1.5k+</div>
+                  <div className="text-sm text-gray-300 font-medium mb-3">Total Submissions</div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex -space-x-2">
+                      {[...Array(4)].map((_, i) => (
+                        <div key={i} className="w-6 h-6 rounded-full bg-purple-500 border-2 border-gray-800 flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-xs text-purple-400">+12 today</span>
+                  </div>
+                </div>
+
+                {/* Total Participants Card - Bottom Left */}
+                <div className="absolute bottom-8 left-8 dashboard-card metric-card-participants w-60">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                      <Users className="h-6 w-6 text-white" />
+                    </div>
+                    <TrendingUp className="h-4 w-4 text-orange-400 animate-pulse" />
+                  </div>
+                  <div className="text-4xl font-black text-orange-400 mb-1">400+</div>
+                  <div className="text-sm text-gray-300 font-medium mb-3">Unique Participants</div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center">
+                        <Users className="h-4 w-4 text-orange-400" />
+                      </div>
+                      <span className="text-xs text-orange-400">Growing daily</span>
+                    </div>
+                    <div className="text-xs text-gray-400">+5 this week</div>
+                  </div>
                 </div>
               </div>
             </div>

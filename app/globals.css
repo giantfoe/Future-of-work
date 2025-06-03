@@ -1641,13 +1641,11 @@ html {
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
   .award-style-card:hover {
-    transform: translateY(-2px);
+    transform: none;
   }
   
   .award-style-card:hover > div {
-    box-shadow: 
-      0 12px 24px rgba(0, 0, 0, 0.2),
-      0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: none;
   }
 }
 
@@ -1759,4 +1757,512 @@ html {
   bottom: 0;
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, transparent 50%, rgba(245, 158, 11, 0.02) 100%);
   pointer-events: none;
+}
+
+/* Mobile responsive improvements for dashboard cards */
+@media (max-width: 1024px) {
+  .dashboard-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Disable hover animations on mobile for better performance */
+  .metric-card-earnings,
+  .metric-card-bounties,
+  .metric-card-submissions,
+  .metric-card-participants {
+    animation: none;
+  }
+  
+  /* Ensure proper spacing for mobile metric cards */
+  .hero-section-mobile {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-card {
+    padding: 14px;
+  }
+  
+  /* Stack cards vertically on small screens */
+  .mobile-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* Improve mobile button styling */
+@media (max-width: 640px) {
+  .btn-primary,
+  .btn-outline-glass {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Enhanced mobile typography */
+@media (max-width: 640px) {
+  .text-reveal {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+}
+
+/* ===============================================
+   MOBILE STACK ANIMATION
+   =============================================== */
+
+/* Mobile card stack container */
+.mobile-card-stack {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Base mobile stack card styles */
+.mobile-stack-card {
+  opacity: 0;
+  transform: translateY(60px) translateZ(-30px) rotateX(15deg) scale(0.95);
+  animation: mobileStackSlideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform-origin: center center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Staggered entrance animation delays */
+.mobile-stack-1 {
+  animation-delay: 0.1s;
+}
+
+.mobile-stack-2 {
+  animation-delay: 0.25s;
+}
+
+.mobile-stack-3 {
+  animation-delay: 0.4s;
+}
+
+.mobile-stack-4 {
+  animation-delay: 0.55s;
+}
+
+/* Stack slide-in animation */
+@keyframes mobileStackSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) translateZ(-30px) rotateX(15deg) scale(0.95);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) translateZ(0px) rotateX(2deg) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) translateZ(0px) rotateX(0deg) scale(1);
+  }
+}
+
+/* Enhanced hover effect for mobile cards */
+.mobile-stack-card:hover {
+  transform: translateY(-8px) scale(1.02) rotateX(-2deg);
+  z-index: 10;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(96, 165, 250, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Subtle parallax effect on scroll */
+@media (max-width: 768px) {
+  .mobile-stack-card {
+    will-change: transform;
+  }
+  
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-stack-card {
+      animation: mobileStackSlideInReduced 0.5s ease-out forwards;
+      transform: none;
+    }
+    
+    .mobile-stack-card:hover {
+      transform: translateY(-4px);
+    }
+  }
+}
+
+/* Reduced motion animation */
+@keyframes mobileStackSlideInReduced {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .mobile-stack-card {
+    transform: translateY(40px) scale(0.98);
+  }
+  
+  @keyframes mobileStackSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+    }
+    60% {
+      opacity: 0.9;
+      transform: translateY(-3px) scale(1.01);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0px) scale(1);
+    }
+  }
+}
+
+/* Add breathing effect to stacked cards */
+.mobile-stack-card.mobile-stack-1 {
+  animation: mobileStackSlideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+             gentleFloat 6s ease-in-out infinite 1s;
+}
+
+.mobile-stack-card.mobile-stack-2 {
+  animation: mobileStackSlideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+             gentleFloat 6s ease-in-out infinite 1.5s;
+}
+
+.mobile-stack-card.mobile-stack-3 {
+  animation: mobileStackSlideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+             gentleFloat 6s ease-in-out infinite 2s;
+}
+
+.mobile-stack-card.mobile-stack-4 {
+  animation: mobileStackSlideIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+             gentleFloat 6s ease-in-out infinite 2.5s;
+}
+
+/* Gentle floating animation */
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.005);
+  }
+}
+
+/* Interactive stack effect - cards slightly separate on container hover */
+.mobile-card-stack:hover .mobile-stack-card:not(:hover) {
+  transform: translateY(2px) scale(0.98);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+/* ===============================================
+   ENHANCED MOBILE NAVIGATION
+   =============================================== */
+
+/* Enhanced mobile menu button */
+.mobile-menu-enhanced {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.1) 0%, transparent 50%, rgba(139, 92, 246, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-menu-enhanced:hover::before {
+  opacity: 1;
+}
+
+/* Mobile navigation items */
+.mobile-nav-item {
+  position: relative;
+  overflow: hidden;
+  animation: mobileNavSlideIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* Staggered entrance animation for nav items */
+@keyframes mobileNavSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.mobile-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, transparent 50%, rgba(139, 92, 246, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-nav-item:hover::before {
+  opacity: 1;
+}
+
+/* Mobile category cards */
+.mobile-category-card {
+  position: relative;
+  overflow: hidden;
+  animation: mobileCategorySlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+@keyframes mobileCategorySlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.mobile-category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(96, 165, 250, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-category-card:hover::before {
+  opacity: 1;
+}
+
+/* Mobile action button */
+.mobile-action-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-action-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.mobile-action-button:hover::before {
+  left: 100%;
+}
+
+/* Smooth backdrop animation */
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(16px);
+  }
+}
+
+/* Navigation drawer slide animation with spring effect */
+@keyframes drawerSlideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(5px);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Enhanced mobile menu shadows and effects */
+.mobile-nav-drawer {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(96, 165, 250, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile menu section dividers */
+.mobile-menu-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.3), transparent);
+}
+
+/* Interactive glow effects for icons */
+.mobile-nav-item .w-10 {
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-nav-item:hover .w-10 {
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.3),
+    0 0 20px var(--icon-glow-color, rgba(96, 165, 250, 0.4));
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .mobile-nav-drawer {
+    width: 100vw;
+  }
+  
+  .mobile-nav-item {
+    padding: 12px;
+  }
+  
+  .mobile-category-card {
+    padding: 12px;
+  }
+}
+
+/* Loading state for mobile menu */
+.mobile-menu-loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Accessibility improvements */
+.mobile-nav-item:focus-visible,
+.mobile-category-card:focus-visible,
+.mobile-action-button:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.6);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-item,
+  .mobile-category-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .mobile-nav-item:hover,
+  .mobile-category-card:hover {
+    transform: none;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .mobile-menu-enhanced {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  .mobile-nav-item,
+  .mobile-category-card {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ===============================================
+   SIMPLE MOBILE NAVIGATION  
+   =============================================== */
+
+/* Hide scrollbar for category filters */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Category filter animations */
+.category-filter {
+  transition: all 0.2s ease;
+}
+
+.category-filter:hover {
+  transform: translateY(-1px);
+}
+
+/* Simple mobile dropdown */
+.mobile-dropdown {
+  animation: fadeInUp 0.2s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
