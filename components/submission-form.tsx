@@ -101,15 +101,15 @@ export default function SubmissionForm({
     return null
   }
 
-  // Check if the bounty is closed or in review, or if the deadline has passed
+  // Check if the bounty is closed or deadline has passed
   const isDeadlinePassed = new Date() > new Date(deadline)
-  const isInReview = status === "in-progress" || status === "in review"
   const isClosed = status === "closed"
-  const isDisabled = isClosed || isInReview || isDeadlinePassed || hasAlreadySubmitted
+  // Form is disabled if bounty is closed, deadline passed, or user already submitted
+  const isDisabled = isClosed || isDeadlinePassed || hasAlreadySubmitted
 
-  // If the bounty is closed or in review and we're on the details page,
+  // If the bounty is closed or deadline passed and we're on the details page,
   // we don't need to render the form at all as the parent component will handle it
-  if ((isClosed || isInReview) && isDetailsPage) {
+  if ((isClosed || isDeadlinePassed) && isDetailsPage) {
     return null
   }
 
@@ -373,11 +373,9 @@ export default function SubmissionForm({
       {isDisabled && !hasAlreadySubmitted && (
         <Alert className="mb-6 notification-warning">
           <AlertDescription className="text-amber-100">
-            {isInReview
-              ? "This bounty is in review and is not accepting submissions at the moment."
-              : isClosed
-                ? "This bounty has been closed."
-                : "The deadline for this bounty has passed."}
+            {isDeadlinePassed
+              ? "The deadline for this bounty has passed."
+              : "This bounty has been closed."}
           </AlertDescription>
         </Alert>
       )}
@@ -410,11 +408,9 @@ export default function SubmissionForm({
           <p className="text-gray-500">
             {hasAlreadySubmitted
               ? "You have already submitted for this bounty. Only one submission per user is allowed."
-              : isInReview
-                ? "This bounty is in review and is not accepting submissions at the moment."
-                : isClosed
-                  ? "This bounty has been completed and is no longer accepting submissions."
-                  : "The deadline for this bounty has passed and it is no longer accepting submissions."}
+              : isDeadlinePassed
+                ? "The deadline for this bounty has passed and it is no longer accepting submissions."
+                : "This bounty has been completed and is no longer accepting submissions."}
           </p>
 
           {/* Only show the View Bounty button if we're NOT on the details page */}
@@ -668,7 +664,7 @@ export default function SubmissionForm({
           <Button
             type="submit"
             className="w-full h-12 bg-[#FBF6E8] text-[#091C2E] rounded-md transition-colors duration-200 hover:bg-[#f8eed7]"
-            disabled={isSubmitting || isInReview || isClosed || isDeadlinePassed || fileErrors.length > 0}
+            disabled={isSubmitting || isDeadlinePassed || fileErrors.length > 0}
           >
             {isSubmitting ? (
               <>

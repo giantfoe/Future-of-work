@@ -2,33 +2,32 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import { Menu, Search } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
-  // Check if we're on the Explore Bounties page
-  const isExploreBountiesPage = pathname === "/bounties" || pathname.startsWith("/bounties?")
+  // Check if we're on the bounties page to show category filters
+  const isBountiesPage = pathname === "/bounties" || pathname.startsWith("/bounties?")
 
-  // Don't render the menu on the Explore Bounties page
-  if (isExploreBountiesPage) {
-    return null
-  }
-
-  // Navigation items
+  // Simple navigation for non-bounties pages
   const navItems = [
     { name: "Home", href: "/" },
     { name: "All Bounties", href: "/bounties" },
+    { name: "Leaderboard", href: "/leaderboard" },
+    { name: "Activity", href: "/activity" }
   ]
 
-  // Categories
+  // Categories for bounties page
   const categories = [
-    { name: "Design", slug: "design" },
-    { name: "Product", slug: "product" },
-    { name: "Content Creation", slug: "content" },
-    { name: "Engineering", slug: "engineering" },
+    { name: "All", slug: "", href: "/bounties" },
+    { name: "Design", slug: "design", href: "/bounties?category=design" },
+    { name: "Product", slug: "product", href: "/bounties?category=product" },
+    { name: "Content Creation", slug: "content", href: "/bounties?category=content" },
+    { name: "Engineering", slug: "engineering", href: "/bounties?category=engineering" },
   ]
 
   const toggleMenu = () => {
@@ -39,84 +38,94 @@ export default function MobileMenu() {
     setIsOpen(false)
   }
 
-  return (
-    <div className="lg:hidden">
-      {/* Hamburger Button - Absolutely Positioned to Ensure Clickability */}
-      <button
-        onClick={toggleMenu}
-        className="mobile-menu-button relative z-50 p-2 text-white hover:text-white focus:outline-none"
-        style={{ touchAction: "manipulation" }}
-        aria-label="Toggle menu"
-      >
-        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </button>
+  // Get current category from URL
+  const getCurrentCategory = () => {
+    if (pathname === "/bounties") return ""
+    const urlParams = new URLSearchParams(window.location.search)
+    return urlParams.get("category") || ""
+  }
 
-      {/* Backdrop - Only visible when menu is open */}
-      {isOpen && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={closeMenu} aria-hidden="true" />}
+  const currentCategory = typeof window !== "undefined" ? getCurrentCategory() : ""
 
-      {/* Drawer - Slides in from left */}
-      <div
-        className={`fixed inset-y-0 left-0 z-50 w-72 transform transition-transform duration-300 ease-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-        style={{
-          background: 'rgba(10, 10, 10, 0.95)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(96, 165, 250, 0.15)',
-          borderLeft: 'none',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 32px rgba(96, 165, 250, 0.1)'
-        }}
-      >
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-xl font-bold text-white header-logo">Navigation</h2>
-            <button
-              onClick={closeMenu}
-              className="mobile-menu-button p-2 text-white hover:text-white focus:outline-none"
-              aria-label="Close menu"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
-          <nav className="space-y-8">
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Main Navigation</h3>
-              <ul className="space-y-2">
-                {navItems.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="nav-link block w-full text-left"
-                      onClick={closeMenu}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="space-y-3 pt-6 border-t border-gray-700/50">
-              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">Categories</h3>
-              <ul className="space-y-2">
-                {categories.map((category) => (
-                  <li key={category.slug}>
-                    <Link
-                      href={`/bounties?category=${category.slug}`}
-                      className="nav-link block w-full text-left"
-                      onClick={closeMenu}
-                    >
-                      {category.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
+  // If we're on bounties page, show horizontal category filters instead
+  if (isBountiesPage) {
+    return (
+      <div className="lg:hidden w-full">
+        {/* Horizontal scrollable category filters */}
+        <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide px-4 py-3">
+          {categories.map((category) => {
+            const isActive = currentCategory === category.slug
+            return (
+              <Link
+                key={category.slug}
+                href={category.href}
+                className={cn(
+                  "flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                  "border border-white/20 backdrop-blur-sm",
+                  isActive
+                    ? "bg-white text-black border-white"
+                    : "bg-white/10 text-white hover:bg-white/20 hover:border-white/30"
+                )}
+              >
+                {category.name}
+              </Link>
+            )
+          })}
         </div>
       </div>
+    )
+  }
+
+  // Simple hamburger menu for other pages
+  return (
+    <div className="lg:hidden">
+      {/* Simple hamburger button */}
+      <button
+        onClick={toggleMenu}
+        className={cn(
+          "p-2 rounded-lg transition-all duration-200",
+          "bg-white/10 border border-white/20 backdrop-blur-sm",
+          "hover:bg-white/20 text-white"
+        )}
+        aria-label="Toggle menu"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
+
+      {/* Simple dropdown menu */}
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/50 z-40" 
+            onClick={closeMenu}
+          />
+          
+          {/* Simple dropdown */}
+          <div className="absolute top-full left-0 mt-2 w-64 z-50">
+            <div 
+              className={cn(
+                "bg-gray-900/95 backdrop-blur-md border border-white/20 rounded-xl",
+                "shadow-xl p-4 space-y-2"
+              )}
+            >
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "block px-3 py-2 rounded-lg text-white hover:bg-white/10",
+                    "transition-colors duration-200 text-sm font-medium"
+                  )}
+                  onClick={closeMenu}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
