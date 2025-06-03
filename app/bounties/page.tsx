@@ -137,10 +137,10 @@ export default function BountiesPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [rewardRange, setRewardRange] = useState<number[]>([0, 5000])
-  const [statusOpen, setStatusOpen] = useState(false)
+  const [statusOpen, setStatusOpen] = useState(true)
   const [statusInProgress, setStatusInProgress] = useState(false)
   const [statusCompleted, setStatusCompleted] = useState(false)
-  const [sortBy, setSortBy] = useState("newest")
+  const [sortBy, setSortBy] = useState("status")
   const [activeFilters, setActiveFilters] = useState(0)
 
   // Min and max reward values
@@ -239,7 +239,7 @@ export default function BountiesPage() {
     if (selectedCategories.length > 0) count++
     if (rewardRange[0] > 0 || rewardRange[1] < maxReward) count++
     if (statusOpen || statusInProgress || statusCompleted) count++
-    if (sortBy !== "newest") count++
+    if (sortBy !== "status") count++
     setActiveFilters(count)
   }, [
     searchQuery,
@@ -293,9 +293,6 @@ export default function BountiesPage() {
         // Get the status and ensure it's a string
         const status = String(bounty.status || "open").toLowerCase()
 
-        // Log the status for debugging
-        console.log(`Filtering bounty: ${bounty.title}, Status: ${status}`)
-
         // Check if the status matches any of the selected filters
         if (statusOpen && status === "open") {
           return true
@@ -312,39 +309,47 @@ export default function BountiesPage() {
         return false
       })
     }
+    // If no status filters are selected, show all bounties (this is the default behavior)
 
     // Apply sorting
     switch (sortBy) {
-      case "newest":
-        // Assuming newer bounties have higher IDs for this demo
+      case "status":
         result = result.sort((a, b) => {
-          const idA = typeof a.id === "string" ? Number.parseInt(a.id.replace(/\D/g, "")) || 0 : 0
-          const idB = typeof b.id === "string" ? Number.parseInt(a.id.replace(/\D/g, "")) || 0 : 0
-          return idB - idA
-        })
-        break
+          const statusOrder: Record<string, number> = { "open": 0, "in-progress": 1, "closed": 2 };
+          const statusA = (a.status || "open").toLowerCase();
+          const statusB = (b.status || "open").toLowerCase();
+          return (statusOrder[statusA] || 999) - (statusOrder[statusB] || 999);
+        });
+        break;
+      case "newest":
+        result = result.sort((a, b) => {
+          const idA = typeof a.id === "string" ? Number.parseInt(a.id.replace(/\D/g, "")) || 0 : 0;
+          const idB = typeof b.id === "string" ? Number.parseInt(b.id.replace(/\D/g, "")) || 0 : 0;
+          return idB - idA;
+        });
+        break;
       case "oldest":
         result = result.sort((a, b) => {
-          const idA = typeof a.id === "string" ? Number.parseInt(a.id.replace(/\D/g, "")) || 0 : 0
-          const idB = typeof b.id === "string" ? Number.parseInt(a.id.replace(/\D/g, "")) || 0 : 0
-          return idA - idB
-        })
-        break
+          const idA = typeof a.id === "string" ? Number.parseInt(a.id.replace(/\D/g, "")) || 0 : 0;
+          const idB = typeof b.id === "string" ? Number.parseInt(b.id.replace(/\D/g, "")) || 0 : 0;
+          return idA - idB;
+        });
+        break;
       case "highest":
-        result = result.sort((a, b) => (b.reward || 0) - (a.reward || 0))
-        break
+        result = result.sort((a, b) => (b.reward || 0) - (a.reward || 0));
+        break;
       case "lowest":
-        result = result.sort((a, b) => (a.reward || 0) - (b.reward || 0))
-        break
+        result = result.sort((a, b) => (a.reward || 0) - (b.reward || 0));
+        break;
       case "deadline":
         result = result.sort((a, b) => {
-          const dateA = a.deadline ? new Date(a.deadline).getTime() : Date.now()
-          const dateB = b.deadline ? new Date(b.deadline).getTime() : Date.now()
-          return dateA - dateB
-        })
-        break
+          const dateA = a.deadline ? new Date(a.deadline).getTime() : Date.now();
+          const dateB = b.deadline ? new Date(b.deadline).getTime() : Date.now();
+          return dateA - dateB;
+        });
+        break;
       default:
-        break
+        break;
     }
 
     setFilteredBounties(result)
@@ -358,7 +363,7 @@ export default function BountiesPage() {
     setStatusOpen(false)
     setStatusInProgress(false)
     setStatusCompleted(false)
-    setSortBy("newest")
+    setSortBy("status")
   }
 
   // Handle search input change
