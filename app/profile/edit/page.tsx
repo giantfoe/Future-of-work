@@ -15,7 +15,7 @@ import Image from "next/image"
 import { useUser } from "@privy-io/react-auth"
 import FuturisticBackground from "@/components/FuturisticBackground"
 import { universities } from "@/lib/universities"
-
+import UserActivitySection from "@/components/user-activity-section"
 
 export default function EditProfilePage() {
   const { user, isLoading } = useAuth()
@@ -231,222 +231,208 @@ export default function EditProfilePage() {
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-        {/* PERSONAL INFO SECTION */}
-        <Card className="glass-card border-[#1F3B54] relative z-20">
-          <CardHeader>
-            <CardTitle className="text-lg font-medium text-[#FBF6E8] relative z-20">Personal Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
+        {/* Bento Box Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Personal Information Card (Span 2 columns on larger screens) */}
+          <Card className="bg-[#1A1A1A] relative z-20 md:col-span-2">
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-[#FBF6E8] relative z-20">Personal Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6 pt-6 border-t border-white">
 
-            {/* Profile Picture */}
-            <div>
-              <label className="block text-[#FBF6E8] mb-2 relative z-20">Profile Picture</label>
-              <div
-                className={`border border-dashed ${isDragging ? "border-[#5865F2] bg-[#5865F2]/10 relative z-20" : "border-[#1F3B54] relative z-20"} rounded-md p-6 flex flex-col items-center justify-center cursor-pointer relative z-20 hover:border-[#5865F2]/50 transition-colors`}
-                onClick={triggerFileInput}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-              >
-                <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+              {/* Profile Picture */}
+              <div>
+                <label className="block text-[#FBF6E8] mb-2 relative z-20">Profile Picture</label>
+                <div
+                  className={`border border-dashed ${isDragging ? "border-[#5865F2] bg-[#5865F2]/10 relative z-20" : "border-[#1F3B54] relative z-20"} rounded-md p-6 flex flex-col items-center justify-center cursor-pointer relative z-20 hover:border-[#5865F2]/50 transition-colors`}
+                  onClick={triggerFileInput}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
 
-                {profileImage ? (
-                  <div className="relative w-24 h-24 mb-2 relative z-20">
-                    <Image
-                      src={profileImage || "/placeholder.svg"}
-                      alt="Profile preview"
-                      fill
-                      className="rounded-md object-cover relative z-20"
-                    />
-                  </div>
-                ) : (
-                  <div className="bg-[#1F3B54]/30 p-4 rounded-md mb-2 relative z-20">
-                    <Upload className="h-6 w-6 text-[#C4C9D2] relative z-20" />
-                  </div>
-                )}
+                  {profileImage ? (
+                    <div className="relative w-24 h-24 mb-2 relative z-20">
+                      <Image
+                        src={profileImage || "/placeholder.svg"}
+                        alt="Profile preview"
+                        fill
+                        className="rounded-md object-cover relative z-20"
+                      />
+                    </div>
+                  ) : (
+                    <div className="bg-[#1F3B54]/30 p-4 rounded-md mb-2 relative z-20">
+                      <Upload className="h-6 w-6 text-[#C4C9D2] relative z-20" />
+                    </div>
+                  )}
 
-                <p className="text-[#FBF6E8] mb-1 relative z-20">Choose or drag and drop media</p>
-                <p className="text-[#C4C9D2] text-sm relative z-20">Maximum size 5 MB</p>
+                  <p className="text-[#FBF6E8] mb-2 relative z-20">Choose or drag and drop media</p>
+                  <p className="text-[#C4C9D2] text-sm relative z-20">Maximum size 5 MB</p>
+                </div>
               </div>
-            </div>
 
-            {/* Username */}
-            <div className="relative z-20">
-              <label htmlFor="username" className="block text-[#FBF6E8] mb-2 relative z-20">
-                Username<span className="text-red-400 relative z-20">*</span>
-              </label>
-              <Input
-                id="username"
-                name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] relative z-20"
-                required
-              />
-            </div>
+              {/* Username, First Name, Last Name */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[#FBF6E8] mb-2 relative z-20">Username</label>
+                  <Input
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] relative z-20"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-[#FBF6E8] mb-2 relative z-20">First Name</label>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] relative z-20"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-[#FBF6E8] mb-2 relative z-20">Last Name</label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] relative z-20"
+                    required
+                  />
+                </div>
+              </div>
 
-            {/* First Name */}
-            <div className="relative z-20">
-              <label htmlFor="firstName" className="block text-[#FBF6E8] mb-2 relative z-20">
-                First Name<span className="text-red-400 relative z-20">*</span>
-              </label>
-              <Input
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] relative z-20"
-                required
-              />
-            </div>
-
-            {/* Last Name */}
-            <div>
-              <label htmlFor="lastName" className="block text-[#FBF6E8] mb-2 relative z-20">
-                Last Name<span className="text-red-400 relative z-20">*</span>
-              </label>
-              <Input
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] relative z-20"
-                required
-              />
-            </div>
-
-            {/* Bio */}
-            <div className="relative z-20">
-              <label htmlFor="bio" className="block text-[#FBF6E8] mb-2 relative z-20">
-                Your Bio
-              </label>
-              <Textarea
-                id="bio"
-                name="bio"
-                value={formData.bio}
-                onChange={handleInputChange}
-                className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] relative z-20"
-                rows={3}
-                maxLength={200}
-                placeholder="Tell us about yourself..."
-              />
-              <div className="text-right text-sm text-[#C4C9D2] mt-1 relative z-20">{bioCharactersLeft} characters left</div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* SOCIALS SECTION */}
-        <Card className="glass-card border-[#1F3B54] mb-8">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-[#FBF6E8] relative z-20">Social Media</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Discord */}
-            <div className="relative z-20">
-              <label htmlFor="discord" className="block text-[#FBF6E8] mb-2 relative z-20">
-                Discord
-              </label>
-              <div className="flex items-center relative z-20">
-                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
-                  @
-                </span>
-                <Input
-                  id="discord"
-                  name="discord"
-                  value={formData.discord}
+              {/* Bio */}
+              <div className="relative z-20">
+                <label htmlFor="bio" className="block text-[#FBF6E8] mb-2 relative z-20">
+                  Your Bio
+                </label>
+                <Textarea
+                  id="bio"
+                  name="bio"
+                  value={formData.bio}
                   onChange={handleInputChange}
-                  className="flex-1 bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] rounded-l-none relative z-20"
-                  placeholder="username"
+                  className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] relative z-20"
+                  rows={3}
+                  maxLength={200}
+                  placeholder="Tell us about yourself..."
                 />
+                <div className="text-right text-sm text-[#C4C9D2] mt-1 relative z-20">{bioCharactersLeft} characters left</div>
               </div>
-            </div>
+            </CardContent>
+          </Card>
 
-            {/* Twitter */}
-            <div className="relative z-20">
-              <label htmlFor="twitter" className="block text-[#FBF6E8] mb-2 relative z-20">
-                Twitter/X
-              </label>
-              <div className="flex items-center relative z-20">
-                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
-                  @
-                </span>
-                <Input
-                  id="twitter"
-                  name="twitter"
-                  value={formData.twitter}
-                  onChange={handleInputChange}
-                  className="flex-1 bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] rounded-l-none relative z-20"
-                  placeholder="username"
-                />
+          {/* Social Links Card */}
+          <Card className="bg-[#1A1A1A] relative z-20">
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-[#FBF6E8] relative z-20">Social Links</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6 pt-6 border-t border-white">
+              {/* Discord */}
+              <div>
+                <label className="block text-[#FBF6E8] mb-2 relative z-20">Discord</label>
+                <div className="flex items-center relative z-20">
+                  <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
+                    @
+                  </span>
+                  <Input
+                    id="discord"
+                    name="discord"
+                    value={formData.discord}
+                    onChange={handleInputChange}
+                    className="flex-1 bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] rounded-l-none relative z-20"
+                    placeholder="username"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* GitHub */}
-            <div className="relative z-20">
-              <label htmlFor="github" className="block text-[#FBF6E8] mb-2 relative z-20">
-                GitHub
-              </label>
-              <div className="flex items-center relative z-20">
-                <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
-                  @
-                </span>
-                <Input
-                  id="github"
-                  name="github"
-                  value={formData.github}
-                  onChange={handleInputChange}
-                  className="flex-1 bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] rounded-l-none relative z-20"
-                  placeholder="username"
-                />
+              {/* Twitter */}
+              <div>
+                <label className="block text-[#FBF6E8] mb-2 relative z-20">Twitter/X</label>
+                <div className="flex items-center relative z-20">
+                  <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
+                    @
+                  </span>
+                  <Input
+                    id="twitter"
+                    name="twitter"
+                    value={formData.twitter}
+                    onChange={handleInputChange}
+                    className="flex-1 bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] rounded-l-none relative z-20"
+                    placeholder="username"
+                  />
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* UNIVERSITY SECTION */}
-        <Card className="glass-card border-[#1F3B54] mb-8">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-[#FBF6E8] relative z-20">University</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="relative z-20">
-              <label htmlFor="university" className="block text-[#FBF6E8] mb-2 relative z-20">
-                University
-              </label>
-              <Select
-                value={formData.university}
-                onValueChange={(value) => handleSelectChange("university", value)}
-              >
-                <SelectTrigger className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] focus:border-[#5865F2] relative z-20">
-                  <SelectValue placeholder="Select your university" />
-                </SelectTrigger>
-                <SelectContent>
-                  {universities.map((uni) => (
-                    <SelectItem key={uni} value={uni}>
-                      {uni}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-sm text-[#C4C9D2] mt-1 relative z-20">
-                If your college is not on the list, please message us to add it to the list, and you'll get $1.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+              {/* GitHub */}
+              <div>
+                <label className="block text-[#FBF6E8] mb-2 relative z-20">GitHub</label>
+                <div className="flex items-center relative z-20">
+                  <span className="bg-[#1F3B54]/30 border border-[#1F3B54] border-r-0 px-3 py-2 text-[#C4C9D2] rounded-l-md relative z-20">
+                    @
+                  </span>
+                  <Input
+                    id="github"
+                    name="github"
+                    value={formData.github}
+                    onChange={handleInputChange}
+                    className="flex-1 bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] placeholder:text-[#C4C9D2] focus:border-[#5865F2] rounded-l-none relative z-20"
+                    placeholder="username"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Submit Button */}
-        <div className="mt-8 relative z-20">
-          <Button
+          {/* University Card */}
+          <Card className="bg-[#1A1A1A] relative z-20 md:col-span-2 lg:col-span-1">
+             <CardHeader>
+              <CardTitle className="text-lg font-medium text-[#FBF6E8] relative z-20">University</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6 pt-6 border-t border-white">
+               {/* University Select */}
+               <div>
+                <label className="block text-[#FBF6E8] mb-2 relative z-20">University</label>
+                <Select
+                  value={formData.university}
+                  onValueChange={(value) => handleSelectChange("university", value)}
+                >
+                  <SelectTrigger className="w-full bg-[#1F3B54]/20 border-[#1F3B54] text-[#FBF6E8] focus:border-[#5865F2] relative z-20">
+                    <SelectValue placeholder="Select your university" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {universities.map((uni) => (
+                      <SelectItem key={uni} value={uni}>
+                        {uni}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-[#C4C9D2] mt-3 relative z-20">
+                  If your college is not on the list, please message us to add it to the list, and you'll get $1.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Submit Button (Full width below the grid) */}
+        <div className="mt-8 flex justify-end">
+           <Button
             type="submit"
-            disabled={isUploadingImage}
-            className="w-full glass-card border-[#5865F2] bg-[#5865F2]/20 hover:bg-[#5865F2]/30 text-[#FBF6E8] py-3 rounded-md relative z-20 transition-all duration-200 disabled:opacity-50"
+            className="bg-[#FBF6E8] text-[#091C2E] rounded-md transition-colors duration-200 hover:bg-[#f8eed7] relative z-20"
+             disabled={isUploadingImage}
           >
             {isUploadingImage ? 'Uploading Image...' : 'Save Changes'}
           </Button>
         </div>
-        </form>
       </div>
     </section>
   )

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useState, useEffect, use } from "react"
 import { Button } from "@/components/ui/button"
 import SubmissionForm from "@/components/submission-form"
-import { CalendarDays, Clock, CheckCircle, Award, AlertCircle, ChevronLeft, ChevronRight } from "lucide-react"
+import { CalendarDays, Clock, CheckCircle, Award, AlertCircle, ChevronLeft, ChevronRight, Home } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import MarkdownRenderer from "@/components/markdown-renderer"
 import type { Bounty } from "@/lib/types"
@@ -90,8 +90,8 @@ export default function BountyDetailPage({ params: paramsPromise }: { params: Pr
       return bountyCategories.some(cat => bCategories.includes(cat))
     })
     
-    // Limit to 3 similar bounties
-    const limitedSimilarBounties = similar.slice(0, 3)
+    // Limit to 2 similar bounties
+    const limitedSimilarBounties = similar.slice(0, 2)
     setSimilarBounties(limitedSimilarBounties)
 
   }, [bounty, allBounties]) // Rerun when bounty or allBounties changes
@@ -431,6 +431,20 @@ export default function BountyDetailPage({ params: paramsPromise }: { params: Pr
           </div>
         </div>
       </div>
+
+      {/* Floating Go Home Button (Mobile Only) */}
+      <div className="fixed bottom-4 right-4 z-50 md:hidden">
+        <Link href="/" passHref>
+          <Button
+            size="icon"
+            className="rounded-full shadow-lg"
+            aria-label="Go to homepage"
+          >
+            <Home className="h-5 w-5" />
+          </Button>
+        </Link>
+      </div>
+
     </div>
   )
 }

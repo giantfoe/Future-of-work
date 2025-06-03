@@ -24,9 +24,7 @@
 
   /* Enhanced Header Styling - Matching Hero Section */
   .header-glass {
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: #020817;
     border-bottom: 1px solid rgba(96, 165, 250, 0.08);
     box-shadow: 
       0 4px 24px -2px rgba(0, 0, 0, 0.4),
@@ -111,7 +109,6 @@
 
   .nav-link:hover {
     color: rgba(255, 255, 255, 1);
-    transform: translateY(-2px);
   }
 
   .nav-link:hover::before {
@@ -119,6 +116,29 @@
     box-shadow: 
       0 4px 16px rgba(96, 165, 250, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Active Navigation Link */
+  .nav-link.active {
+    color: #60a5fa; /* Accent color */
+    font-weight: 700; /* Slightly bolder */
+    /* Add a subtle underline */
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; /* Adjust as needed for spacing */
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #60a5fa; /* Accent color */
+      border-radius: 1px;
+      opacity: 1;
+      transition: width 0.3s ease;
+    }
+  }
+
+  .nav-link.active:hover::before {
+     opacity: 0; /* Hide hover effect when active */
   }
 
   /* Enhanced Search Box */
@@ -734,7 +754,7 @@
   }
   body {
     color: hsl(var(--foreground));
-    background: #0a0a0a;
+    background: #020817;
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
@@ -780,7 +800,7 @@
   background: 
     radial-gradient(ellipse at 20% 80%, rgba(96, 165, 250, 0.15) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(96, 165, 250, 0.1) 0%, transparent 50%),
-    #0a0a0a;
+    #020817;
   position: relative;
   overflow: hidden;
 }
@@ -869,11 +889,11 @@
 
 /* Section backgrounds */
 .section-dark {
-  background: #0a0a0a;
+  background: #020817;
 }
 
 .section-darker {
-  background: #050505;
+  background: #020817;
 }
 
 .section-gradient {

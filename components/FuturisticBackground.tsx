@@ -5,8 +5,19 @@ import React from 'react'
 const FuturisticBackground: React.FC = () => {
   return (
     <>
+      {/* Radial gradient background matching screenshot style with blue tones */}
+      <div 
+        className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
+        style={{
+          background: `
+            radial-gradient(circle at 90% 50%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+            #020817
+          `
+        }}
+      />
+
       {/* Architectural background grid */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden architectural-grid opacity-20"></div>
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden architectural-grid opacity-50"></div>
       
       {/* Subtle geometric elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">

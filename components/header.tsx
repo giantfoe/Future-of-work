@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { ArrowUp, Search, X } from "lucide-react"
 import MobileMenu from "@/components/mobile-menu"
 import { cn } from "@/lib/utils"
@@ -23,6 +23,7 @@ export default function Header() {
 
   const pathname = usePathname()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const isBountiesPage = pathname === "/bounties" || pathname.startsWith("/bounties?")
   const isAirtableBountiesPage = false
 
@@ -200,21 +201,34 @@ export default function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-bold header-logo">Bounty Platform</span>
+              <img 
+                src="/FOW.png" 
+                alt="Future of Work Logo" 
+                className="h-16 w-auto"
+              />
             </Link>
           </div>
 
           {/* Desktop Navigation - Only visible on desktop (>=1024px) */}
           {!isAirtableBountiesPage && (
             <div className="hidden lg:flex items-center space-x-2 mx-8">
-              <Link href="/bounties" className="nav-link">
+              <Link 
+                href="/bounties" 
+                className={cn(
+                  "nav-link",
+                  pathname === "/bounties" && !searchParams.get("category") ? "active" : ""
+                )}
+              >
                 All Bounties
               </Link>
               {categories.map((category) => (
                 <Link
                   key={category.slug}
                   href={`/bounties?category=${category.slug}`}
-                  className="nav-link"
+                  className={cn(
+                    "nav-link",
+                    pathname === "/bounties" && searchParams.get("category") === category.slug ? "active" : ""
+                  )}
                 >
                   {category.name}
                 </Link>
@@ -298,21 +312,13 @@ export default function Header() {
                   </div>
                 ) : (
                   <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      // Trigger global search modal
-                      const event = new KeyboardEvent('keydown', {
-                        key: 'k',
-                        metaKey: true,
-                        bubbles: true
-                      })
-                      document.dispatchEvent(event)
-                    }}
-                    className="header-search flex items-center gap-2 text-muted-foreground hover:text-foreground border-none"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => router.push('/search')}
+                    aria-label="Search"
+                    className="text-muted-foreground hover:text-foreground"
                   >
-                    <Search className="h-4 w-4" />
-                    <span className="text-sm">Search</span>
+                    <Search className="h-5 w-5" />
                   </Button>
                 )}
               </div>
@@ -385,20 +391,13 @@ export default function Header() {
                 </div>
               ) : (
                 <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    // Trigger global search modal
-                    const event = new KeyboardEvent('keydown', {
-                      key: 'k',
-                      metaKey: true,
-                      bubbles: true
-                    })
-                    document.dispatchEvent(event)
-                  }}
-                  className="header-search p-2 border-none"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => router.push('/search')}
+                  aria-label="Search"
+                  className="text-muted-foreground hover:text-foreground"
                 >
-                  <Search className="h-4 w-4" />
+                  <Search className="h-5 w-5" />
                 </Button>
               )}
             </div>

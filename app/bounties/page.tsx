@@ -394,13 +394,10 @@ export default function BountiesPage() {
   return (
     <section className="relative">
 <FuturisticBackground/>
-    <div className="bg-background min-h-screen relative">
+    <div className="min-h-screen relative z-10">
       {/* Background Pattern from Homepage */}
-      <div
-        className="absolute left-0 right-0 top-0 h-[300px] bg-gradient-to-b from-background to-transparent z-0"
-        aria-hidden="true"
-      />
-
+      
+      {/* Filters and Content Layout */}
       <div className="container px-4 md:px-6 max-w-[1400px] mx-auto relative z-10 py-12">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <h1 className="text-3xl font-bold">Explore Bounties</h1>

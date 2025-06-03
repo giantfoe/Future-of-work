@@ -458,7 +458,7 @@ export default function SubmissionForm({
               <Label htmlFor="files" className="text-base font-medium">
                 Supporting Documents (Optional)
               </Label>
-              <span className="bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-full px-3 py-1 text-sm transition-colors duration-200 hover:bg-[#FBF6E8]/10">
+              <span className="bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-full px-3 py-1 text-sm transition-colors duration-200 hover:bg-[#FBF6E8]/10 text-center">
                 Max size: 30MB
               </span>
             </div>
