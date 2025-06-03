@@ -17,6 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { parseCategories } from "@/components/category-tag"
 import { cn } from "@/lib/utils"
 import { useCategories } from "@/hooks/use-categories"
+import ProfileCompletionBanner from "@/components/profile-completion-banner"
 
 // Skeleton component for a single bounty card
 function BountyCardSkeleton() {
@@ -402,6 +403,8 @@ export default function BountiesPage() {
       />
 
       <div className="container px-4 md:px-6 max-w-[1400px] mx-auto relative z-10 py-12">
+        <ProfileCompletionBanner />
+        
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <h1 className="text-3xl font-bold">Explore Bounties</h1>
 
