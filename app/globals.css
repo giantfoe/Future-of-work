@@ -2571,3 +2571,61 @@ html {
     font-size: 0.875rem !important;
   }
 }
+
+/* Privy Modal Mobile Overrides */
+@media (max-width: 768px) {
+  /* Target Privy modal container */
+  div[data-testid="modal-container"] {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90vw !important;
+    max-width: 400px !important;
+    max-height: 70vh !important;
+    margin: 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+  
+  /* Privy modal content adjustments */
+  div[data-testid="modal-container"] > div {
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Alternative selector for Privy modal */
+  [class*="privy"] [role="dialog"] {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90vw !important;
+    max-width: 400px !important;
+    max-height: 70vh !important;
+    margin: 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+  
+  /* Ensure modal backdrop doesn't interfere */
+  div[data-testid="modal-backdrop"] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    z-index: 9998 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even smaller screens */
+  div[data-testid="modal-container"],
+  [class*="privy"] [role="dialog"] {
+    width: 95vw !important;
+    max-width: 350px !important;
+    max-height: 65vh !important;
+  }
+}

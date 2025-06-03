@@ -12,7 +12,8 @@ export function PrivyProvider({ children }: { children: ReactNode }) {
         appearance: {
           theme: "light",
           accentColor: "#5865F2",
-          logo: "/placeholder-logo.svg"
+          logo: "/placeholder-logo.svg",
+          modalPosition: "center"
         },
         embeddedWallets: {
           solana: {

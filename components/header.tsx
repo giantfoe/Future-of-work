@@ -432,27 +432,44 @@ export default function Header() {
                   <UserMenu />
                 ) : (
                   <>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setAuthModalMode("login")
-                        setAuthModalOpen(true)
-                      }}
-                      className="auth-button-login border-none text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="auth-button-signup border-none text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
-                      onClick={() => {
-                        setAuthModalMode("signup")
-                        setAuthModalOpen(true)
-                      }}
-                    >
-                      Sign Up
-                    </Button>
+                    {pathname === "/" ? (
+                      // Home page: show only one Login button
+                      <Button
+                        size="sm"
+                        className="auth-button-signup border-none text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
+                        onClick={() => {
+                          setAuthModalMode("login")
+                          setAuthModalOpen(true)
+                        }}
+                      >
+                        Login
+                      </Button>
+                    ) : (
+                      // Other pages: show both buttons
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setAuthModalMode("login")
+                            setAuthModalOpen(true)
+                          }}
+                          className="auth-button-login border-none text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
+                        >
+                          Login
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="auth-button-signup border-none text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
+                          onClick={() => {
+                            setAuthModalMode("signup")
+                            setAuthModalOpen(true)
+                          }}
+                        >
+                          Sign Up
+                        </Button>
+                      </>
+                    )}
                   </>
                 )}
               </>
