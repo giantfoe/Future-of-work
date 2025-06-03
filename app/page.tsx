@@ -334,10 +334,10 @@ export default async function Home() {
       </section>
 
       {/* Recent Winners and Activities Section */}
+      {/* 
       <section className="section-gradient py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Recent Winners */}
             <div className="premium-card p-10">
               <div className="mb-10">
                 <h3 className="text-3xl font-bold mb-3">Recent Champions</h3>
@@ -346,7 +346,6 @@ export default async function Home() {
               <RecentWinners winners={winners.slice(0, 4)} />
             </div>
 
-            {/* Recent Activities */}
             <div className="premium-card p-10">
               <div className="mb-10">
                 <h3 className="text-3xl font-bold mb-3">Live Platform Activity</h3>
@@ -357,6 +356,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      */}
 
       {/* How It Works Section */}
       <section className="section-dark py-24">
