@@ -382,3 +382,61 @@ export function GlobalSearch() {
     </>
   )
 }
+
+// Enhanced highlighting with multiple visual cues
+const getEnhancedHighlightStyles = (isHighlighted: boolean) => {
+  if (isHighlighted) {
+    return `
+      bg-black text-white border-black 
+      shadow-xl ring-2 ring-gray-400 
+      transform scale-[1.02] 
+      transition-all duration-200 ease-out
+      relative
+      before:absolute before:inset-0 before:bg-gradient-to-r 
+      before:from-transparent before:via-white/10 before:to-transparent
+      before:animate-pulse
+    `
+  }
+  return `
+    bg-white hover:bg-gray-50 border-gray-200 
+    transition-all duration-200 ease-out
+    hover:shadow-md hover:scale-[1.01]
+  `
+}
+
+// Fix the missing getHighlightStyles function
+const getHighlightStyles = (isHighlighted: boolean) => {
+  if (isHighlighted) {
+    return "bg-blue-50 border-blue-300 shadow-md ring-2 ring-blue-200 transform scale-[1.01] transition-all duration-200"
+  }
+  return "bg-white hover:bg-gray-50 border-gray-200 transition-all duration-200"
+}
+
+// Alternative complementary color scheme
+const getComplementaryHighlightStyles = (isHighlighted: boolean) => {
+  if (isHighlighted) {
+    return "bg-blue-600 text-white border-blue-600 shadow-lg ring-2 ring-blue-300 transform scale-[1.02] transition-all duration-200"
+  }
+  return "bg-white hover:bg-gray-50 border-gray-200 transition-all duration-200"
+}
+
+// Fix the SearchResultItem function with proper types
+interface SearchResultItemProps {
+  result: SearchResult
+  isHighlighted: boolean
+  onClick: () => void
+}
+
+function SearchResultItem({ result, isHighlighted, onClick }: SearchResultItemProps) {
+  return (
+    <div 
+      className={`
+        p-4 border rounded-lg cursor-pointer
+        ${getHighlightStyles(isHighlighted)}
+      `}
+      onClick={onClick}
+    >
+      {/* ... existing result content ... */}
+    </div>
+  )
+}

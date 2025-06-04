@@ -57,7 +57,7 @@ export default function AirtableBountiesPage() {
   }, [statusFilter, bounties])
 
   // Handle status change
-  const handleStatusChange = async (id: string, newStatus: string) => {
+  const handleStatusChange = async (id: string, newStatus: "open" | "in-progress" | "closed") => {
     try {
       const response = await fetch(`/api/bounties/${id}/status`, {
         method: "PATCH",

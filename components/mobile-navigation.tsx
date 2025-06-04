@@ -1,9 +1,12 @@
 "use client"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet"
+import { useCategories } from "@/hooks/use-categories"
+import { useAuth } from "@/contexts/auth-context"
 
 export function MobileNavigation() {
   const pathname = usePathname()
@@ -19,8 +22,7 @@ export function MobileNavigation() {
   const mainLinks = [
     { name: "Home", href: "/" },
     { name: "All Bounties", href: "/bounties" },
-    { name: "Leaderboard", href: "/leaderboard" },
-    { name: "Activity", href: "/activity" },
+
   ]
 
   return (
@@ -33,7 +35,15 @@ export function MobileNavigation() {
       <SheetContent side="left" className="w-[300px] sm:w-[350px] p-0 overflow-y-auto">
         <div className="p-6">
           <SheetHeader className="mb-6">
-            <SheetTitle className="text-left text-xl font-bold">Bounty Platform</SheetTitle>
+            <SheetTitle className="text-left">
+              <Image 
+                src="/FOW.png" 
+                alt="Future of Work" 
+                width={100} 
+                height={50} 
+                className="header-logo"
+              />
+            </SheetTitle>
           </SheetHeader>
 
           <div className="space-y-6">

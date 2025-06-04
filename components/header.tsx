@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { ArrowUp, Search, X } from "lucide-react"
 import MobileMenu from "@/components/mobile-menu"
@@ -200,7 +201,14 @@ export default function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-bold header-logo">Bounty Platform</span>
+              <Image 
+                src="/FOW.png" 
+                alt="Future of Work" 
+                width={120} 
+                height={60} 
+                className="header-logo"
+                priority
+              />
             </Link>
           </div>
 

@@ -1,7 +1,7 @@
 import AirtableBountyDetail from "@/components/airtable-bounty-detail"
 
 export const metadata = {
-  title: "Bounty Details | Bounty Platform",
+  title: "Bounty Details | Future of Work",
   description: "View details and submit applications for bounties from Airtable",
 }
 

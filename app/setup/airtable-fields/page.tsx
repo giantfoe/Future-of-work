@@ -10,14 +10,14 @@ export default function AirtableFieldsSetupPage() {
           </Link>
           <h1 className="text-3xl font-bold mt-4 mb-2">Airtable Field Names Guide</h1>
           <p className="text-gray-500">
-            This guide explains how to set up your Airtable fields to work with the Bounty Platform.
+            This guide explains how to set up your Airtable fields to work with the Future of Work platform.
           </p>
         </div>
 
         <div className="bg-white border rounded-lg p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">Required Field Names</h2>
           <p className="text-gray-700 mb-4">
-            Your Airtable table should have the following field names for the bounty platform to work correctly:
+            Your Airtable table should have the following field names for the Future of Work platform to work correctly:
           </p>
 
           <div className="overflow-x-auto">

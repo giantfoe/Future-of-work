@@ -2,11 +2,9 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, DollarSign, Users, Wallet, Target, Zap, Globe, Award, CheckCircle, TrendingUp, Code, Shield, Star, Clock, Play, BarChart3, Rocket, Building, FileText, Activity } from "lucide-react"
 import FeaturedBounties from "@/components/featured-bounties"
-import RecentWinners from "@/components/recent-winners"
-import RecentActivities from "@/components/recent-activities"
+
 import FuturisticBackground from "@/components/FuturisticBackground"
 import { getBounties, getMockBounties } from "@/lib/airtable-service"
-import { getWinners, getRecentActivities } from "@/lib/airtable"
 
 export default async function Home() {
   // Try to get bounties from Airtable, fall back to mock data if it fails
@@ -19,11 +17,9 @@ export default async function Home() {
   }
 
   const featuredBounties = bounties.slice(0, 6)
-  const winners = await getWinners()
-  const activities = await getRecentActivities()
 
   return (
-    <div className="min-h-screen text-white">
+    <div className="min-h-screen text-white blue-mesh-background">
       <FuturisticBackground />
       
       {/* Bold Hero Section */}
@@ -210,30 +206,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Recent Winners and Activities Section */}
-      <section className="section-gradient py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Recent Winners */}
-            <div className="premium-card p-10">
-              <div className="mb-10">
-                <h3 className="text-3xl font-bold mb-3">Recent Champions</h3>
-                <p className="text-lg text-gray-300">Celebrating our latest bounty winners</p>
-              </div>
-              <RecentWinners winners={winners.slice(0, 4)} />
-            </div>
 
-            {/* Recent Activities */}
-            <div className="premium-card p-10">
-              <div className="mb-10">
-                <h3 className="text-3xl font-bold mb-3">Live Platform Activity</h3>
-                <p className="text-lg text-gray-300">Real-time updates from our community</p>
-              </div>
-              <RecentActivities activities={activities.slice(0, 6)} />
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* How It Works Section */}
       <section className="section-dark py-24">

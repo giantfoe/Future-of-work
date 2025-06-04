@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getBounties } from "@/lib/airtable-service"
+import { getBounties, getCategories } from "@/lib/airtable-service"
 import type { Bounty } from "@/lib/types"
 
 // Types for search functionality
@@ -121,10 +121,8 @@ async function searchBounties(
   includeInactive: boolean = false
 ): Promise<SearchResult[]> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/bounties`)
-    if (!response.ok) return []
-    
-    const bounties = await response.json()
+    // Direct function call instead of HTTP request for better Vercel compatibility
+    const bounties = await getBounties()
     
     return bounties
       .filter((bounty: any) => {
@@ -173,19 +171,7 @@ async function searchBounties(
   }
 }
 
-// Helper function to get categories
-async function getCategories(): Promise<string[]> {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/categories`)
-    if (!response.ok) return []
-    
-    const categories = await response.json()
-    return categories
-  } catch (error) {
-    console.error('Error fetching categories:', error)
-    return []
-  }
-}
+// Note: getCategories is now imported directly from airtable-service
 
 // Enhanced fuzzy search matching function
 function fuzzySearchMatch(query: string, searchFields: string[]): boolean {

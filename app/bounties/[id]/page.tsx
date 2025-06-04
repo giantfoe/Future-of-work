@@ -90,8 +90,8 @@ export default function BountyDetailPage({ params: paramsPromise }: { params: Pr
       return bountyCategories.some(cat => bCategories.includes(cat))
     })
     
-    // Limit to 3 similar bounties
-    const limitedSimilarBounties = similar.slice(0, 3)
+    // Limit to 2 similar bounties
+    const limitedSimilarBounties = similar.slice(0, 2)
     setSimilarBounties(limitedSimilarBounties)
 
   }, [bounty, allBounties]) // Rerun when bounty or allBounties changes

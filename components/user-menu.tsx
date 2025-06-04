@@ -33,7 +33,7 @@ export function UserMenu() {
         className="flex items-center justify-center hover grey 800  text-white p-1 rounded-full transition-colors duration-200 w-10 h-10 ring-2 ring-gray-900 ring-offset-2 ring-offset-gray-800"
       >
         <Image
-          src={user?.avatar || user?.picture || '/placeholder-user.jpg'}
+          src={user?.avatar || '/placeholder-user.jpg'}
           alt={user?.name || 'User'}
           width={32}
           height={32}

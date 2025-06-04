@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-background border-t border-border relative z-20">
       <div className="max-w-[1440px] mx-auto flex flex-col items-center md:items-start md:flex-row justify-center gap-6 py-10 px-4 md:px-6">
         <div className="flex-1 max-w-sm text-center md:text-left">
-          <div className="text-lg font-medium mb-2 text-foreground">Bounty Platform</div>
+          <div className="text-lg font-medium mb-2 text-foreground">Future of Work</div>
           <p className="text-sm text-muted-foreground">
             A platform for discovering and completing bounties to earn rewards in the web3 ecosystem.
           </p>
@@ -19,11 +19,7 @@ export default function Footer() {
                   Bounties
                 </Link>
               </li>
-              <li>
-                <Link href="/leaderboard" className="text-sm text-muted-foreground hover:text-primary">
-                  Leaderboard
-                </Link>
-              </li>
+
             </ul>
           </div>
           <div className="space-y-3">
@@ -60,7 +56,7 @@ export default function Footer() {
       </div>
       <div className="border-t py-6 text-center text-sm text-muted-foreground">
         <div className="max-w-[1440px] px-4 md:px-6 mx-auto">
-          © {new Date().getFullYear()} Bounty Platform. All rights reserved.
+          © {new Date().getFullYear()} Future of Work. All rights reserved.
         </div>
       </div>
     </footer>
