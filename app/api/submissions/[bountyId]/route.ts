@@ -12,9 +12,15 @@ export async function POST(request: NextRequest, { params }: { params: { bountyI
     // Extract text fields
     const fullName = formData.get("fullName") as string
     const university = formData.get("university") as string
+    const userId = formData.get("userId") as string
     const bountyName = formData.get("bountyName") as string
     const submissionLink = formData.get("submissionLink") as string
     const walletAddress = formData.get("walletAddress") as string
+
+    // Validate required fields
+    if (!fullName || !university || !userId || !bountyName || !submissionLink || !walletAddress) {
+      return NextResponse.json({ message: "All required fields must be provided" }, { status: 400 })
+    }
 
     // Extract files
     const files: File[] = []
@@ -40,11 +46,12 @@ export async function POST(request: NextRequest, { params }: { params: { bountyI
     const result = await submitBountyApplication({
       fullName,
       university,
+      userId,
       bountyId,
       bountyName,
       submissionLink,
       walletAddress,
-      fileAttachments,
+      cloudinaryAttachments: fileAttachments,
     })
 
     if (!result.success) {

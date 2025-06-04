@@ -242,11 +242,11 @@ export function GlobalSearch() {
       />
       
       {/* Search Modal */}
-      <div className="fixed top-[20%] left-1/2 transform -translate-x-1/2 w-full max-w-2xl mx-4 z-50">
-        <div className="glass-card rounded-2xl overflow-hidden shadow-2xl">
+      <div className="fixed top-4 md:top-[20%] left-1/2 transform -translate-x-1/2 w-full max-w-2xl mx-2 md:mx-4 z-50">
+        <div className="glass-card rounded-xl md:rounded-2xl overflow-hidden shadow-2xl max-h-[calc(100vh-2rem)]">
           {/* Search Input */}
-          <div className="flex items-center gap-3 p-4 border-b border-border/20">
-            <Search className="h-5 w-5 text-muted-foreground" />
+          <div className="flex items-center gap-2 md:gap-3 p-3 md:p-4 border-b border-border/20">
+            <Search className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground flex-shrink-0" />
             <input
               ref={inputRef}
               type="text"
@@ -254,27 +254,30 @@ export function GlobalSearch() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground text-lg"
+              className="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground text-base md:text-lg min-w-0"
             />
             {isLoading && (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground flex-shrink-0" />
             )}
             <Button
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              className="h-8 w-8 p-0 hover:bg-background/20"
+              className="h-6 w-6 md:h-8 md:w-8 p-0 hover:bg-background/20 flex-shrink-0"
             >
-              <X className="h-4 w-4" />
+              <X className="h-3 w-3 md:h-4 md:w-4" />
             </Button>
           </div>
 
               {/* Search Filters */}
-              <SearchFilters
-                filters={filters}
-                onFiltersChange={setFilters}
-                availableCategories={availableCategories}
-              />
+              <div className="md:block">
+                <SearchFilters
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                  availableCategories={availableCategories}
+                  className="mobile-search-filters"
+                />
+              </div>
 
               {/* Error State */}
           {error && (
@@ -287,38 +290,38 @@ export function GlobalSearch() {
 
           {/* Search Results */}
           {!error && results.length > 0 && (
-            <div ref={resultsRef} className="max-h-96 overflow-y-auto">
+            <div ref={resultsRef} className="max-h-60 md:max-h-96 overflow-y-auto">
               {results.map((result, index) => (
                 <button
                   key={result.id}
                   onClick={() => handleSelect(result)}
                   className={cn(
-                    "w-full text-left p-4 hover:bg-background/20 transition-colors border-b border-border/10 last:border-b-0",
+                    "w-full text-left p-3 md:p-4 hover:bg-background/20 transition-colors border-b border-border/10 last:border-b-0",
                     index === selectedIndex && "bg-background/20"
                   )}
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2 md:gap-3">
                     <div className={cn(
-                      "w-2 h-2 rounded-full mt-2 flex-shrink-0",
+                      "w-2 h-2 rounded-full mt-1.5 md:mt-2 flex-shrink-0",
                       result.type === "bounty" ? "bg-green-500" : "bg-blue-500"
                     )} />
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-foreground truncate">
+                      <h3 className="font-medium text-foreground truncate text-sm md:text-base">
                         {result.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground truncate mb-1">
+                      <p className="text-xs md:text-sm text-muted-foreground truncate mb-1">
                         {result.description}
                       </p>
                       {result.metadata && (
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <div className="flex flex-wrap items-center gap-1 md:gap-2 text-xs text-muted-foreground">
                           {result.metadata.reward && (
-                            <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
+                            <span className="bg-green-100 text-green-800 px-1.5 md:px-2 py-0.5 rounded-full text-xs">
                               ${result.metadata.reward}
                             </span>
                           )}
                           {result.metadata.status && (
                             <span className={cn(
-                              "px-2 py-0.5 rounded-full",
+                              "px-1.5 md:px-2 py-0.5 rounded-full text-xs",
                               result.metadata.status === "active" 
                                 ? "bg-blue-100 text-blue-800"
                                 : "bg-gray-100 text-gray-800"
@@ -327,12 +330,12 @@ export function GlobalSearch() {
                             </span>
                           )}
                           {result.metadata.category && (
-                            <span className="bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">
+                            <span className="bg-purple-100 text-purple-800 px-1.5 md:px-2 py-0.5 rounded-full text-xs">
                               {result.metadata.category}
                             </span>
                           )}
                           {result.metadata.deadline && (
-                            <span className="text-orange-600">
+                            <span className="text-orange-600 text-xs">
                               Due: {new Date(result.metadata.deadline).toLocaleDateString()}
                             </span>
                           )}
@@ -350,17 +353,17 @@ export function GlobalSearch() {
 
           {/* No Results */}
           {!error && !isLoading && query && results.length === 0 && (
-            <div className="p-8 text-center text-muted-foreground">
-              <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p>No results found for "{query}"</p>
+            <div className="p-6 md:p-8 text-center text-muted-foreground">
+              <Search className="h-6 w-6 md:h-8 md:w-8 mx-auto mb-2 opacity-50" />
+              <p className="text-sm md:text-base">No results found for "{query}"</p>
               <p className="text-xs mt-1">Try different keywords or check spelling</p>
             </div>
           )}
 
           {/* Footer */}
-          <div className="p-3 border-t border-border/20 bg-background/10">
+          <div className="p-2 md:p-3 border-t border-border/20 bg-background/10">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <div className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-4">
                 <span className="flex items-center gap-1">
                   <kbd className="px-1.5 py-0.5 bg-background/20 rounded text-xs">↑</kbd>
                   <kbd className="px-1.5 py-0.5 bg-background/20 rounded text-xs">↓</kbd>
@@ -370,6 +373,9 @@ export function GlobalSearch() {
                   <kbd className="px-1.5 py-0.5 bg-background/20 rounded text-xs">↵</kbd>
                   to select
                 </span>
+              </div>
+              <div className="md:hidden flex items-center gap-2 text-xs">
+                <span>Tap to select</span>
               </div>
               <span className="flex items-center gap-1">
                 <kbd className="px-1.5 py-0.5 bg-background/20 rounded text-xs">esc</kbd>

@@ -4,8 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
-import { ArrowUp, Search, X } from "lucide-react"
-import MobileMenu from "@/components/mobile-menu"
+import { ArrowUp, Search, X, Menu } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { AuthModal } from "@/components/auth-modal"
@@ -45,6 +44,7 @@ export default function Header() {
   const [headerSearchResults, setHeaderSearchResults] = useState<any[]>([])
   const headerSearchRef = useRef<HTMLDivElement>(null)
   const headerSearchInputRef = useRef<HTMLInputElement>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Mock search results for header dropdown
   const mockSearchResults = [
@@ -193,13 +193,23 @@ export default function Header() {
           scrolled ? "scrolled" : "",
         )}
       >
-        <div className="max-w-[1440px] mx-auto flex h-16 items-center justify-between px-4 md:px-6 w-full">
+        <div className="max-w-[1440px] mx-auto flex h-16 items-center justify-between px-2 sm:px-4 md:px-6 w-full min-w-0">
           {/* Logo and Mobile Menu */}
-          <div className="flex items-center gap-2">
-            {/* Mobile Menu - Only visible on mobile (<1024px) and not on Bounties page */}
-            <MobileMenu />
-
-            {/* Logo */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 hover:bg-white/10 burger-menu-button"
+            >
+              <div className="burger-icon">
+                <span className="burger-line"></span>
+                <span className="burger-line"></span>
+                <span className="burger-line"></span>
+              </div>
+            </Button>
+            
             <Link href="/" className="flex items-center gap-2">
               <Image 
                 src="/FOW.png" 
@@ -212,26 +222,40 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Desktop Navigation - Only visible on desktop (>=1024px) */}
+          {/* Desktop Navigation */}
           {!isAirtableBountiesPage && (
-            <div className="hidden lg:flex items-center space-x-2 mx-8">
-              <Link href="/bounties" className="nav-link">
-                All Bounties
+            <div className="hidden md:flex items-center space-x-2 mx-8">
+              <Link 
+                href="/bounties" 
+                className={cn(
+                  "nav-link whitespace-nowrap",
+                  pathname === "/bounties" || pathname.startsWith("/bounties") 
+                    ? "bg-white/20 text-white" 
+                    : ""
+                )}
+              >
+                All
               </Link>
-              {categories.map((category) => (
-                <Link
-                  key={category.slug}
-                  href={`/bounties?category=${category.slug}`}
-                  className="nav-link"
-                >
-                  {category.name}
-                </Link>
-              ))}
+              {categories.map((category) => {
+                const isActive = pathname.includes(`category=${category.slug}`)
+                return (
+                  <Link
+                    key={category.slug}
+                    href={`/bounties?category=${category.slug}`}
+                    className={cn(
+                      "nav-link whitespace-nowrap",
+                      isActive ? "bg-white/20 text-white" : ""
+                    )}
+                  >
+                    {category.name === "Content Creation" ? "Content" : category.name}
+                  </Link>
+                )
+              })}
             </div>
           )}
 
           {/* Right side - Search and Auth */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 md:gap-4 flex-shrink-0">
             {/* Header Search - Desktop */}
             <div ref={headerSearchRef} className="hidden md:block relative">
               <div className={cn(
@@ -329,7 +353,7 @@ export default function Header() {
             {/* Mobile Search Button */}
             <div ref={headerSearchRef} className="md:hidden relative">
               {headerSearchExpanded ? (
-                <div className="absolute right-0 top-0 w-64 z-50">
+                <div className="absolute right-0 top-0 w-[calc(100vw-2rem)] max-w-sm z-50">
                   <div className="header-search">
                     <div className="flex items-center gap-2 px-3 py-2">
                       <Search className="h-4 w-4 text-muted-foreground" />
@@ -404,7 +428,7 @@ export default function Header() {
                     })
                     document.dispatchEvent(event)
                   }}
-                  className="header-search p-2 border-none"
+                  className="header-search-mobile p-2 border-none bg-white/10 hover:bg-white/20"
                 >
                   <Search className="h-4 w-4" />
                 </Button>
@@ -416,27 +440,44 @@ export default function Header() {
                   <UserMenu />
                 ) : (
                   <>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setAuthModalMode("login")
-                        setAuthModalOpen(true)
-                      }}
-                      className="auth-button-login border-none"
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="auth-button-signup border-none"
-                      onClick={() => {
-                        setAuthModalMode("signup")
-                        setAuthModalOpen(true)
-                      }}
-                    >
-                      Sign Up
-                    </Button>
+                    {pathname === "/" ? (
+                      // Home page: show only one Login button
+                      <Button
+                        size="sm"
+                        className="auth-button-signup border-none text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
+                        onClick={() => {
+                          setAuthModalMode("login")
+                          setAuthModalOpen(true)
+                        }}
+                      >
+                        Login
+                      </Button>
+                    ) : (
+                      // Other pages: show both buttons
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setAuthModalMode("login")
+                            setAuthModalOpen(true)
+                          }}
+                          className="auth-button-login border-none text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
+                        >
+                          Login
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="auth-button-signup border-none text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
+                          onClick={() => {
+                            setAuthModalMode("signup")
+                            setAuthModalOpen(true)
+                          }}
+                        >
+                          Sign Up
+                        </Button>
+                      </>
+                    )}
                   </>
                 )}
               </>
@@ -444,6 +485,78 @@ export default function Header() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="mobile-menu-overlay fixed inset-0 bg-black/50 z-40 md:hidden" 
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          
+          {/* Mobile Menu */}
+          <div className="mobile-menu-sidebar fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-black/95 backdrop-blur-md border-r border-white/10 z-50 md:hidden">
+            <div className="p-6">
+              {/* Close Button */}
+              <div className="flex justify-between items-center mb-8">
+                <span className="text-lg font-bold text-white">Menu</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 hover:bg-white/10"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              
+              {/* Navigation Links */}
+              <nav className="space-y-4">
+                <Link 
+                  href="/bounties"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    "mobile-menu-item block px-4 py-3 rounded-lg text-white font-medium transition-colors",
+                    pathname === "/bounties" || pathname.startsWith("/bounties") 
+                      ? "bg-white/20" 
+                      : "hover:bg-white/10"
+                  )}
+                >
+                  All Bounties
+                </Link>
+                
+                {categories.map((category) => {
+                  const isActive = pathname.includes(`category=${category.slug}`)
+                  return (
+                    <Link
+                      key={category.slug}
+                      href={`/bounties?category=${category.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "mobile-menu-item block px-4 py-3 rounded-lg text-white font-medium transition-colors",
+                        isActive ? "bg-white/20" : "hover:bg-white/10"
+                      )}
+                    >
+                      {category.name}
+                    </Link>
+                  )
+                })}
+                
+                <div className="border-t border-white/10 pt-4 mt-6">
+                  <Link 
+                    href="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="mobile-menu-item block px-4 py-3 rounded-lg text-white font-medium hover:bg-white/10 transition-colors"
+                  >
+                    Home
+                  </Link>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Scroll to top button */}
       <button

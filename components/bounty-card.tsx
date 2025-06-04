@@ -26,9 +26,9 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
   const today = new Date()
   const daysLeft = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
 
-  // Check if bounty is closed or in review
+  // Check if bounty is closed or deadline has passed
   const isClosed = bounty.status === "closed"
-  const isInReview = bounty.status === "in-progress"
+  const deadlinePassed = daysLeft <= 0
 
   // Handle card click
   const handleCardClick = () => {
@@ -115,12 +115,15 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
   const categoryInfo = getCategoryIcon(bounty.category)
   const IconComponent = categoryInfo.icon
 
-  // Get urgency status
+  // Get status based on the new requirements
   const getUrgencyStatus = () => {
+    // If status is explicitly closed, show closed
     if (isClosed) return { text: "Closed", color: "text-gray-400" }
-    if (isInReview) return { text: "In Review", color: "text-yellow-400" }
-    if (daysLeft <= 0) return { text: "In Review", color: "text-yellow-400" }
-    if (daysLeft <= 7) return { text: "Urgent", color: "text-orange-400" }
+    
+    // If status is in-progress OR deadline has passed but not closed, show in review
+    if (bounty.status === "in-progress" || deadlinePassed) return { text: "In Review", color: "text-yellow-400" }
+    
+    // If deadline hasn't been reached and status is open, show open
     return { text: "Open", color: "text-green-400" }
   }
 
@@ -141,7 +144,7 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
         }
       }}
     >
-      <div className="relative bg-gray-900/95 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden h-full transition-all duration-300 group-hover:border-gray-700/70 group-hover:shadow-xl flex flex-col">
+      <div className="relative bg-gray-900/95 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden h-[420px] transition-all duration-300 group-hover:border-gray-700/70 group-hover:shadow-xl flex flex-col">
         
         {/* Header with Icon and Status */}
         <div className="flex items-start justify-between p-6 pb-4">
@@ -155,27 +158,29 @@ export default function BountyCard({ bounty, onStatusChange, allowStatusChange =
           </div>
         </div>
 
-        {/* Content Area - Flex grow to fill space */}
-        <div className="flex-1 flex flex-col">
+        {/* Content Area - Fixed layout */}
+        <div className="">
           {/* Title */}
-          <div className="px-6 pb-4">
-            <h3 className="text-xl font-bold text-white leading-tight mb-2">
+          <div className="px-6 pb-4 h-[100px]">
+            <h3 className="text-xl font-bold text-white leading-tight mb-2 line-clamp-2">
               {bounty.title}
             </h3>
             <CategoryTags categories={bounty.category} size="sm" />
           </div>
 
           {/* Description */}
-          <div className="px-6 pb-6">
-            <CardMarkdownRenderer
-              content={bounty.description}
-              className="text-gray-300 text-sm leading-relaxed"
-              maxLines={2}
-            />
+          <div className="px-6 pb-6 h-[80px]">
+            <div className="h-[2.5rem]">
+              <CardMarkdownRenderer
+                content={bounty.description}
+                className="text-gray-300 text-sm leading-relaxed"
+                maxLines={2}
+              />
+            </div>
           </div>
 
           {/* Reward and Time Info */}
-          <div className="px-6 pb-6 space-y-3">
+          <div className="px-6 pb-6 space-y-3 h-[80px]">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-400">Reward</span>
               <span className="text-white font-bold">${bounty.reward} USD</span>

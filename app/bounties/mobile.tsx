@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Filter, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useCategories } from "@/hooks/use-categories"
@@ -127,41 +127,32 @@ export default function MobileFilters({
 
   return (
     <div className="lg:hidden mb-6">
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
           <Button
             variant="outline"
+            size="sm"
             className={cn(
-              "w-full flex items-center justify-between transition-all duration-300",
-              isFilterSticky ? "sticky top-16 z-20 bg-white shadow-md" : "",
+              "flex items-center gap-2 transition-all duration-300",
+              activeFilters > 0 ? "bg-[#FBF6E8]/10 border-[#FBF6E8]/30" : "",
             )}
           >
-            <div className="flex items-center">
-              <Filter className="h-4 w-4 mr-2" />
-              <span>Filters {activeFilters > 0 && `(${activeFilters})`}</span>
-            </div>
+            <Filter className="h-4 w-4" />
+            <span>Filters</span>
             {activeFilters > 0 && (
-              <span className="text-xs text-gray-500 truncate max-w-[200px] text-right">{filterSummary}</span>
+              <span className="bg-[#FBF6E8] text-[#091C2E] text-xs px-1.5 py-0.5 rounded-full font-medium">
+                {activeFilters}
+              </span>
             )}
           </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] sm:w-[400px] flex flex-col">
-          <SheetHeader>
-            <SheetTitle>Filters</SheetTitle>
-            <SheetDescription>Narrow down bounties based on your preferences</SheetDescription>
-          </SheetHeader>
-          <div className="py-4 space-y-8 overflow-y-auto flex-grow">
-            <div className="space-y-4">
-              <h2 className="font-medium">Search</h2>
-              <Input
-                placeholder="Search bounties..."
-                className="w-full"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-4">
+        </DialogTrigger>
+        <DialogContent className="max-w-[90vw] w-full max-h-[85vh] sm:max-w-[400px] flex flex-col p-0">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle>Filters</DialogTitle>
+            <DialogDescription>Narrow down bounties based on your preferences</DialogDescription>
+          </DialogHeader>
+          <div className="px-6 py-4 space-y-6 overflow-y-auto flex-grow max-h-[60vh]">
+            <div className="space-y-3">
               <h2 className="font-medium">Categories</h2>
               <div className="flex flex-wrap gap-2">
                 {categoriesLoading ? (
@@ -171,26 +162,25 @@ export default function MobileFilters({
                     <button
                       key={cat.normalized}
                       onClick={() => {
-                        setSelectedCategories((prev) =>
-                          prev.includes(cat.normalized)
-                            ? prev.filter((c) => c !== cat.normalized)
-                            : [...prev, cat.normalized],
-                        )
+                        const newCategories = selectedCategories.includes(cat.normalized)
+                          ? selectedCategories.filter((c: string) => c !== cat.normalized)
+                          : [...selectedCategories, cat.normalized]
+                        setSelectedCategories(newCategories)
                       }}
                       className={cn(
-                        "px-2.5 py-1 text-sm font-medium rounded-full transition-all duration-200 border flex items-center",
+                        "px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 border flex items-center gap-1",
                         selectedCategories.includes(cat.normalized)
-                          ? "bg-black text-white border-black shadow-md"
-                          : "bg-gradient-to-b from-white to-gray-50 text-gray-700 border-gray-200 shadow-sm hover:shadow hover:border-gray-300",
+                          ? "bg-[#FBF6E8] text-[#091C2E] border-[#FBF6E8] shadow-sm ring-1 ring-[#FBF6E8]"
+                          : "bg-transparent text-muted-foreground border-border hover:bg-white/5",
                       )}
                     >
                       <span>{cat.original}</span>
                       <span
                         className={cn(
-                          "ml-1.5 text-xs px-1.5 py-0.5 rounded-full",
+                          "text-xs w-5 h-5 flex items-center justify-center rounded-full",
                           selectedCategories.includes(cat.normalized)
-                            ? "bg-white bg-opacity-20 text-white"
-                            : "bg-gray-100 text-gray-700 border border-gray-200",
+                            ? "bg-[#091C2E] text-[#FBF6E8] border-0"
+                            : "bg-transparent text-muted-foreground border border-border"
                         )}
                       >
                         {categoryCounts[cat.normalized] || 0}
@@ -202,21 +192,20 @@ export default function MobileFilters({
                   <button
                     onClick={() => setSelectedCategories([])}
                     className={cn(
-                      "px-2.5 py-1 text-sm font-medium rounded-full",
-                      "bg-gradient-to-b from-white to-gray-50",
-                      "text-gray-700 border border-gray-200",
-                      "shadow-sm hover:shadow hover:border-gray-300 transition-all duration-200",
-                      "flex items-center",
+                      "px-3 py-1.5 text-sm font-medium rounded-full",
+                      "bg-transparent text-muted-foreground border border-border",
+                      "hover:bg-white/5 transition-all duration-200",
+                      "flex items-center gap-1",
                     )}
                   >
-                    <X className="h-3 w-3 mr-1" />
+                    <X className="h-3 w-3" />
                     Clear
                   </button>
                 )}
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <h2 className="font-medium">Reward Range</h2>
               <Slider
                 value={rewardRange}
@@ -236,7 +225,7 @@ export default function MobileFilters({
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <h2 className="font-medium">Status</h2>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
@@ -281,7 +270,7 @@ export default function MobileFilters({
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <h2 className="font-medium">Sort By</h2>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger>
@@ -298,20 +287,27 @@ export default function MobileFilters({
             </div>
 
             {/* Add extra padding at the bottom to ensure content isn't hidden behind the fixed buttons */}
-            <div className="h-20"></div>
+            <div className="h-4"></div>
           </div>
 
           {/* Fixed position buttons at the bottom */}
-          <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t flex gap-2 mt-auto">
-            <Button variant="outline" className="flex-1" onClick={resetFilters}>
-              <X className="h-4 w-4 mr-1" /> Reset
+          <div className="p-6 pt-4 bg-background border-t border-border flex gap-3 mt-auto">
+            <Button 
+              variant="outline" 
+              className="flex-1 bg-transparent border-border text-muted-foreground hover:bg-white/5 hover:text-foreground" 
+              onClick={resetFilters}
+            >
+              <X className="h-4 w-4 mr-2" /> Reset
             </Button>
-            <Button className="flex-1" onClick={handleApplyFilters}>
+            <Button 
+              className="flex-1 bg-[#FBF6E8] text-[#091C2E] hover:bg-[#FBF6E8]/80 border-[#FBF6E8]" 
+              onClick={handleApplyFilters}
+            >
               Apply Filters
             </Button>
           </div>
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
 
       {/* Filter Preview - Shows active filters on mobile */}
       {activeFilters > 0 && (
@@ -328,7 +324,7 @@ export default function MobileFilters({
             >
               {formatCategoryName(category)}
               <button
-                onClick={() => setSelectedCategories((prev) => prev.filter((c) => c !== category))}
+                onClick={() => setSelectedCategories(selectedCategories.filter((c: string) => c !== category))}
                 className="ml-1.5 hover:bg-white hover:bg-opacity-20 rounded-full p-0.5"
               >
                 <X className="h-3 w-3" />

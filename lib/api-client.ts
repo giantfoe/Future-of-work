@@ -11,6 +11,7 @@ import type { Bounty } from "./types"
 export interface BountySubmission {
   fullName: string
   university: string
+  userId: string
   bountyId: string
   bountyName: string
   submissionLink: string
@@ -81,6 +82,7 @@ export async function submitApplication(
     // Add text fields
     formData.append("fullName", submission.fullName)
     formData.append("university", submission.university)
+    formData.append("userId", submission.userId)
     formData.append("bountyId", submission.bountyId)
     formData.append("bountyName", submission.bountyName)
     formData.append("submissionLink", submission.submissionLink)
