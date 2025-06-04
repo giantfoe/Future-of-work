@@ -13,7 +13,7 @@ import { StatusTag } from "@/components/status-tag"
 
 interface BountyCardProps {
   bounty: Bounty
-  onStatusChange?: (id: string, status: string) => Promise<boolean>
+  onStatusChange?: (id: string, status: "open" | "in-progress" | "closed") => Promise<boolean>
   allowStatusChange?: boolean
   index?: number
 }
