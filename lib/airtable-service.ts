@@ -59,16 +59,12 @@ const getBase = () => {
  * This ensures that the content is properly formatted for Markdown rendering
  */
 function sanitizeMarkdownContent(content: string | undefined): string {
-  if (!content) return ""
-
-  // If content is already in Markdown format, return it as is
-  if (typeof content === "string" && !content.startsWith("<")) {
-    return content
+  if (!content) {
+    return ""
   }
 
   // If content is in HTML format (from Airtable rich text), return it as is
   // Our Markdown renderer can handle HTML with rehype-raw
-  return content
   return content
 }
 
@@ -726,5 +722,82 @@ export function getMockBounties(): Bounty[] {
       category: "Content creation",
       status: "open",
     },
+  ]
+}
+
+/**
+ * Get recent winners from mock data
+ */
+export async function getWinners(): Promise<any[]> {
+  // Mock winners data
+  return [
+    {
+      id: "1",
+      name: "Alice Johnson",
+      avatar: "/placeholder-user.jpg",
+      bountyTitle: "Design Mobile App UI",
+      reward: 500,
+      completedAt: "2024-01-15"
+    },
+    {
+      id: "2", 
+      name: "Bob Smith",
+      avatar: "/placeholder-user.jpg",
+      bountyTitle: "Smart Contract Development",
+      reward: 1200,
+      completedAt: "2024-01-10"
+    },
+    {
+      id: "3",
+      name: "Carol Davis",
+      avatar: "/placeholder-user.jpg", 
+      bountyTitle: "Technical Documentation",
+      reward: 800,
+      completedAt: "2024-01-08"
+    }
+  ]
+}
+
+/**
+ * Get platform statistics from mock data
+ */
+export async function getPlatformStats(): Promise<any> {
+  return {
+    totalBounties: 156,
+    activeBounties: 42,
+    totalRewards: 125000,
+    totalUsers: 1250
+  }
+}
+
+/**
+ * Get recent activities from mock data
+ */
+export async function getRecentActivities(): Promise<any[]> {
+  return [
+    {
+      id: "1",
+      type: "bounty_created",
+      title: "New bounty: Design Mobile App UI",
+      description: "A new design bounty has been posted",
+      timestamp: "2024-01-20T10:30:00Z",
+      user: "John Doe"
+    },
+    {
+      id: "2",
+      type: "bounty_completed", 
+      title: "Bounty completed: Smart Contract Development",
+      description: "Bob Smith completed the smart contract bounty",
+      timestamp: "2024-01-19T15:45:00Z",
+      user: "Bob Smith"
+    },
+    {
+      id: "3",
+      type: "submission_received",
+      title: "New submission for Technical Documentation",
+      description: "Carol Davis submitted work for the documentation bounty",
+      timestamp: "2024-01-18T09:15:00Z",
+      user: "Carol Davis"
+    }
   ]
 }

@@ -21,8 +21,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <head>
-        <title>Web3 Bounty Platform</title>
-        <meta name="description" content="Join thousands of developers completing high-impact bounties in the Web3 ecosystem." />
+        <title>Future of Work</title>
+        <meta name="description" content="Join thousands of developers completing high-impact bounties in the Future of Work ecosystem." />
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-sans text-foreground antialiased dark">

@@ -1,5 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { v2 as cloudinary } from "cloudinary"
+
+// Define the Cloudinary upload response type
+interface CloudinaryUploadResponse {
+  secure_url: string
+  public_id: string
+  [key: string]: any
+}
 
 // Configure Cloudinary with environment variables
 cloudinary.config({
@@ -25,20 +32,13 @@ export async function POST(request: NextRequest) {
     const publicId = `profile_${userId.replace(/[^a-zA-Z0-9]/g, "_")}_${Date.now()}`
 
     // Upload to Cloudinary using the SDK (server-side)
-    const uploadResult = await new Promise((resolve, reject) => {
-      const uploadOptions = {
-        folder: "profile-images",
-        public_id: publicId,
-        tags: ["profile-image", userId],
-        resource_type: "image" as const,
-        overwrite: true, // Allow overwriting existing images
-      }
-
-      cloudinary.uploader.upload(base64Data, uploadOptions, (error, result) => {
-        if (error) reject(error)
-        else resolve(result)
-      })
-    })
+    const uploadResult = await cloudinary.uploader.upload(base64Data, {
+      folder: "profile-images",
+      public_id: publicId,
+      tags: ["profile-image", userId],
+      resource_type: "image" as const,
+      overwrite: true, // Allow overwriting existing images
+    }) as CloudinaryUploadResponse
 
     if (uploadResult && typeof uploadResult === 'object' && 'secure_url' in uploadResult) {
       return NextResponse.json({
@@ -62,4 +62,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-} 
+}

@@ -458,7 +458,7 @@ export default function SubmissionForm({
               <Label htmlFor="files" className="text-base font-medium">
                 Supporting Documents (Optional)
               </Label>
-              <span className="bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-full px-3 py-1 text-sm transition-colors duration-200 hover:bg-[#FBF6E8]/10">
+              <span className="bg-transparent border border-[#FBF6E8] text-[#FBF6E8] rounded-full px-3 py-1 text-sm transition-colors duration-200 hover:bg-[#FBF6E8]/10 text-center">
                 Max size: 30MB
               </span>
             </div>
@@ -549,17 +549,17 @@ export default function SubmissionForm({
 
             {/* File Error Messages */}
             {fileErrors.length > 0 && (
-              <div className="mt-2 p-4 notification-error">
-                <h4 className="text-sm font-semibold text-red-200 mb-1 flex items-center">
-                  <AlertTriangle className="h-4 w-4 mr-2 flex-shrink-0 text-red-400" />
+              <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-sm">
+                <h4 className="text-sm font-semibold text-red-800 mb-1 flex items-center justify-center">
+                  <AlertTriangle className="h-4 w-4 mr-2 flex-shrink-0" />
                   File Upload Error
                 </h4>
                 {fileErrors.map((error, index) => (
-                  <p key={index} className="text-sm text-red-100 flex items-center mb-1 last:mb-0 pl-6">
+                  <p key={index} className="text-sm text-red-600 text-center mb-1 last:mb-0">
                     • {error}
                   </p>
                 ))}
-                <p className="text-xs text-red-200 mt-2 pl-6">
+                <p className="text-xs text-red-500 mt-2 text-center">
                   Please remove or replace the problematic file(s) before submitting.
                 </p>
               </div>

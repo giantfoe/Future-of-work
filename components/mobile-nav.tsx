@@ -9,8 +9,7 @@ export default function MobileNav() {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "All Bounties", href: "/bounties" },
-    { name: "Leaderboard", href: "/leaderboard" },
-    { name: "Activity", href: "/activity" },
+
   ]
 
   // Categories

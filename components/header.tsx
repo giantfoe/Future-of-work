@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { ArrowUp, Search, X, Menu } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -210,7 +211,14 @@ export default function Header() {
             </Button>
             
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-sm sm:text-lg md:text-xl font-bold header-logo truncate">Bounty Platform</span>
+              <Image 
+                src="/FOW.png" 
+                alt="Future of Work" 
+                width={120} 
+                height={60} 
+                className="header-logo"
+                priority
+              />
             </Link>
           </div>
 
