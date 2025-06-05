@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { AuthModal } from "@/components/auth-modal"
 import { UserMenu } from "@/components/user-menu"
 import { useAuth } from "@/contexts/auth-context"
+import { useBreakpoint } from "@/hooks/use-breakpoint"
 
 
 export default function Header() {

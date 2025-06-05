@@ -109,7 +109,7 @@ export default function FeaturedBounties({ bounties }: FeaturedBountiesProps) {
   }
 
   return (
-    <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-[1200px] mx-auto">
+    <div className="grid gap-6 md:gap-8 lg:gap-10 xl:gap-12 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
       {bounties.map((bounty, index) => {
         // Calculate days left
         const deadline = new Date(bounty.deadline)

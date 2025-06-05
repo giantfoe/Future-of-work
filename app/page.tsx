@@ -86,7 +86,7 @@ export default async function Home() {
 
             {/* Mobile Metrics Cards - Stacked Layout */}
             <div className="mt-16 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mobile-card-stack">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 mobile-card-stack">
                 
                 {/* Active Bounties Card */}
                 <div className="dashboard-card metric-card-bounties mobile-stack-card mobile-stack-1">

@@ -23,6 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <title>Web3 Bounty Platform</title>
         <meta name="description" content="Join thousands of developers completing high-impact bounties in the Web3 ecosystem." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-sans text-foreground antialiased dark">

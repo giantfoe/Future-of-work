@@ -5,6 +5,7 @@ import type { Bounty } from "@/lib/types"
 import { CategoryTags } from "@/components/category-tag"
 import { StatusTag } from "@/components/status-tag"
 import CardMarkdownRenderer from "@/components/card-markdown-renderer"
+import BountyCard from "@/components/bounty-card"
 
 interface BountyListProps {
   bounties: Bounty[]
@@ -92,108 +93,15 @@ export default function BountyList({ bounties, featured = false }: BountyListPro
   }
 
   return (
-    <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {bounties.map((bounty, index) => {
-        // Calculate days left
-        const deadline = new Date(bounty.deadline)
-        const today = new Date()
-        const daysLeft = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-
-        // Check if bounty is closed or deadline has passed
-        const isClosed = bounty.status === "closed"
-        const deadlinePassed = daysLeft <= 0
-
-        // Get category info
-        const categoryInfo = getCategoryIcon(bounty.category)
-        const IconComponent = categoryInfo.icon
-
-        // Get status based on the new requirements
-        const getUrgencyStatus = () => {
-          // If status is explicitly closed, show closed
-          if (isClosed) return { text: "Closed", color: "text-gray-400" }
-          
-          // If status is in-progress OR deadline has passed but not closed, show in review
-          if (bounty.status === "in-progress" || deadlinePassed) return { text: "In Review", color: "text-yellow-400" }
-          
-          // If deadline hasn't been reached and status is open, show open
-          return { text: "Open", color: "text-green-400" }
-        }
-
-        const urgencyStatus = getUrgencyStatus()
-        const patternClass = getPattern(index)
-
-        return (
-          <div
-            key={bounty.id}
-            className="group award-style-card cursor-pointer"
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            <div className="relative bg-gray-900/95 backdrop-blur-sm border border-gray-800/50 rounded-2xl overflow-hidden h-full transition-all duration-300 group-hover:border-gray-700/70 group-hover:shadow-xl flex flex-col">
-              
-              {/* Header with Icon and Status */}
-              <div className="flex items-start justify-between p-6 pb-4">
-                <div className={`w-12 h-12 rounded-xl ${categoryInfo.color} flex items-center justify-center shadow-lg`}>
-                  <IconComponent className="h-6 w-6 text-white" />
-                </div>
-                <div className="text-right">
-                  <span className={`text-sm font-medium ${urgencyStatus.color}`}>
-                    {urgencyStatus.text}
-                  </span>
-                </div>
-              </div>
-
-              {/* Content Area - Flex grow to fill space */}
-              <div className="flex-1 flex flex-col">
-                {/* Title */}
-                <div className="px-6 pb-4">
-                  <h3 className="text-xl font-bold text-white leading-tight mb-2">
-                    {bounty.title}
-                  </h3>
-                  <CategoryTags categories={bounty.category} size="sm" />
-                </div>
-
-                {/* Description */}
-                <div className="px-6 pb-6">
-                  <CardMarkdownRenderer
-                    content={bounty.description}
-                    className="text-gray-300 text-sm leading-relaxed"
-                    maxLines={2}
-                  />
-                </div>
-
-                {/* Reward and Time Info */}
-                <div className="px-6 pb-6 space-y-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">Reward</span>
-                    <span className="text-white font-bold">${bounty.reward} USD</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">Time Left</span>
-                    <span className={`font-medium ${urgencyStatus.color}`}>
-                      {daysLeft <= 0 ? "Expired" : `${daysLeft} days`}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Button - Always at bottom */}
-              <div className="px-6 pb-6 mt-auto">
-                <Link href={`/bounties/${bounty.id}`}>
-                  <Button className="w-full h-10 bg-white text-gray-900 hover:bg-gray-100 font-medium rounded-lg transition-colors duration-200">
-                    <span className="flex items-center justify-center gap-2">
-                      View Details
-                      <ArrowRight className="h-4 w-4" />
-                    </span>
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Decorative Pattern */}
-              <div className={`absolute bottom-8 right-0 w-32 h-32 ${patternClass} opacity-20 -z-10`} />
-            </div>
-          </div>
-        )
-      })}
+    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+      {/* This ensures:
+          - Mobile: 1 column
+          - Tablet: 2 columns  
+          - Desktop: 3 columns
+      */}
+      {bounties.map((bounty) => (
+        <BountyCard key={bounty.id} bounty={bounty} />
+      ))}
     </div>
   )
 }

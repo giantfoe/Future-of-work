@@ -849,6 +849,8 @@
     0 24px 48px -12px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 1;
 }
 
 .dashboard-card:hover {
@@ -858,6 +860,9 @@
     0 32px 64px -12px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(96, 165, 250, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+  position: relative;
 }
 
 /* Premium card designs */
@@ -1444,6 +1449,8 @@
   transform: translateY(20px);
   animation: awardCardSlideIn 0.6s ease-out forwards;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes awardCardSlideIn {
@@ -1460,6 +1467,31 @@
 .award-style-card:hover {
   transform: translateY(-8px) scale(1.02);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+  position: relative;
+}
+
+/* Enhanced responsive spacing for iPad Pro and tablet devices */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .award-style-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Ensure proper grid spacing on tablets */
+  .grid.gap-6.md\:gap-8.lg\:gap-10 {
+    gap: 2rem;
+  }
+}
+
+/* iPad Pro specific adjustments */
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .award-style-card {
+    margin-bottom: 2rem;
+  }
+  
+  .grid.gap-6.md\:gap-8.lg\:gap-10 {
+    gap: 2.5rem;
+  }
 }
 
 /* Enhanced hover effects for the inner card */
@@ -1675,6 +1707,10 @@ html {
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
+  .award-style-card {
+    margin-bottom: 1rem;
+  }
+  
   .award-style-card:hover {
     transform: none;
   }
@@ -2277,6 +2313,38 @@ html {
   display: none;
 }
 
+/* iPad Pro specific adjustments for statistics cards */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .mobile-card-stack {
+    gap: 1.5rem !important;
+    max-width: 100%;
+  }
+  
+  .dashboard-card {
+    padding: 20px;
+    margin-bottom: 0;
+  }
+  
+  /* Ensure 2x2 grid layout on iPad Pro */
+  .mobile-card-stack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+}
+
+/* iPad Pro Portrait and Landscape */
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .mobile-card-stack {
+    gap: 2rem !important;
+    max-width: 100%;
+  }
+  
+  .dashboard-card {
+    padding: 24px;
+  }
+}
+
 /* Category filter animations */
 .category-filter {
   transition: all 0.2s ease;
@@ -2569,6 +2637,35 @@ html {
   /* Reduce logo text size on very small screens */
   .header-logo {
     font-size: 0.875rem !important;
+  }
+}
+
+/* Tablet-specific optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-optimized {
+    padding: 1.5rem;
+  }
+  
+  .tablet-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .tablet-text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .tablet-spacing {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Ensure touch targets are appropriate for tablets */
+@media (min-width: 768px) and (max-width: 1023px) {
+  button, .clickable {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 

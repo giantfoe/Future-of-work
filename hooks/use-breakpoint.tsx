@@ -18,7 +18,6 @@ export function useBreakpoint() {
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
-    // Only run on client
     if (typeof window === "undefined") return
 
     const handleResize = () => {
@@ -40,15 +39,16 @@ export function useBreakpoint() {
       }
     }
 
-    // Set initial values
     handleResize()
-
-    // Add event listener
     window.addEventListener("resize", handleResize)
-
-    // Clean up
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  return { breakpoint, width, isAboveLg: width >= breakpoints.lg }
+  return { 
+    breakpoint, 
+    width, 
+    isAboveLg: width >= breakpoints.lg,
+    isTablet: width >= breakpoints.md && width < breakpoints.lg,
+    isMobile: width < breakpoints.md
+  }
 }
