@@ -210,7 +210,12 @@ export default function Header() {
             </Button>
             
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-sm sm:text-lg md:text-xl font-bold header-logo truncate">Bounty Platform</span>
+              <img 
+                src="/FOW.png" 
+                alt="Future of Work Logo" 
+                className="h-8 w-auto sm:h-10 md:h-12 header-logo"
+                style={{ transform: 'scale(1)' }}
+              />
             </Link>
           </div>
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { usePrivy } from "@privy-io/react-auth"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 
 type AuthModalProps = {
   isOpen: boolean
@@ -15,6 +15,9 @@ export function AuthModal({ isOpen, onClose, initialMode }: AuthModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
+        <DialogTitle className="sr-only">
+          {initialMode === "login" ? "Login" : "Sign Up"}
+        </DialogTitle>
         <div className="grid gap-4 py-4">
           <div className="flex flex-col items-center gap-4 px-4 py-8">
             <h2 className="text-2xl font-bold text-center">

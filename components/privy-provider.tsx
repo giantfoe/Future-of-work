@@ -8,12 +8,11 @@ export function PrivyProvider({ children }: { children: ReactNode }) {
     <PrivyProviderBase
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
       config={{
-        loginMethods: ["email", "google"],
+        loginMethods: ["email"],
         appearance: {
-          theme: "light",
+          theme: "dark",
           accentColor: "#5865F2",
-          logo: "/placeholder-logo.svg",
-          modalPosition: "center"
+          logo: "/FOW.png"
         },
         embeddedWallets: {
           solana: {
